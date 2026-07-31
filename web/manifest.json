@@ -1,6 +1,6 @@
 {
-    "name": "happ_pay_flutter",
-    "short_name": "happ_pay_flutter",
+    "name": "happy_pay_flutter",
+    "short_name": "happy_pay_flutter",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
