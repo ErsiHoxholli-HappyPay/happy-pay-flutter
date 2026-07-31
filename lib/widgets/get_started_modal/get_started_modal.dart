@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:happ_pay_flutter/widgets/get_started_modal/step_progress_bar.dart';
+import 'package:happy_pay_flutter/widgets/get_started_modal/step_progress_bar.dart';
 
 class OnboardingStepData {
   const OnboardingStepData({

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:happ_pay_flutter/widgets/get_started_modal/get_started_modal.dart';
-import 'package:happ_pay_flutter/features/onboarding/phone_number_screen.dart';
+import 'package:happy_pay_flutter/widgets/get_started_modal/get_started_modal.dart';
+import 'package:happy_pay_flutter/features/onboarding/phone_number_screen.dart';
 
 class GetStartedScreen extends StatefulWidget {
   const GetStartedScreen({super.key});
