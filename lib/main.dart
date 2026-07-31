@@ -14,6 +14,8 @@ class MyApp extends StatelessWidget {
       title: 'Happy Pay',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: const SplashScreen(),
+      // home: const OffersScreen(),
+
       debugShowCheckedModeBanner: false,
       debugShowMaterialGrid: false,
     );
