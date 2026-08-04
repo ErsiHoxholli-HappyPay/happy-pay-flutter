@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.example.happy_pay_flutter"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
