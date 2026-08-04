@@ -66,7 +66,9 @@ class _HappyDocumentsScreenState extends State<HappyDocumentsScreen> {
                 ),
                 child: InkWell(
                   onTap: () {
-                    Navigator.pushNamed(context, '/kyc/terms_and_conditions');
+                    Navigator.of(
+                      context,
+                    ).pushNamed('/kyc/terms_and_conditions');
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -101,7 +103,7 @@ class _HappyDocumentsScreenState extends State<HappyDocumentsScreen> {
                 ),
                 child: InkWell(
                   onTap: () {
-                    Navigator.pushNamed(context, '/kyc/privacy_policy');
+                    Navigator.of(context).pushNamed('/kyc/privacy_policy');
                   },
 
                   child: Row(

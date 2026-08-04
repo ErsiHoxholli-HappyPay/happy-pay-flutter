@@ -1,7 +1,6 @@
 // complete_profile.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:happy_pay_flutter/features/kyc/contact_information.dart';
 import 'package:happy_pay_flutter/widgets/back_button.dart';
 
 class CompleteProfileScreen extends StatefulWidget {
@@ -308,14 +307,9 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
               const Spacer(),
               ElevatedButton(
                 onPressed: _isComplete
-                    ? () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                const ContactInformationScreen(),
-                          ),
-                        );
-                      }
+                    ? () => Navigator.of(
+                        context,
+                      ).pushNamed('/kyc/contact_information')
                     : null,
                 style: ButtonStyle(
                   minimumSize: const WidgetStatePropertyAll(

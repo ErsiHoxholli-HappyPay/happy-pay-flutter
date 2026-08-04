@@ -1,0 +1,68 @@
+import '../models/coupons.dart';
+
+final coupons = <Coupon>[
+  Coupon(
+    brandName: 'Nike',
+    codeLabel: '20% off sitewide',
+    description:
+        'Get 20% off your next Nike purchase. Valid on all full-price items.',
+    discountLabel: '20%',
+    code: 'NIKE20',
+    statusDate: DateTime(2026, 9, 30),
+    status: CouponStatus.available,
+  ),
+  Coupon(
+    brandName: 'Starbucks',
+    codeLabel: 'Free drink on your birthday',
+    description: 'Redeem for one free handcrafted beverage of your choice.',
+    discountLabel: 'FREE',
+    code: 'SBDAY26',
+    statusDate: DateTime(2026, 8, 31),
+    status: CouponStatus.available,
+  ),
+  Coupon(
+    brandName: 'Amazon',
+    codeLabel: '\$15 off orders over \$75',
+    description: 'Apply at checkout on any eligible order of \$75 or more.',
+    discountLabel: '\$15',
+    code: 'AMZ15OFF',
+    statusDate: DateTime(2026, 10, 15),
+    status: CouponStatus.available,
+  ),
+  Coupon(
+    brandName: 'Zara',
+    codeLabel: '30% off sale items',
+    description: 'Extra 30% discount on all already-reduced sale items.',
+    discountLabel: '30%',
+    code: 'ZARA30',
+    statusDate: DateTime(2026, 7, 10),
+    status: CouponStatus.used,
+  ),
+  Coupon(
+    brandName: 'Spotify',
+    codeLabel: '3 months Premium for \$0.99',
+    description: 'New subscribers only. Cancel anytime after the offer period.',
+    discountLabel: '\$0.99',
+    code: 'SPOT3MO',
+    statusDate: DateTime(2026, 6, 1),
+    status: CouponStatus.used,
+  ),
+  Coupon(
+    brandName: 'H&M',
+    codeLabel: '10% off your first order',
+    description: 'Welcome discount for new H&M members. One-time use only.',
+    discountLabel: '10%',
+    code: 'HM10NEW',
+    statusDate: DateTime(2025, 12, 31),
+    status: CouponStatus.expired,
+  ),
+  Coupon(
+    brandName: 'Netflix',
+    codeLabel: '1 month free',
+    description: 'Enjoy one month of Netflix Standard with no charge.',
+    discountLabel: 'FREE',
+    code: 'NF1FREE',
+    statusDate: DateTime(2026, 1, 15),
+    status: CouponStatus.expired,
+  ),
+];
