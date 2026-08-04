@@ -8,13 +8,9 @@ class AppBackButton extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(12),
       onTap: () => Navigator.pop(context),
-      child: Container(
+      child: SizedBox(
         width: 42,
         height: 42,
-        decoration: BoxDecoration(
-          color: Colors.grey.shade300,
-          borderRadius: BorderRadius.circular(12),
-        ),
         child: const Icon(Icons.arrow_back_ios_new),
       ),
     );

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'features/splash_screen.dart';
+import 'features/loyalty/home_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,8 +13,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Happy Pay',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const SplashScreen(),
-      // home: const OffersScreen(),
+      //home: const SplashScreen(),
+      home: const HomeScreen(),
 
       debugShowCheckedModeBanner: false,
       debugShowMaterialGrid: false,
