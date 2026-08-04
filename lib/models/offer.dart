@@ -1,23 +1,20 @@
+import 'partner.dart';
 class Offer {
   final String id;
   final String title;
-  final String subtitle;
   final String image;
-  final String logo;
   final String description;
   final String? terms;
   final int? points;
+  final Partner partner;
 
   const Offer({
     required this.id,
     required this.title,
-    required this.subtitle,
     required this.image,
-    required this.logo,
     required this.description,
     this.terms,
     this.points,
+    required this.partner,
   });
-
-  bool get isHappyOffer => points != null;
 }
