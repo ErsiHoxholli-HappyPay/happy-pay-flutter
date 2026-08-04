@@ -1,4 +1,4 @@
-# happ_pay_flutter
+# happy_pay_flutter
 
 A new Flutter project.
 

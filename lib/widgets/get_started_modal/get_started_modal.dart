@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:happ_pay_flutter/widgets/get_started_modal/step_progress_bar.dart';
+import 'package:happy_pay_flutter/widgets/get_started_modal/step_progress_bar.dart';
 
 class OnboardingStepData {
   const OnboardingStepData({
@@ -78,9 +78,7 @@ class _OnboardingSheetState extends State<OnboardingSheet> {
           children: [
             StepProgressBar(
               stepFills: List.generate(widget.steps.length, (i) {
-                if (i < _currentStep) return 1.0;
-                if (i > _currentStep) return 0.0;
-                // partial fill per step: 0.3 on step 0, 0.6 on step 1, 1.0 on last
+                if (i != _currentStep) return 0.0;
                 const partials = [0.3, 0.6, 1.0];
                 return partials[_currentStep.clamp(0, partials.length - 1)];
               }),
