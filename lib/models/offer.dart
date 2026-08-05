@@ -1,4 +1,5 @@
 import 'partner.dart';
+
 class Offer {
   final String id;
   final String title;

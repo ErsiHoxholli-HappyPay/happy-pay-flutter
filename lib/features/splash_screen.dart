@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'onboarding/get_started_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -32,9 +31,7 @@ class _SplashScreenState extends State<SplashScreen>
       Future.delayed(const Duration(seconds: 3)), // min display time
     ]);
     if (!mounted) return;
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const GetStartedScreen()),
-    );
+    Navigator.of(context).pushReplacementNamed('/get_started');
   }
 
   Future<void> _initApp() async {

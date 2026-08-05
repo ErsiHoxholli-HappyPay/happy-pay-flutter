@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:happy_pay_flutter/widgets/get_started_modal/get_started_modal.dart';
-import 'package:happy_pay_flutter/features/onboarding/phone_number_screen.dart';
 
 class GetStartedScreen extends StatefulWidget {
   const GetStartedScreen({super.key});
@@ -17,9 +16,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
   }
 
   void _goToPhone() {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const PhoneNumberScreen()),
-    );
+    Navigator.of(context).pushReplacementNamed('/phone_number');
   }
 
   void _showOnboarding() {
