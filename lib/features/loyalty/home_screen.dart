@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:happy_pay_flutter/features/loyalty/barcode_screen.dart';
+import 'package:happy_pay_flutter/features/loyalty/referal.dart';
+import 'package:happy_pay_flutter/widgets/lucky_spin/lucky_spin.dart';
 import 'package:happy_pay_flutter/features/partners/partners_screen.dart';
 import '../../data/offer.dart';
 import '../../data/coupons.dart';
@@ -104,13 +107,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: _smallButton(Icons.card_giftcard, "Coupons"),
+                          child: _couponsButton(Icons.card_giftcard, "Coupons"),
                         ),
 
                         const SizedBox(width: 8),
 
                         Expanded(
-                          child: _smallButton(Icons.qr_code, "Show barcode"),
+                          child: _barcodeButton(Icons.qr_code, "Show barcode"),
                         ),
                       ],
                     ),
@@ -266,7 +269,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                           const SizedBox(height: 15),
 
-                          _blackButton("View all partners"),
+                          _partnersButton("View all partners"),
                         ],
                       ),
                     ),
@@ -282,9 +285,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     Row(
                       children: [
-                        _greyCard("Lucky Spin"),
+                        _greyCard(
+                          "Lucky Spin",
+                          onTap: () => LuckySpinSheet.show(context),
+                        ),
                         const SizedBox(width: 10),
-                        _greyCard("Step Counter"),
+                        _greyCard(
+                          "Scratch Card",
+                          // onTap: () => Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (_) => const CouponsScreen(coupons: coupons),
+                          //   ),
+                          // ),
+                        ),
                       ],
                     ),
 
@@ -310,7 +324,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                           const SizedBox(height: 15),
 
-                          _blackButton("Invite"),
+                          _inviteButton("Invite"),
                         ],
                       ),
                     ),
@@ -341,13 +355,34 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _smallButton(IconData icon, String text) {
+  Widget _couponsButton(IconData icon, String text) {
     return ElevatedButton(
       onPressed: () {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (_) => CouponsScreen(coupons: coupons)),
         );
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.grey.shade200,
+        minimumSize: const Size(double.infinity, 34),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, size: 15),
+          const SizedBox(width: 5),
+          Text(text, style: const TextStyle(fontSize: 12)),
+        ],
+      ),
+    );
+  }
+
+  Widget _barcodeButton(IconData icon, String text) {
+    return ElevatedButton(
+      onPressed: () {
+        BarcodeSheet.show(context, barcodeValue: 'AB1234567890');
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.grey.shade200,
@@ -411,7 +446,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _blackButton(String text) {
+  Widget _partnersButton(String text) {
     return ElevatedButton(
       onPressed: () {
         Navigator.push(
@@ -428,20 +463,40 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _greyCard(String text) {
+  Widget _inviteButton(String text) {
+    return ElevatedButton(
+      onPressed: () {
+        Referral.show(context);
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.black,
+        minimumSize: const Size(double.infinity, 36),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+      child: Text(text, style: const TextStyle(color: Colors.white)),
+    );
+  }
+
+  Widget _greyCard(String text, {VoidCallback? onTap}) {
     return Expanded(
-      child: Container(
-        height: 120,
-        color: Colors.grey.shade200,
-        child: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.all(8),
-              height: 60,
-              color: Colors.grey,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Material(
+          color: Colors.grey.shade200,
+          child: InkWell(
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(height: 60, color: Colors.grey),
+                  const SizedBox(height: 8),
+                  Text(text, style: const TextStyle(fontSize: 12)),
+                ],
+              ),
             ),
-            Text(text),
-          ],
+          ),
         ),
       ),
     );

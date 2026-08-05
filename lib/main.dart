@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'features/partners/partners_screen.dart';
+
 import 'features/onboarding/get_started_screen.dart';
 import 'features/onboarding/phone_number_screen.dart';
 import 'features/onboarding/otp_code.dart';
