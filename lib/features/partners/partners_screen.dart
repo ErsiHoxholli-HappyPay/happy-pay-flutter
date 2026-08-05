@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:happy_pay_flutter/widgets/partners_card.dart';
 import 'package:happy_pay_flutter/features/offers/partner_screen.dart';
-import '../../models/offer.dart';
 import '../../data/offer.dart';
 import 'package:happy_pay_flutter/widgets/back_button.dart';
 
