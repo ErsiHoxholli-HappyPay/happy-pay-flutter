@@ -60,7 +60,7 @@ class _CouponsScreenState extends State<CouponsScreen> {
                   : ListView.separated(
                       padding: const EdgeInsets.all(16.0),
                       itemCount: _filteredCoupons.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 16),
+                      separatorBuilder: (_, _) => const SizedBox(height: 16),
                       itemBuilder: (context, i) =>
                           CouponCard(coupon: _filteredCoupons[i]),
                     ),
