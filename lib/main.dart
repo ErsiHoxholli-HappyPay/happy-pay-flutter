@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'features/splash_screen.dart';
-import 'features/coupons/coupons_screen.dart';
-import 'data/coupons.dart';
+import 'features/partners/partners_screen.dart';
 import 'features/onboarding/get_started_screen.dart';
 import 'features/onboarding/phone_number_screen.dart';
 import 'features/onboarding/otp_code.dart';
-import 'features/onboarding/home.dart';
+import 'features/loyalty/home_screen.dart';
 import 'features/kyc/complete_profile.dart';
 import 'features/kyc/contact_information.dart';
 import 'features/kyc/address_details.dart';
@@ -25,12 +23,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Happy Pay',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: CouponsScreen(coupons: coupons),
+      home: HomeScreen(),
       routes: {
         '/get_started': (context) => const GetStartedScreen(),
         '/phone_number': (context) => const PhoneNumberScreen(),
         '/otp_code': (context) => const OtpCodeScreen(),
-        '/home': (context) => const HomeScreen(),
+        '/home_screen': (context) => const HomeScreen(),
         '/kyc/complete_profile': (context) => const CompleteProfileScreen(),
         '/kyc/contact_information': (context) =>
             const ContactInformationScreen(),

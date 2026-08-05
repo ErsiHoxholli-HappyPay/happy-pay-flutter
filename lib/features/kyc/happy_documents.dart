@@ -149,7 +149,7 @@ class _HappyDocumentsScreenState extends State<HappyDocumentsScreen> {
                 onPressed: _isComplete
                     ? () => Navigator.of(
                         context,
-                      ).pushNamedAndRemoveUntil('/home', (_) => false)
+                      ).pushNamedAndRemoveUntil('/home_screen', (_) => false)
                     : null,
                 style: ButtonStyle(
                   minimumSize: const WidgetStatePropertyAll(
