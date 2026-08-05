@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:happy_pay_flutter/features/partners/partners_screen.dart';
 import '../../data/offer.dart';
+import '../../data/coupons.dart';
 import '../offers/offers_screen.dart';
 import '../offers/offer_details_screen.dart';
 import '../../widgets/offer_widgets/offer_card.dart';
+import '../coupons/coupons_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -340,11 +342,17 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _smallButton(IconData icon, String text) {
-    return Container(
-      height: 34,
-      decoration: BoxDecoration(
-        color: Colors.grey.shade200,
-        borderRadius: BorderRadius.circular(6),
+    return ElevatedButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => CouponsScreen(coupons: coupons)),
+        );
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.grey.shade200,
+        minimumSize: const Size(double.infinity, 34),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
