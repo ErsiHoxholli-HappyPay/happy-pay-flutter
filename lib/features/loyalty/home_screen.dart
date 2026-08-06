@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:happy_pay_flutter/features/steps/step_main_screen.dart';
+import 'package:happy_pay_flutter/features/booklets/booklets.dart';
+import 'package:happy_pay_flutter/features/booklets/booklets_screen.dart';
 import 'package:happy_pay_flutter/features/loyalty/level_rewards_info.dart';
 import 'package:happy_pay_flutter/features/loyalty/barcode_screen.dart';
 import 'package:happy_pay_flutter/features/loyalty/referal.dart';
@@ -8,6 +9,7 @@ import 'package:happy_pay_flutter/widgets/lucky_spin/lucky_spin.dart';
 import 'package:happy_pay_flutter/features/partners/partners_screen.dart';
 import '../../data/offer.dart';
 import '../../data/coupons.dart';
+import '../../data/session.dart';
 import '../offers/offers_screen.dart';
 import '../offers/offer_details_screen.dart';
 import '../../widgets/offer_widgets/offer_card.dart';
@@ -24,11 +26,40 @@ class _HomeScreenState extends State<HomeScreen> {
   bool happyOffers = true;
   @override
   Widget build(BuildContext context) {
+    final user = AppSession.currentUser;
+    final points = user?.happyPoints ?? 0;
     final filteredOffers = offers
         .where(
           (offer) => happyOffers ? offer.points != null : offer.points == null,
         )
         .toList();
+    final currentPoints = points;
+    int pointsRemainingForNextLevel(int currentPoints) {
+      if (currentPoints < 5000) {
+        return 5000 - currentPoints;
+      } else if (currentPoints < 10000) {
+        return 10000 - currentPoints;
+      } else if (currentPoints < 20000) {
+        return 20000 - currentPoints;
+      } else {
+        return 0;
+      }
+    }
+
+    double levelProgress(int p) => (p / 10000).clamp(0.0, 1.0);
+
+    String currentLevelLabel(int p) {
+      if (p < 5000) return 'Level 0';
+      if (p < 10000) return 'Level 1';
+      return 'Level 2';
+    }
+
+    String nextLevelLabel(int p) {
+      if (p < 5000) return 'Level 1';
+      if (p < 10000) return 'Level 2';
+      return 'Level 3';
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -83,9 +114,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text(
-                                "3,765",
-                                style: TextStyle(
+                              Text(
+                                currentPoints.toString().replaceAllMapped(
+                                  RegExp(r'(\d)(?=(\d{3})+$)'),
+                                  (m) => '${m[1]},',
+                                ),
+                                style: const TextStyle(
                                   fontSize: 32,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -100,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "🔥 Earn 1,235 more points for Level 1 rewards",
+                                "🔥 Earn ${pointsRemainingForNextLevel(currentPoints)} more points for Level 1 rewards",
                                 style: TextStyle(fontSize: 12),
                               ),
                               IconButton(
@@ -137,6 +171,40 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
 
                     const SizedBox(height: 25),
+                    //Booklets
+                    Container(
+                      margin: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Earn more points with our booklets',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          BookletsCard(
+                            pointsRemaining: pointsRemainingForNextLevel(
+                              currentPoints,
+                            ),
+                            progress: levelProgress(currentPoints),
+                            currentLevelLabel: currentLevelLabel(currentPoints),
+                            nextLevelLabel: nextLevelLabel(currentPoints),
+                            buttonLabel: 'View booklets',
+                            onButtonPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const BookletsScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
                     // HISTORY
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

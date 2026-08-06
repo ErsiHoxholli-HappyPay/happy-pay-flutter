@@ -9,6 +9,7 @@ final users = [
     gender: 'Male',
     birthDate: '1990-01-01',
     address: 'Main St, Tirana, Albania 1001',
+    happyPoints: 6154,
   ),
   Users(
     id: '2',
@@ -18,5 +19,6 @@ final users = [
     gender: 'Female',
     birthDate: '1992-02-02',
     address: 'Main St, Tirana, Albania 1001',
+    happyPoints: 3640,
   ),
 ];
