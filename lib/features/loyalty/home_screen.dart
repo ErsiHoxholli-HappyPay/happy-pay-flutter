@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:happy_pay_flutter/features/steps/step_main_screen.dart';
+import 'package:happy_pay_flutter/features/loyalty/level_rewards_info.dart';
 import 'package:happy_pay_flutter/features/loyalty/barcode_screen.dart';
 import 'package:happy_pay_flutter/features/loyalty/referal.dart';
+import 'package:happy_pay_flutter/features/steps/steps_permission.dart';
 import 'package:happy_pay_flutter/widgets/lucky_spin/lucky_spin.dart';
 import 'package:happy_pay_flutter/features/partners/partners_screen.dart';
 import '../../data/offer.dart';
@@ -93,10 +96,25 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
 
                           const SizedBox(height: 8),
-
-                          const Text(
-                            "🔥 Earn 1,235 more points for Level 1 rewards",
-                            style: TextStyle(fontSize: 12),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "🔥 Earn 1,235 more points for Level 1 rewards",
+                                style: TextStyle(fontSize: 12),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    backgroundColor: Colors.transparent,
+                                    builder: (context) => const Info(),
+                                  );
+                                },
+                                icon: const Icon(Icons.info, size: 16),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -290,15 +308,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           onTap: () => LuckySpinSheet.show(context),
                         ),
                         const SizedBox(width: 10),
-                        _greyCard(
-                          "Scratch Card",
-                          // onTap: () => Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (_) => const CouponsScreen(coupons: coupons),
-                          //   ),
-                          // ),
-                        ),
+                        _greyCard("Steps", onTap: () => Steps.show(context)),
                       ],
                     ),
 

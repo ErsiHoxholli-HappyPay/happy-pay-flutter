@@ -41,15 +41,6 @@ class LuckySpinSheet extends StatelessWidget {
                   ],
                 ),
               ),
-              Positioned(
-                top: 0,
-                right: 0,
-                child: IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () => Navigator.of(context).pop(),
-                  tooltip: 'Close',
-                ),
-              ),
             ],
           ),
         ),

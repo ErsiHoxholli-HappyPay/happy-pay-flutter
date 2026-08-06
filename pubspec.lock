@@ -81,6 +81,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.6"
+  equatable:
+    dependency: transitive
+    description:
+      name: equatable
+      sha256: "3bce007a596ff8b3119c45d68aaef631272537c03d30e5d4534dd24bf4c5eaa2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   fake_async:
     dependency: transitive
     description:
@@ -105,6 +113,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.1"
+  fl_chart:
+    dependency: "direct main"
+    description:
+      name: fl_chart
+      sha256: b938f77d042cbcd822936a7a359a7235bad8bd72070de1f827efc2cc297ac888
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -144,6 +160,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  ionicons_plus:
+    dependency: "direct main"
+    description:
+      name: ionicons_plus
+      sha256: "9f5a837f1a0df204f3d11fc4a8adbd870c5239e21b25e8df68504e227084e86f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.5"
   leak_tracker:
     dependency: transitive
     description:
