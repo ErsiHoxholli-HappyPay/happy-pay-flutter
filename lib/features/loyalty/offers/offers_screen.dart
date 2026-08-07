@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../widgets/back_button.dart';
-import '../../data/offer.dart';
+import '../../../widgets/back_button.dart';
+import '../../../data/offer.dart';
 import '/widgets/offer_widgets/offer_card.dart';
 
 class OffersScreen extends StatefulWidget {
@@ -11,15 +11,12 @@ class OffersScreen extends StatefulWidget {
 }
 
 class _OffersScreenState extends State<OffersScreen> {
-
   bool happyOffers = false;
 
   @override
   Widget build(BuildContext context) {
     final filtered = offers.where((offer) {
-      return happyOffers
-          ? offer.points != null
-          : offer.points == null;
+      return happyOffers ? offer.points != null : offer.points == null;
     }).toList();
 
     return Scaffold(
@@ -47,10 +44,7 @@ class _OffersScreenState extends State<OffersScreen> {
                   ),
                   const Text(
                     "Offers",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                   ),
                 ],
               ),
@@ -145,9 +139,7 @@ class _OffersScreenState extends State<OffersScreen> {
                 itemCount: filtered.length,
                 separatorBuilder: (_, _) => const SizedBox(height: 16),
                 itemBuilder: (_, index) {
-                  return OfferCard(
-                    offer: filtered[index],
-                  );
+                  return OfferCard(offer: filtered[index]);
                 },
               ),
             ),

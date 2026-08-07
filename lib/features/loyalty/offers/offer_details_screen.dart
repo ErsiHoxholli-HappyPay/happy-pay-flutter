@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import '../../widgets/offer_widgets/voucher_claim_dialog.dart';
-import '../../widgets/back_button.dart';
-import '../../models/offer.dart';
+import '../../../widgets/offer_widgets/voucher_claim_dialog.dart';
+import '../../../widgets/back_button.dart';
+import '../../../models/offer.dart';
 import 'partner_screen.dart';
 
 class OfferDetailsScreen extends StatelessWidget {
   final Offer offer;
 
-  const OfferDetailsScreen({
-    super.key,
-    required this.offer,
-  });
+  const OfferDetailsScreen({super.key, required this.offer});
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +16,7 @@ class OfferDetailsScreen extends StatelessWidget {
         builder: (context, constraints) {
           return SingleChildScrollView(
             child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: constraints.maxHeight,
-              ),
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
               child: IntrinsicHeight(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,8 +53,9 @@ class OfferDetailsScreen extends StatelessWidget {
                               children: [
                                 CircleAvatar(
                                   radius: 18,
-                                  backgroundImage:
-                                      NetworkImage(offer.partner.logo),
+                                  backgroundImage: NetworkImage(
+                                    offer.partner.logo,
+                                  ),
                                 ),
                                 const SizedBox(width: 12),
                                 Expanded(
@@ -141,9 +137,7 @@ class OfferDetailsScreen extends StatelessWidget {
                                 ),
                                 child: Text(
                                   offer.terms!,
-                                  style: const TextStyle(
-                                    height: 1.4,
-                                  ),
+                                  style: const TextStyle(height: 1.4),
                                 ),
                               ),
 
@@ -174,9 +168,8 @@ class OfferDetailsScreen extends StatelessWidget {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (_) => PartnerScreen(
-                                          offer: offer,
-                                        ),
+                                        builder: (_) =>
+                                            PartnerScreen(offer: offer),
                                       ),
                                     );
                                   }

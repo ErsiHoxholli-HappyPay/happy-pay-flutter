@@ -1,9 +1,9 @@
 // coupons_screen.dart
 import 'package:flutter/material.dart';
 import 'package:happy_pay_flutter/widgets/back_button.dart';
-import '../../models/coupons.dart';
-import '../../widgets/coupons/coupons_card.dart';
-import '../../widgets/coupons/segmented_button.dart';
+import '../../../models/coupons.dart';
+import '../../../widgets/coupons/coupons_card.dart';
+import '../../../widgets/coupons/segmented_button.dart';
 
 class CouponsScreen extends StatefulWidget {
   const CouponsScreen({super.key, required this.coupons});

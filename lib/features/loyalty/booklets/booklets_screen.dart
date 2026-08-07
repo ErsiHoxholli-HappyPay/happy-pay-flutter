@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:happy_pay_flutter/data/coupons.dart' as coupon_data;
 import 'package:happy_pay_flutter/data/session.dart';
-import 'package:happy_pay_flutter/features/booklets/buying_booklets.dart';
-import 'package:happy_pay_flutter/features/coupons/coupons_screen.dart';
+import 'package:happy_pay_flutter/features/loyalty/booklets/buying_booklets.dart';
+import 'package:happy_pay_flutter/features/loyalty/coupons/coupons_screen.dart';
 import 'package:happy_pay_flutter/widgets/back_button.dart';
 
 // ---------------------------------------------------------------------------

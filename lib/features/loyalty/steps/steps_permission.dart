@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:happy_pay_flutter/features/steps/step_main_screen.dart';
+import 'package:happy_pay_flutter/features/loyalty/steps/step_main_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class Steps extends StatelessWidget {

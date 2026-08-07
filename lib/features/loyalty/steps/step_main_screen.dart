@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:happy_pay_flutter/features/steps/step_history.dart';
+import 'package:happy_pay_flutter/features/loyalty/steps/step_history.dart';
 import 'package:happy_pay_flutter/widgets/back_button.dart';
 
 // ---------------------------------------------------------------------------

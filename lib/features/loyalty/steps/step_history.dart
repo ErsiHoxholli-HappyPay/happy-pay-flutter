@@ -8,7 +8,7 @@
 // highlight silently stop working once the mock dates are in the past.
 
 import 'package:flutter/material.dart';
-import '../../widgets/back_button.dart';
+import '../../../widgets/back_button.dart';
 
 // ---------------------------------------------------------------------------
 // Palette — shared visual language with StepsScreen. Pull both into a
