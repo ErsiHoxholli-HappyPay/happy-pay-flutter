@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         '/kyc/privacy_policy': (context) => const PrivacyPolicyScreen(),
       },
 
-      // home: const OffersScreen(),
+      // home: const HomeScreen(),
       debugShowCheckedModeBanner: false,
       debugShowMaterialGrid: false,
     );

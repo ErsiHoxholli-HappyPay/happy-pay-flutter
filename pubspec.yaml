@@ -41,6 +41,9 @@ dependencies:
   shared_preferences: ^2.5.5
   fl_chart: ^1.2.0
   ionicons_plus: ^0.2.5
+  mobile_scanner: ^7.1.2
+  qr_flutter: ^4.1.0
+  share_plus: ^11.0.0
 
 dev_dependencies:
   flutter_test:
