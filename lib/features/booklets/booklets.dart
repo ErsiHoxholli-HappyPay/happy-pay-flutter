@@ -151,7 +151,7 @@ class _LevelTrack extends StatelessWidget {
                     vertical: 8,
                   ),
                   decoration: pillDecoration,
-                  child: Text(currentLevelLabel, style: pillStyle),
+                  child: const Text('Level 1', style: pillStyle),
                 ),
               ),
               Align(
@@ -162,7 +162,7 @@ class _LevelTrack extends StatelessWidget {
                     vertical: 8,
                   ),
                   decoration: pillDecoration,
-                  child: Text(nextLevelLabel, style: pillStyle),
+                  child: const Text('Level 2', style: pillStyle),
                 ),
               ),
             ],

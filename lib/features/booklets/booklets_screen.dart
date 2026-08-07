@@ -177,7 +177,7 @@ class _LogoCarousel extends StatelessWidget {
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: count,
-        separatorBuilder: (_, __) => const SizedBox(width: 10),
+        separatorBuilder: (_, _) => const SizedBox(width: 10),
         itemBuilder: (context, index) {
           return Container(
             width: 56,
@@ -200,10 +200,7 @@ class _BookletDetailSheet extends StatelessWidget {
   final BookletData data;
   final NavigatorState _parentNav;
 
-  const _BookletDetailSheet({
-    required this.data,
-    required NavigatorState parentNav,
-  }) : _parentNav = parentNav;
+  const _BookletDetailSheet({required this.data, required this._parentNav});
 
   static Future<void> show(BuildContext context, BookletData data) {
     final nav = Navigator.of(context);

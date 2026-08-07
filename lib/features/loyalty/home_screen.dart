@@ -3,10 +3,12 @@ import 'package:happy_pay_flutter/features/booklets/booklets.dart';
 import 'package:happy_pay_flutter/features/booklets/booklets_screen.dart';
 import 'package:happy_pay_flutter/features/loyalty/level_rewards_info.dart';
 import 'package:happy_pay_flutter/features/loyalty/barcode_screen.dart';
+import 'package:happy_pay_flutter/features/loyalty/points_history.dart';
 import 'package:happy_pay_flutter/features/loyalty/referal.dart';
 import 'package:happy_pay_flutter/features/steps/steps_permission.dart';
 import 'package:happy_pay_flutter/widgets/lucky_spin/lucky_spin.dart';
 import 'package:happy_pay_flutter/features/partners/partners_screen.dart';
+import 'package:happy_pay_flutter/features/loyalty/points_history.dart';
 import '../../data/offer.dart';
 import '../../data/coupons.dart';
 import '../../data/session.dart';
@@ -214,7 +216,20 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
 
-                        Text("View all ›", style: TextStyle(fontSize: 12)),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const PointsHistoryScreen(),
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            "View All >",
+                            style: TextStyle(fontSize: 14),
+                          ),
+                        ),
                       ],
                     ),
 

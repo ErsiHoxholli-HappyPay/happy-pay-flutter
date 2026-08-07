@@ -19,7 +19,7 @@ class LuckySpinWheel extends StatefulWidget {
     'Prize 7',
     'Prize 8',
   ];
-  static const _cooldown = Duration(hours: 24);
+  static const _cooldown = Duration(minutes: 24);
   static const _prefsKey = 'lucky_spin_last_spin_ts';
 
   @override

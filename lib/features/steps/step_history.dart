@@ -98,7 +98,7 @@ class StepHistory extends StatelessWidget {
                 child: ListView.separated(
                   padding: const EdgeInsets.only(bottom: 24),
                   itemCount: months.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 12),
+                  separatorBuilder: (_, _) => const SizedBox(height: 12),
                   itemBuilder: (context, index) =>
                       _MonthCard(summary: months[index]),
                 ),
