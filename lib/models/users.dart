@@ -7,6 +7,7 @@ class Users {
   final String? gender;
   final String? birthDate;
   final String? address;
+  final int? happyPoints;
 
   Users({
     required this.id,
@@ -17,5 +18,6 @@ class Users {
     this.gender,
     this.birthDate,
     this.address,
+    this.happyPoints,
   });
 }

@@ -82,7 +82,9 @@ class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
               const Spacer(),
               ElevatedButton(
                 onPressed: _isComplete
-                    ? () => Navigator.pushNamed(context, '/kyc/happy_documents')
+                    ? () => Navigator.of(
+                        context,
+                      ).pushNamed('/kyc/happy_documents')
                     : null,
                 style: ButtonStyle(
                   minimumSize: const WidgetStatePropertyAll(

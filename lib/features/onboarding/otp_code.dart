@@ -3,6 +3,7 @@ import 'dart:async';
 import '../../widgets/phone/otp_field.dart';
 import '../../widgets/back_button.dart';
 import '../../data/users.dart';
+import '../../data/session.dart';
 
 enum _VerifyStatus { idle, verifying, error }
 
@@ -49,7 +50,7 @@ class _OtpCodeScreenState extends State<OtpCodeScreen> {
 
     if (!mounted) return;
     if (success != null) {
-      final route = success ? '/kyc/complete_profile' : '/home';
+      final route = success ? '/kyc/complete_profile' : '/home_screen';
       Navigator.of(context).pushNamedAndRemoveUntil(route, (_) => false);
     } else {
       setState(() {
@@ -64,10 +65,15 @@ class _OtpCodeScreenState extends State<OtpCodeScreen> {
     await Future.delayed(const Duration(seconds: 3));
     if (code != '111111') return null;
     final normalized = _phoneNumber.replaceAll(' ', '');
-    final isExisting = users.any(
-      (u) => u.phoneNumber.replaceAll(' ', '') == normalized,
+    final match = users.cast<dynamic>().firstWhere(
+      (u) => (u.phoneNumber as String).replaceAll(' ', '') == normalized,
+      orElse: () => null,
     );
-    return !isExisting;
+    if (match != null) {
+      AppSession.currentUser = match;
+      return false; // existing user
+    }
+    return true; // new user
   }
 
   @override

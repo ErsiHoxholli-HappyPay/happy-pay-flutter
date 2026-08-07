@@ -1,7 +1,6 @@
 // complete_profile.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:happy_pay_flutter/features/kyc/contact_information.dart';
 import 'package:happy_pay_flutter/widgets/back_button.dart';
 
 class CompleteProfileScreen extends StatefulWidget {
@@ -23,8 +22,9 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
 
   String? _nameError(String value) {
     final trimmed = value.trim();
-    if (trimmed.isEmpty)
+    if (trimmed.isEmpty) {
       return null; // handled by button-disable, not inline error
+    }
     if (trimmed.length < _minNameLength) {
       return 'Minimum $_minNameLength characters';
     }
@@ -51,8 +51,9 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
     final month = _monthController.text.trim();
     final year = _yearController.text.trim();
     if (day.isEmpty && month.isEmpty && year.isEmpty) return null;
-    if (day.length < 2 || month.length < 2 || year.length < 4)
+    if (day.length < 2 || month.length < 2 || year.length < 4) {
       return null; // still typing
+    }
     return _isValidDate(day, month, year)
         ? null
         : 'Enter a valid date (dd/mm/yyyy)';
@@ -308,14 +309,9 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
               const Spacer(),
               ElevatedButton(
                 onPressed: _isComplete
-                    ? () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                const ContactInformationScreen(),
-                          ),
-                        );
-                      }
+                    ? () => Navigator.of(
+                        context,
+                      ).pushNamed('/kyc/contact_information')
                     : null,
                 style: ButtonStyle(
                   minimumSize: const WidgetStatePropertyAll(
