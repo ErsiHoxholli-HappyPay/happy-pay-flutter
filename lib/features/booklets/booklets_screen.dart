@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_initializing_formals, unnecessary_underscores
+
 import 'package:flutter/material.dart';
 import 'package:happy_pay_flutter/data/coupons.dart' as coupon_data;
 import 'package:happy_pay_flutter/data/session.dart';

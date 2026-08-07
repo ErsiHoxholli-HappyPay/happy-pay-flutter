@@ -16,6 +16,8 @@ import '../offers/offers_screen.dart';
 import '../offers/offer_details_screen.dart';
 import '../../widgets/offer_widgets/offer_card.dart';
 import '../coupons/coupons_screen.dart';
+import '../../widgets/app_bottom_navigation.dart';
+import '../../widgets/app_header.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -25,7 +27,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool happyOffers = true;
+  bool happyOffers = false;
   @override
   Widget build(BuildContext context) {
     final user = AppSession.currentUser;
@@ -75,22 +77,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     // HEADER
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                          "Loyalty",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                        const Expanded(
+                          child: AppHeader(
+                            title: "Loyalty",
+                            currentIndex: 0,
                           ),
                         ),
 
+                        const SizedBox(width: 12),
+
                         Container(
-                          width: 36,
-                          height: 36,
+                          width: 38,
+                          height: 38,
                           decoration: BoxDecoration(
                             color: Colors.black,
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           child: const Icon(
                             Icons.person,
@@ -429,21 +431,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
 
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar:
+      const AppBottomNavigation(
         currentIndex: 0,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.card_giftcard),
-            label: "Loyalty",
-          ),
-
-          BottomNavigationBarItem(icon: Icon(Icons.wallet), label: "Wallet"),
-
-          BottomNavigationBarItem(icon: Icon(Icons.payments), label: "Loans"),
-
-          BottomNavigationBarItem(icon: Icon(Icons.qr_code), label: "QR pay"),
-        ],
       ),
     );
   }
