@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:happy_pay_flutter/data/session.dart';
-import 'package:happy_pay_flutter/features/booklets/booklets_screen.dart';
+import 'package:happy_pay_flutter/features/loyalty/booklets/booklets_screen.dart';
 
 enum _BuyStage { confirm, loading, success }
 

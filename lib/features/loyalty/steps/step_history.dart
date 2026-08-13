@@ -8,7 +8,7 @@
 // highlight silently stop working once the mock dates are in the past.
 
 import 'package:flutter/material.dart';
-import '../../widgets/back_button.dart';
+import '../../../widgets/back_button.dart';
 
 // ---------------------------------------------------------------------------
 // Palette — shared visual language with StepsScreen. Pull both into a
@@ -98,7 +98,7 @@ class StepHistory extends StatelessWidget {
                 child: ListView.separated(
                   padding: const EdgeInsets.only(bottom: 24),
                   itemCount: months.length,
-                  separatorBuilder: (_, _) => const SizedBox(height: 12),
+
                   // ignore: unnecessary_underscores
                   separatorBuilder: (_, __) => const SizedBox(height: 12),
                   itemBuilder: (context, index) =>

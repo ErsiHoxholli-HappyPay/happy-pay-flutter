@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/offer.dart';
-import '../../features/offers/offer_details_screen.dart';
+import '../../features/loyalty/offers/offer_details_screen.dart';
 
 class OfferCard extends StatelessWidget {
   final Offer offer;
@@ -23,11 +23,7 @@ class OfferCard extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (_) => OfferDetailsScreen(
-                offer: offer,
-              ),
-            ),
+            MaterialPageRoute(builder: (_) => OfferDetailsScreen(offer: offer)),
           );
         },
         child: Card(
@@ -42,10 +38,8 @@ class OfferCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               Stack(
                 children: [
-
                   Image.network(
                     offer.image,
                     height: imageHeight ?? 145,
@@ -79,29 +73,22 @@ class OfferCard extends StatelessWidget {
                 ],
               ),
 
-
               Padding(
                 padding: const EdgeInsets.all(8),
                 child: Row(
                   children: [
-
                     CircleAvatar(
                       radius: 18,
-                      backgroundImage: NetworkImage(
-                        offer.partner.logo,
-                      ),
+                      backgroundImage: NetworkImage(offer.partner.logo),
                     ),
 
                     const SizedBox(width: 8),
 
-
                     Expanded(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment:
-                            CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-
                           Text(
                             offer.title,
                             maxLines: 1,

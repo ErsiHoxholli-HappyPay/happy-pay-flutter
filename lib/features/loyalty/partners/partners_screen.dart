@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:happy_pay_flutter/widgets/partners_card.dart';
-import 'package:happy_pay_flutter/features/offers/partner_screen.dart';
-import '../../data/offer.dart';
+import 'package:happy_pay_flutter/features/loyalty/offers/partner_screen.dart';
+import '../../../data/offer.dart';
 import 'package:happy_pay_flutter/widgets/back_button.dart';
 
 class PartnersScreen extends StatelessWidget {

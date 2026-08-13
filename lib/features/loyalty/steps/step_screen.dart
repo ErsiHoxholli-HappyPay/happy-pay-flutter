@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:happy_pay_flutter/features/steps/steps_permission.dart';
+import 'package:happy_pay_flutter/features/loyalty/steps/steps_permission.dart';
 
 class StepScreen extends StatelessWidget {
   const StepScreen({super.key});

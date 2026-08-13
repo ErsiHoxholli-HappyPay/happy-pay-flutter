@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import '../../widgets/back_button.dart';
-import '../../models/offer.dart';
+import '../../../widgets/back_button.dart';
+import '../../../models/offer.dart';
 
 class PartnerScreen extends StatelessWidget {
   final Offer offer;
 
-  const PartnerScreen({
-    super.key,
-    required this.offer,
-  });
+  const PartnerScreen({super.key, required this.offer});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +15,6 @@ class PartnerScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-
             const SizedBox(height: 10),
 
             Container(
@@ -70,11 +66,9 @@ class PartnerScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(24),
 
                 child: Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
 
                   children: [
-
                     Text(
                       offer.partner.name,
                       style: const TextStyle(
@@ -97,26 +91,15 @@ class PartnerScreen extends StatelessWidget {
 
                     Row(
                       children: [
-
-                        _social(
-                          Icons.language,
-                          () {},
-                        ),
+                        _social(Icons.language, () {}),
 
                         const SizedBox(width: 10),
 
-                        _social(
-                          Icons.email,
-                          () {},
-                        ),
+                        _social(Icons.email, () {}),
 
                         const SizedBox(width: 10),
 
-                        _social(
-                          Icons.camera_alt,
-                          () {},
-                        ),
-                        
+                        _social(Icons.camera_alt, () {}),
                       ],
                     ),
 
@@ -138,15 +121,9 @@ class PartnerScreen extends StatelessWidget {
                             (location) => Card(
                               margin: const EdgeInsets.only(bottom: 12),
                               child: ListTile(
-                                title: Text(
-                                  location.name,
-                                ),
-                                subtitle: Text(
-                                  location.address,
-                                ),
-                                trailing: const Icon(
-                                  Icons.store,
-                                ),
+                                title: Text(location.name),
+                                subtitle: Text(location.address),
+                                trailing: const Icon(Icons.store),
                               ),
                             ),
                           )
@@ -162,10 +139,7 @@ class PartnerScreen extends StatelessWidget {
     );
   }
 
-  Widget _social(
-    IconData icon,
-    VoidCallback onTap,
-  ) {
+  Widget _social(IconData icon, VoidCallback onTap) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),

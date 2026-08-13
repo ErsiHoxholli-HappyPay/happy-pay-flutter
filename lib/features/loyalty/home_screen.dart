@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:happy_pay_flutter/features/booklets/booklets.dart';
-import 'package:happy_pay_flutter/features/booklets/booklets_screen.dart';
+import 'package:happy_pay_flutter/features/loyalty/booklets/booklets.dart';
+import 'package:happy_pay_flutter/features/loyalty/booklets/booklets_screen.dart';
 import 'package:happy_pay_flutter/features/loyalty/level_rewards_info.dart';
 import 'package:happy_pay_flutter/features/loyalty/barcode_screen.dart';
 import 'package:happy_pay_flutter/features/loyalty/points_history.dart';
 import 'package:happy_pay_flutter/features/loyalty/referal.dart';
-import 'package:happy_pay_flutter/features/steps/steps_permission.dart';
+import 'package:happy_pay_flutter/features/loyalty/steps/steps_permission.dart';
 import 'package:happy_pay_flutter/widgets/lucky_spin/lucky_spin.dart';
-import 'package:happy_pay_flutter/features/partners/partners_screen.dart';
-import 'package:happy_pay_flutter/features/loyalty/points_history.dart';
+import 'package:happy_pay_flutter/features/loyalty/partners/partners_screen.dart';
 import '../../data/offer.dart';
 import '../../data/coupons.dart';
 import '../../data/session.dart';
-import '../offers/offers_screen.dart';
-import '../offers/offer_details_screen.dart';
+import 'offers/offers_screen.dart';
+import 'offers/offer_details_screen.dart';
 import '../../widgets/offer_widgets/offer_card.dart';
-import '../coupons/coupons_screen.dart';
+import 'coupons/coupons_screen.dart';
 import '../../widgets/app_bottom_navigation.dart';
 import '../../widgets/app_header.dart';
 
@@ -79,10 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Row(
                       children: [
                         const Expanded(
-                          child: AppHeader(
-                            title: "Loyalty",
-                            currentIndex: 0,
-                          ),
+                          child: AppHeader(title: "Loyalty", currentIndex: 0),
                         ),
 
                         const SizedBox(width: 12),
@@ -431,10 +427,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
 
-      bottomNavigationBar:
-      const AppBottomNavigation(
-        currentIndex: 0,
-      ),
+      bottomNavigationBar: const AppBottomNavigation(currentIndex: 0),
     );
   }
 
