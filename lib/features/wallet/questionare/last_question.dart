@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:happy_pay_flutter/features/wallet/questionare/questionare_screen.dart';
+
 import 'package:happy_pay_flutter/features/wallet/terms_and_conditions/terms_and_conditions.dart';
 import 'package:happy_pay_flutter/features/wallet/wallet_screen.dart';
 import 'package:happy_pay_flutter/widgets/back_button.dart';
