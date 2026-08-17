@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:happy_pay_flutter/features/wallet/terms_and_conditions/terms_and_conditions.dart';
+import 'package:happy_pay_flutter/features/wallet/wallet_screen.dart';
 import 'package:happy_pay_flutter/widgets/back_button.dart';
 
 enum Documents {
@@ -248,7 +249,12 @@ class ShowBottomModal extends StatelessWidget {
             width: double.infinity,
 
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const WalletScreen()),
+                );
+              },
               style: ButtonStyle(
                 backgroundColor: WidgetStateColor.resolveWith((states) {
                   return Color.fromARGB(255, 0, 0, 0);
