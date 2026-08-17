@@ -70,6 +70,9 @@ flutter:
     - lib/assets/
     - lib/assets/legal/terms_and_conditions.txt
     - lib/assets/legal/privacy_policy.txt
+    - lib/assets/wallet_legal/terms_and_conditions.txt
+    - lib/assets/wallet_legal/consent_to_data.txt
+    - lib/assets/wallet_legal/other_consents.txt
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

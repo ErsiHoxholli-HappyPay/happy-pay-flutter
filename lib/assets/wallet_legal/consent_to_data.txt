@@ -1,0 +1,121 @@
+CONSENT TO PERSONAL DATA COLLECTION AND PROCESSING
+====================================================
+haPPy Pay Wallet - On Solutions sh.p.k., part of Balfin Group
+NUIS: M02219018E | Reshit Collaku Street, Tirana, Albania
+Last Updated: August 2026
+
+
+WHO IS COLLECTING YOUR DATA
+-----------------------------
+Your personal data is collected and controlled by On Solutions sh.p.k. (the
+Company), the operator of the haPPy Pay Wallet and haPPy Loyalty Program.
+
+
+WHAT DATA WE COLLECT
+---------------------
+When you register, we collect the following personal information:
+
+  - Full name (first and last)
+  - Gender
+  - Residential address, city, and postal code
+  - Mobile phone number
+  - Date of birth
+
+This data is collected at the point of registration, either in-store or through
+the haPPy mobile application or website.
+
+
+WHY WE PROCESS YOUR DATA (LEGAL BASIS AND PURPOSES)
+-----------------------------------------------------
+Your data is processed on the basis of your explicit consent and for the
+following specific purposes:
+
+  1. Program Administration
+     Processing is necessary to manage your membership, track earned points,
+     and administer reward redemptions.
+
+  2. Service Communications
+     We send transactional messages (e.g., point updates, account alerts)
+     necessary for the operation of your Wallet account.
+
+  3. Personalised Offers and Campaigns
+     With your consent, we process your purchase history and preferences to
+     deliver exclusive offers, loyalty rewards, and personalised promotions.
+
+  4. Legal Compliance
+     We process data as required to comply with Albanian law, including
+     Law No. 9887 dated 10.03.2008 "On the Protection of Personal Data".
+
+
+WHO HAS ACCESS TO YOUR DATA
+-----------------------------
+Your data is processed by On Solutions sh.p.k. and, on our behalf, by:
+
+  QIVOS - WE CREATE CUSTOMER LOYALTY A.E.
+  www.qivos.gr | Athens, Greece
+  (CRM platform and loyalty program software provider)
+
+QIVOS is contractually bound to apply the same level of data protection as the
+Company and processes data solely within the scope defined by this agreement.
+
+The Company will not disclose your personal data to any other third party
+except:
+  - When required by applicable law or regulatory authority
+  - When necessary to deliver contracted services (e.g., fulfilment partners,
+    customer support providers) operating within the Republic of Albania
+  - When you have been explicitly notified and have given prior consent
+
+All marketing and promotional communications will be sent under the haPPy
+brand name or that of its authorised partners.
+
+
+HOW LONG WE KEEP YOUR DATA
+----------------------------
+Your data is retained for the duration of your active membership. Once your
+account is deactivated or your consent is withdrawn, your data will be
+permanently erased from all systems, unless retention is required by law.
+
+
+CHILDREN'S PRIVACY
+-------------------
+The haPPy Loyalty Program is available only to individuals aged 16 and above.
+If we become aware that personal data has been collected from a person under
+the age of 16 without verified parental consent, that data will be deleted
+immediately.
+
+
+YOUR RIGHTS
+-----------
+As a data subject, you are entitled to exercise the following rights at any time:
+
+  - Right of Access           - Request a copy of your personal data.
+  - Right of Erasure          - Request deletion where no legal basis for
+                                retention applies.
+  - Right of Rectification    - Request correction of inaccurate data.
+  - Right to Object           - Object to data processing for marketing
+                                or where no legitimate interest applies.
+  - Right to Restrict         - Request that your data be held but not
+                                actively used in specific circumstances.
+  - Right to Withdraw Consent - Withdraw consent at any time without
+                                affecting processing carried out prior to withdrawal.
+
+To exercise any of these rights, contact us at:
+  - Tel:   +355 44803999
+  - Email: loyalty@happy.al
+  - Web:   www.happy.al
+  - App:   haPPy Mobile Application
+
+We will respond in writing within one (1) month of receiving your request,
+either confirming fulfilment or explaining any limitation under applicable law.
+
+
+CONSENT DECLARATION
+---------------------
+By registering for the haPPy Pay Wallet, you confirm that:
+
+  [ ] You are 16 years of age or older.
+  [ ] You have read and understood this Consent to Data Processing.
+  [ ] You freely and explicitly consent to the collection and processing of
+      your personal data for the purposes described above.
+  [ ] You understand that you may withdraw this consent at any time by
+      contacting loyalty@happy.al.
