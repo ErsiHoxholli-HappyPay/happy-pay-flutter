@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:happy_pay_flutter/features/wallet/aditional_information.dart';
+import 'package:happy_pay_flutter/features/wallet/questionare/aditional_information.dart';
 
 import 'features/onboarding/get_started_screen.dart';
 import 'features/onboarding/phone_number_screen.dart';

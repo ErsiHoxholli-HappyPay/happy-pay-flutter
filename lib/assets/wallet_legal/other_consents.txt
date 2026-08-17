@@ -1,97 +1,56 @@
-ADDITIONAL CONSENTS - haPPy PAY WALLET
-=======================================
-On Solutions sh.p.k., part of Balfin Group
-NUIS: M02219018E | Reshit Collaku Street, Tirana, Albania
-Last Updated: August 2026
-
-The following consents are optional and separate from the core Terms and
-Conditions required to use the haPPy Pay Wallet. You may choose to grant or
-withhold each consent independently. Withholding optional consents will not
-affect your access to the core Wallet or Loyalty Program services.
-
-You may withdraw any of these consents at any time by contacting:
-  loyalty@happy.al | +355 44803999 | www.happy.al
-
-
-1. CONSENT TO MARKETING COMMUNICATIONS
-----------------------------------------
-I consent to On Solutions sh.p.k. (haPPy) contacting me with promotional
-materials, news, product updates, and personalised offers through the
-following channels:
-
-  [ ] Email
-  [ ] SMS
-  [ ] Viber
-  [ ] Push Notifications (via the haPPy mobile application)
-  [ ] Phone Call
-
-Marketing communications will be sent under the haPPy brand name or that
-of its authorised partner companies. You may opt out at any time by using
-the unsubscribe link in any communication or by contacting us directly.
-
-
-2. CONSENT TO PERSONALISED OFFERS AND PROFILING
--------------------------------------------------
-I consent to On Solutions sh.p.k. analysing my purchase history, transaction
-behaviour, and account preferences for the purpose of:
-
-  - Delivering personalised discounts and loyalty rewards
-  - Providing targeted campaign offers based on my profile and activity
-  - Improving the relevance of communications sent to me
-
-This processing is based solely on your consent and you may withdraw it at
-any time without affecting your access to standard program benefits.
-
-
-3. CONSENT TO THIRD-PARTY DATA SHARING FOR PARTNER OFFERS
------------------------------------------------------------
-I consent to On Solutions sh.p.k. sharing my anonymised or identifiable
-purchase and preference data with selected partner companies within the
-haPPy Loyalty Program network for the purpose of delivering exclusive
-partner offers and promotions.
-
-Partner companies are contractually bound to:
-  - Use the data solely for delivering the agreed offer or service
-  - Apply data protection measures equivalent to those of On Solutions
-  - Not retain or re-sell the data beyond the scope of the agreed purpose
-
-A current list of participating partner companies is available at:
-www.happy.al/partners
-
-
-4. CONSENT TO TRANSFER OF DATA TO SERVICE PROVIDER ABROAD
------------------------------------------------------------
-I consent to my personal data being transferred to and processed by:
-
-  QIVOS - WE CREATE CUSTOMER LOYALTY A.E.
-  www.qivos.gr | Athens, Greece
-
-QIVOS provides the CRM and loyalty software platform underpinning the
-haPPy Program. The transfer is governed by applicable Albanian data
-protection law (Law No. 9887, 10.03.2008) and equivalent contractual
-safeguards.
-
-
-5. CONSENT TO PARTICIPATION IN SURVEYS AND RESEARCH
------------------------------------------------------
-I consent to On Solutions sh.p.k. inviting me to participate in optional
-customer satisfaction surveys, market research, and product feedback
-initiatives. Participation in any such activity is always voluntary.
-
-Responses will be used solely for service improvement and will be
-processed in aggregated, anonymised form unless you choose to identify
-yourself within the survey.
-
-
-WITHDRAWAL OF CONSENT
------------------------
-Any of the above consents may be withdrawn at any time, free of charge,
-without providing a reason, and without consequence to your membership:
-
-  - In the haPPy mobile application under Settings > Privacy
-  - By emailing: loyalty@happy.al
-  - By calling:  +355 44803999
-  - Online at:   www.happy.al
-
-Withdrawal of consent does not affect the lawfulness of any processing
-conducted prior to the withdrawal.
+1. THE PROGRAM
+haPPy Loyalty Program is created to reward the loyal customers of the participant companies based on their purchases and special offers for  members.
+The Members of the loyalty scheme will enjoy unique benefits like:
+Points collecting from each purchase at participant companies stores (physical /e-shops)
+Unique offers that help members to earn more points based on purchases or individual characteristics (performance)
+Ad-Hoc Occasions (Birthday, Events, etc.)
+For the better support of members there are dedicated communication channels.
+haPPy Loyalty Program, represented from the company On Solutions,  part of Balfin Group, with NUIS M02219018E with headquarters on Reshit  Çollaku Street, Tirana, Albania.
+For the realization and implementation of this Program, it is  necessary to collect the personal data of the Customers, who give their  consent at the time of declaration. On Solution Company, in  implementation of the haPPy Loyalty Program, maintains and processes  members' data confidentially, respects privacy by taking all the  necessary technical and organizational measures.
+2. Registration at program / Membership The process of being member of haPPy Loyalty Program, could happen in two ways:
+Physical Stores 
+A new member can visit any store of the participating companies to join the scheme.
+To join the program, each new member must have a mobile phone number.
+The member provides the cashier with a verification code received  via SMS, thereby giving consent to the collection and processing of  personal data.
+After confirming the verification code, the new member completes the application form through a link sent via a second SMS.
+By visiting Loyalty Program official website www.happy.al
+With this method the new member will have electronic card, which can be used via mobile phone or Mobile Application.
+The new member should create his individual profile with his/her mobile phone.
+Afterwards will receive a verification code and will complete the personal info
+To complete the registration as a new member, the user must accept  the terms and conditions, which also include consent to the collection  and processing of the personal data
+3. GENERAL TERMS AND CONDITIONS
+Each member card is and remains the property of the loyalty program  haPPy and it cannot be used for any other reason outside the haPPy  Loyalty Program.
+The membership card is personal and not transferable.
+The membership card is not credit or debit card. The member, cannot  make money transactions, except to enjoy privileges previously defined  by the program.
+The company reserves the right to unilaterally modify the reward system. In this case the company should notify all members by notification at the website www.happy.al
+The membership card and the privileges obtained are valid only in  the Republic of Albania and the network of participating companies in  the Albanian territory. In case there will be any updates, the company  must notify all members through the announcement on the website  www.happy.al
+The card can be replaced in case of loss, theft or destruction by  contacting Contact Support or going to the physical Shops, at  haPPy Loyalty Program store companies’ network.
+4. EXPIRY
+The Company reserves the right to terminate the Program membership of the customer, (or even prohibit any use of the card in specific cases of illegal actions or fraud) at any time with prior notification via Email or any other communication channel provided by the costumer.
+The Company has the right to unilaterally modify any of the terms of this agreement, including the method of calculating points and the  amount of rewards. Any such modification shall be communicated to the program members by any appropriate means in the contact details he/her has stated in this application or by posting any modification within the company’s branches, website etc.
+If, for any reason, the company modifies a part or all of the terms  of the Program or changes the privilege of the program, the member will  have no claim against the company if he has given his prior approval to  any change of terms.
+The validity of the points collected from each invoice is 1 year.  The points get deducted from the costumer’s account within 1 year  according to the deadline when the purchase is done if the costumer  cannot make it to convert into the rewarding levels.
+If the card is not used for more than five (5) years the company will notify the member via Email and/or Viber Message 2 months before the expiration date. If the member shall not use the card before its expiration the card shall be deactivated.
+5. DATA PROTECTION
+The company reserves the right to process the personal data after  the costumer’s approval in order to improve the management of its  costumer and to promote its products.
+The company collects from the member at the moment of registeration  the below information: Name, Surname, Gender, Address, City, Code,  Telephone Number, Birthday.
+Only members at the age of 16 and above are able to be part of the  program and its privileges. If it is detected that personal data is  received from an under 16 year old person without any verified agreement from their parents, these data will be deleted as soon as possible.
+Our aims for processing the data are as below:
+Reward and redeem of the points that the member has collected.
+Newsletters through email, SMS, Viber and/or calls regarding our news, new products and different offers.
+Dedicated Campaigns which are exclusive for the member as an extra privilege of card holders according to their preferences.
+5.1. Transmission to Third Parties
+Members’ personal data will be processed by QIVOS – WE CREATE CUSTOMER LOYALTY A.E. (www.qivos.gr) Athens, Greece that provides haPPy Program with the software platform (CRM) loyalty program services and acts on behalf.
+This company takes the same measures for the protection of the  member's personal data as the On Solutions and processes the data based  on the specific provisions/limits referred to the Albanian Law no. 9887, dated 10.03.2008 "On the protection of personal data" a. The Company will not share with any third party the member’s personal data, without his/her consent. b. The member gives his consent for their personal data to be accessed, registered, and processed by On Solutions sh.p.k.- part of Balfin Group and by QIVOS – WE CREATE CUSTOMER LOYALTY A.E. that provides the software platform (CRM) of the haPPy Program. c. The Company will not share with any third party the member’s personal data except when it is necessary that any person from the staff, employees, agents, contractors or suppliers, to perform a service, or to complete a duty in the Republic of Albania (including marketing assistance, market research or customer service; and administration of his/her membership, products supply or services offered for the member now or in the future or lotteries of discount prices, competitions for prices or promotions). d. The Company will not share personal data of the costumer with any third party, except the cases when the costumer is notified that its data  will be transferred to third parties and the costumer gave its consent.
+Any marketing promotion, information, research will be sent under the haPPy logo and with haPPy sender name or its partners.
+4.2 Time of Observation of Personal Data The Company maintains and processes your data for as long as your membership card remains active .After this moment the company erases the data from its database  without using them anymore for any reason until its reactivated with the costumer’s consent.
+4.3 Privacy Policy
+The process of personal data processing takes place in such a way as  to ensure its confidentiality. The company uses appropriate technical  and organizational security measures, follows rules and other procedures to protect your personal data from any unauthorized access, misuse,  alteration, disclosure, loss or accidental / illegal destruction and any other form of form of illicit processing.
+4.4 Member Rights Please be aware that for all of the above-mentioned processing purposes, at any time, the member has  the right to access, correct and / or delete his Personal Data, by  contacting the Program Customer Care via the following contact channels: - Tel: +355 44803999: -Email: loyalty@happy.al Or directly at official website www.happy.al, or through Mobile Application
+The members have the following rights:
+To ask for a copy of personal data that the company holds about them (the company sends the terms via e-mail)
+To request (in certain circumstances) for the deletion of personal data; where there no longer stands a legal ground to retain them (the right of erasure);
+To ask the company to update and correct any out-of-date or incorrect personal data that the company holds about the member (the right of rectification);
+To opt out of any marketing communications that the company may send to the member and to object to the company using / holding members personal data if the company have no legitimate reasons to do so (the right to object);
+ To ask the company (in certain circumstances) to restrict processing of data; which means that we would need to secure and retain the data for the members benefit but not otherwise use it (the right to restrict processing);
+ In the event that one of the above mentioned rights is exercised, the Company will take every possible action to satisfy the claim within one (1) month of its submission and identification, informing the member in writing of the satisfaction of their request or the reasons which impede the exercise of the right to them, and / or the satisfaction of one or more of the above- mentioned rights in accordance with the General Data Protection Regulation.
