@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:happy_pay_flutter/features/wallet/wallet_verification/get_started_with_wallet.dart';
 import '../features/loyalty/home_screen.dart';
 import '../features/wallet/wallet_screen.dart';
 import '../features/loan/loan_screen.dart';
@@ -7,10 +8,7 @@ import '../features/qr_pay/qr_scanner_screen.dart';
 class AppBottomNavigation extends StatelessWidget {
   final int currentIndex;
 
-  const AppBottomNavigation({
-    super.key,
-    required this.currentIndex,
-  });
+  const AppBottomNavigation({super.key, required this.currentIndex});
 
   void _navigate(BuildContext context, int index) {
     if (index == currentIndex) return;
@@ -23,7 +21,7 @@ class AppBottomNavigation extends StatelessWidget {
         break;
 
       case 1:
-        screen = const WalletScreen();
+        screen = const GetStartedWithWallet();
         break;
 
       case 2:
@@ -32,7 +30,7 @@ class AppBottomNavigation extends StatelessWidget {
 
       case 3:
         screen = QRScannerScreen(previousIndex: currentIndex);
-          break;
+        break;
 
       default:
         screen = const HomeScreen();
@@ -40,17 +38,11 @@ class AppBottomNavigation extends StatelessWidget {
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(
-        builder: (_) => screen,
-      ),
+      MaterialPageRoute(builder: (_) => screen),
     );
   }
 
-  Widget _item(
-    BuildContext context,
-    String title,
-    int index,
-  ) {
+  Widget _item(BuildContext context, String title, int index) {
     final bool selected = currentIndex == index;
 
     return Expanded(
@@ -65,8 +57,7 @@ class AppBottomNavigation extends StatelessWidget {
                 title,
                 style: TextStyle(
                   fontSize: 12,
-                  fontWeight:
-                      selected ? FontWeight.w700 : FontWeight.w500,
+                  fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
                   color: Colors.black,
                 ),
               ),
@@ -95,34 +86,14 @@ class AppBottomNavigation extends StatelessWidget {
         height: 70,
         decoration: const BoxDecoration(
           color: Colors.white,
-          border: Border(
-            top: BorderSide(
-              color: Color(0xffECECEC),
-            ),
-          ),
+          border: Border(top: BorderSide(color: Color(0xffECECEC))),
         ),
         child: Row(
           children: [
-            _item(
-              context,
-              "Loyalty",
-              0,
-            ),
-            _item(
-              context,
-              "Wallet",
-              1,
-            ),
-            _item(
-              context,
-              "Loans",
-              2,
-            ),
-            _item(
-              context,
-              "QR pay",
-              3,
-            ),
+            _item(context, "Loyalty", 0),
+            _item(context, "Wallet", 1),
+            _item(context, "Loans", 2),
+            _item(context, "QR pay", 3),
           ],
         ),
       ),

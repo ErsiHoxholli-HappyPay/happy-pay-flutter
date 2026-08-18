@@ -13,7 +13,7 @@ class LastQuestion extends StatelessWidget {
         leading: AppBackButton(),
         title: FractionallySizedBox(
           widthFactor: 0.5,
-          child: StepProgressBar(stepFills: [0.5]),
+          child: StepProgressBar(stepFills: [0.5], color: Colors.black),
         ),
         centerTitle: true,
       ),

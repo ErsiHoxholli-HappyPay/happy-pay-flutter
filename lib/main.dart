@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:happy_pay_flutter/features/splash_screen.dart';
 
-import 'package:happy_pay_flutter/features/wallet/questionare/aditional_information.dart';
+import 'package:happy_pay_flutter/features/wallet/wallet_verification/get_started_with_wallet.dart';
 
 import 'features/onboarding/get_started_screen.dart';
 import 'features/onboarding/phone_number_screen.dart';
@@ -24,9 +25,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Happy Pay',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      // home: const SplashScreen(),
-      home: AditionalInformation(),
+      theme: ThemeData().copyWith(),
+      home: const SplashScreen(),
+      // home: GetStartedWithWallet(),
       routes: {
         '/get_started': (context) => const GetStartedScreen(),
         '/phone_number': (context) => const PhoneNumberScreen(),
