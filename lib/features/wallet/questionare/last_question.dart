@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'package:happy_pay_flutter/features/wallet/terms_and_conditions/terms_and_conditions.dart';
-import 'package:happy_pay_flutter/features/wallet/wallet_screen.dart';
+import 'package:happy_pay_flutter/features/wallet/terms_and_conditions/tcd_holder_screen.dart';
 import 'package:happy_pay_flutter/widgets/back_button.dart';
 import 'package:happy_pay_flutter/widgets/get_started_modal/step_progress_bar.dart';
 
@@ -15,7 +13,7 @@ class LastQuestion extends StatelessWidget {
         leading: AppBackButton(),
         title: FractionallySizedBox(
           widthFactor: 0.5,
-          child: StepProgressBar(stepFills: [0.5]),
+          child: StepProgressBar(stepFills: [0.5], color: Colors.black),
         ),
         centerTitle: true,
       ),
@@ -67,30 +65,7 @@ class LastQuestion extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (_) => LegalDocumentScreen(
-                      title: 'Terms & Conditions',
-                      assetPath:
-                          'lib/assets/wallet_legal/terms_and_conditions.txt',
-                      checkboxLabel:
-                          'I acknowledge that I have received, read, and accepted the Happy Terms and conditions.',
-                      nextScreen: LegalDocumentScreen(
-                        title: 'Consent to data',
-                        assetPath:
-                            'lib/assets/wallet_legal/consent_to_data.txt',
-                        checkboxLabel:
-                            'I acknowledge that I have received, read, and accepted the Happy Terms and conditions.',
-                        nextScreen: LegalDocumentScreen(
-                          title: 'Other consents',
-                          assetPath:
-                              'lib/assets/wallet_legal/other_consents.txt',
-                          checkboxLabel:
-                              'I acknowledge that I have received, read, and accepted the Happy Terms and conditions.',
-                          nextScreen: WalletScreen(),
-                        ),
-                      ),
-                    ),
-                  ),
+                  MaterialPageRoute(builder: (_) => const TermsHolderScreen()),
                 );
               },
               child: Text('Continue', style: TextStyle(color: Colors.white)),

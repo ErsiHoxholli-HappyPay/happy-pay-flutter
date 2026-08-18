@@ -20,7 +20,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: StepProgressBar(stepFills: [0.5]),
+        title: StepProgressBar(stepFills: [0.5], color: Colors.black),
         titleSpacing: 100,
         centerTitle: true,
         elevation: 1,

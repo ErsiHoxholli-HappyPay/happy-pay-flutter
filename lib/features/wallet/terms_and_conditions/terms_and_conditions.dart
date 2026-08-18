@@ -8,13 +8,15 @@ class LegalDocumentScreen extends StatefulWidget {
     required this.title,
     required this.assetPath,
     required this.checkboxLabel,
-    required this.nextScreen,
+    this.nextScreen,
+    this.onAccepted,
   });
 
   final String title;
   final String assetPath;
   final String checkboxLabel;
-  final Widget nextScreen;
+  final Widget? nextScreen;
+  final VoidCallback? onAccepted;
 
   @override
   State<LegalDocumentScreen> createState() => _LegalDocumentScreenState();
@@ -75,10 +77,16 @@ class _LegalDocumentScreenState extends State<LegalDocumentScreen> {
             const SizedBox(height: 10),
             ElevatedButton(
               onPressed: _accepted
-                  ? () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => widget.nextScreen),
-                    )
+                  ? () {
+                      if (widget.onAccepted != null) {
+                        widget.onAccepted!();
+                      } else if (widget.nextScreen != null) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => widget.nextScreen!),
+                        );
+                      }
+                    }
                   : null,
               style: ButtonStyle(
                 minimumSize: const WidgetStatePropertyAll(Size.fromHeight(50)),
