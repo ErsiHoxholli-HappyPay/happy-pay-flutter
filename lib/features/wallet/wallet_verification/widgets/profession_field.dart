@@ -34,7 +34,9 @@ class _AppDropdownFieldState<T> extends State<AppDropdownField<T>> {
 
   @override
   void dispose() {
-    _removeOverlay();
+    // Remove overlay directly — calling setState during dispose crashes
+    _overlayEntry?.remove();
+    _overlayEntry = null;
     super.dispose();
   }
 

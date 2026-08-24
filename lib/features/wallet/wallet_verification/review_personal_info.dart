@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:happy_pay_flutter/features/wallet/id_verification/verification_info.dart';
 import 'package:happy_pay_flutter/features/wallet/wallet_verification/widgets/personal_info_data.dart';
 import 'package:happy_pay_flutter/features/wallet/wallet_verification/widgets/input_field.dart';
 import 'package:happy_pay_flutter/features/wallet/wallet_verification/widgets/submit_button.dart';
@@ -89,7 +90,10 @@ class _ReviewPersonalInfoScreenState extends State<ReviewPersonalInfoScreen> {
     await Future.delayed(const Duration(milliseconds: 600));
     if (!mounted) return;
     setState(() => _isSubmitting = false);
-    Navigator.pushNamed(context, '/kyc/next_step');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => VerificationInfo()),
+    );
   }
 
   @override
