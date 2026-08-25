@@ -51,7 +51,7 @@ class DocumentVerificationSuccess extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text('Back to Home', style: TextStyle(fontSize: 16)),
+              child: const Text('Done', style: TextStyle(fontSize: 16)),
             ),
           ),
         ],

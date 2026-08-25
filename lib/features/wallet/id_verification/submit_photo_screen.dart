@@ -57,10 +57,7 @@ class _SubmitPhotoScreenState extends State<SubmitPhotoScreen> {
   }
 
   void _retake() {
-    // Pop SubmitPhotoScreen(s) + IdDirectionsScreen to land back on GovDocuments
-    int count = 0;
-    final int popsNeeded = widget.isFront ? 2 : 3;
-    Navigator.of(context).popUntil((_) => count++ >= popsNeeded);
+    Navigator.of(context).pop();
   }
 
   String get _sideLabel => widget.isFront ? 'Front' : 'Back';
