@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:happy_pay_flutter/features/wallet/wallet_verification/get_started_with_wallet.dart';
+import '../data/session.dart';
 import '../features/loyalty/home_screen.dart';
 import '../features/wallet/wallet_screen.dart';
 import '../features/loan/loan_screen.dart';
@@ -12,7 +13,7 @@ class AppBottomNavigation extends StatelessWidget {
 
   void _navigate(BuildContext context, int index) {
     if (index == currentIndex) return;
-
+    final hasKyc = AppSession.currentUser?.hasWalletKyc == true;
     Widget screen;
 
     switch (index) {
@@ -21,7 +22,7 @@ class AppBottomNavigation extends StatelessWidget {
         break;
 
       case 1:
-        screen = const GetStartedWithWallet();
+        screen = hasKyc ? const WalletScreen() : const GetStartedWithWallet();
         break;
 
       case 2:

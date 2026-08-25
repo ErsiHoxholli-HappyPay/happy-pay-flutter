@@ -284,6 +284,7 @@ class _ReviewPersonalInfoScreenState extends State<ReviewPersonalInfoScreen> {
               onPressed: _handleSubmit,
             ),
           ),
+          const SizedBox(height: 40),
         ],
       ),
     );

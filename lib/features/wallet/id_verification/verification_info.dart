@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:happy_pay_flutter/features/wallet/id_verification/documents.dart';
+import 'package:happy_pay_flutter/features/wallet/wallet_verification/widgets/submit_button.dart';
 import 'package:happy_pay_flutter/widgets/back_button.dart';
 
 class VerificationInfo extends StatelessWidget {
   const VerificationInfo({super.key});
+
+  void _continue(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const GovDocuments()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,32 +64,9 @@ class VerificationInfo extends StatelessWidget {
               ],
             ),
             Spacer(),
-            SizedBox(
-              height: 50,
-              width: double.infinity,
-
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const GovDocuments()),
-                  );
-                },
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateColor.resolveWith(
-                    (states) => Colors.black,
-                  ),
-                  foregroundColor: WidgetStateColor.resolveWith(
-                    (states) => Colors.white,
-                  ),
-                  shape: WidgetStateOutlinedBorder.resolveWith(
-                    (states) => RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-                child: Text('Continue'),
-              ),
+            AppSubmitButton(
+              label: 'Continue',
+              onPressed: () => _continue(context),
             ),
             const SizedBox(height: 40),
           ],

@@ -2,8 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:happy_pay_flutter/features/wallet/id_verification/document_verification_success.dart';
+import 'package:happy_pay_flutter/features/wallet/wallet_verification/widgets/submit_button.dart';
 import 'package:happy_pay_flutter/widgets/back_button.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:camera/camera.dart' show XFile;
+
+import 'document_camera_screen.dart';
 
 class SubmitPhotoScreen extends StatefulWidget {
   const SubmitPhotoScreen({
@@ -23,21 +26,14 @@ class _SubmitPhotoScreenState extends State<SubmitPhotoScreen> {
   XFile? _capturedPhoto;
 
   Future<void> _takePhoto() async {
-    try {
-      final XFile? photo = await ImagePicker().pickImage(
-        source: ImageSource.camera,
-        imageQuality: 90,
-      );
-      if (photo != null) setState(() => _capturedPhoto = photo);
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Could not open camera. Please check permissions.'),
-          ),
-        );
-      }
-    }
+    final result = await Navigator.push<XFile>(
+      context,
+      MaterialPageRoute(
+        builder: (_) =>
+            DocumentCameraScreen(sideLabel: widget.isFront ? 'front' : 'back'),
+      ),
+    );
+    if (result != null) setState(() => _capturedPhoto = result);
   }
 
   void _submit() {
@@ -56,14 +52,9 @@ class _SubmitPhotoScreenState extends State<SubmitPhotoScreen> {
     }
   }
 
-  void _retake() {
-    Navigator.of(context).pop();
-  }
-
-  String get _sideLabel => widget.isFront ? 'Front' : 'Back';
-
   @override
   Widget build(BuildContext context) {
+    final photo = _capturedPhoto;
     return Scaffold(
       appBar: AppBar(
         leading: const AppBackButton(),
@@ -75,19 +66,34 @@ class _SubmitPhotoScreenState extends State<SubmitPhotoScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _capturedPhoto == null ? _buildFramingTitle() : _buildReviewTitle(),
+            if (photo == null)
+              _FramingTitle(sideLabel: widget.isFront ? 'Front' : 'Back')
+            else
+              const _ReviewTitle(),
             const SizedBox(height: 24),
-            _buildImageBox(),
+            _ImageBox(photo: photo),
             const Spacer(),
-            if (_capturedPhoto == null) _buildTakePhotoButton(),
-            if (_capturedPhoto != null) ..._buildReviewButtons(),
+            if (photo == null)
+              AppSubmitButton(label: 'Take a photo', onPressed: _takePhoto)
+            else ...[
+              AppSubmitButton(label: 'Submit', onPressed: _submit),
+              const SizedBox(height: 12),
+              _RetakeButton(onPressed: Navigator.of(context).pop),
+            ],
           ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildFramingTitle() {
+class _FramingTitle extends StatelessWidget {
+  const _FramingTitle({required this.sideLabel});
+
+  final String sideLabel;
+
+  @override
+  Widget build(BuildContext context) {
     return RichText(
       text: TextSpan(
         style: const TextStyle(
@@ -98,7 +104,7 @@ class _SubmitPhotoScreenState extends State<SubmitPhotoScreen> {
         children: [
           const TextSpan(text: 'Place the '),
           TextSpan(
-            text: '$_sideLabel of the document',
+            text: '$sideLabel of the document',
             style: const TextStyle(decoration: TextDecoration.underline),
           ),
           const TextSpan(text: ' in the frame'),
@@ -106,15 +112,27 @@ class _SubmitPhotoScreenState extends State<SubmitPhotoScreen> {
       ),
     );
   }
+}
 
-  Widget _buildReviewTitle() {
+class _ReviewTitle extends StatelessWidget {
+  const _ReviewTitle();
+
+  @override
+  Widget build(BuildContext context) {
     return const Text(
       'Make sure that your details are clear and readable',
       style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
     );
   }
+}
 
-  Widget _buildImageBox() {
+class _ImageBox extends StatelessWidget {
+  const _ImageBox({required this.photo});
+
+  final XFile? photo;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       height: 220,
       width: double.infinity,
@@ -123,63 +141,34 @@ class _SubmitPhotoScreenState extends State<SubmitPhotoScreen> {
         color: Colors.grey[300],
         borderRadius: BorderRadius.circular(12),
       ),
-      child: _capturedPhoto != null
-          ? Image.file(File(_capturedPhoto!.path), fit: BoxFit.cover)
+      child: photo != null
+          ? Image.file(File(photo!.path), fit: BoxFit.cover)
           : null,
     );
   }
+}
 
-  Widget _buildTakePhotoButton() {
+class _RetakeButton extends StatelessWidget {
+  const _RetakeButton({required this.onPressed});
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
       height: 50,
       width: double.infinity,
-      child: ElevatedButton(
-        onPressed: _takePhoto,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.black,
-          foregroundColor: Colors.white,
+      child: OutlinedButton(
+        onPressed: onPressed,
+        style: OutlinedButton.styleFrom(
+          foregroundColor: Colors.black,
+          side: const BorderSide(color: Colors.black),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
         ),
-        child: const Text('Take a photo', style: TextStyle(fontSize: 16)),
+        child: const Text('Retake photo', style: TextStyle(fontSize: 16)),
       ),
     );
-  }
-
-  List<Widget> _buildReviewButtons() {
-    return [
-      SizedBox(
-        height: 50,
-        width: double.infinity,
-        child: ElevatedButton(
-          onPressed: _submit,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          child: const Text('Submit', style: TextStyle(fontSize: 16)),
-        ),
-      ),
-      const SizedBox(height: 12),
-      SizedBox(
-        height: 50,
-        width: double.infinity,
-        child: OutlinedButton(
-          onPressed: _retake,
-          style: OutlinedButton.styleFrom(
-            foregroundColor: Colors.black,
-            side: const BorderSide(color: Colors.black),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          child: const Text('Retake photo', style: TextStyle(fontSize: 16)),
-        ),
-      ),
-    ];
   }
 }

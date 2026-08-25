@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:happy_pay_flutter/features/wallet/id_verification/selfie_info_screen.dart';
+
 class DocumentVerificationSuccess extends StatelessWidget {
   const DocumentVerificationSuccess({super.key});
 
@@ -41,9 +43,10 @@ class DocumentVerificationSuccess extends StatelessWidget {
             height: 50,
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () => Navigator.of(
+              onPressed: () => Navigator.push(
                 context,
-              ).pushNamedAndRemoveUntil('/home_screen', (_) => false),
+                MaterialPageRoute(builder: (_) => SelfieInfoScreen()),
+              ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,
                 foregroundColor: Colors.white,
