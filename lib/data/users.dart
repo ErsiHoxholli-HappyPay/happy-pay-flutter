@@ -10,6 +10,7 @@ final users = [
     birthDate: '1990-01-01',
     address: 'Main St, Tirana, Albania 1001',
     happyPoints: 6154,
+    hasWalletKyc: true,
   ),
   Users(
     id: '2',
@@ -20,5 +21,6 @@ final users = [
     birthDate: '1992-02-02',
     address: 'Main St, Tirana, Albania 1001',
     happyPoints: 3640,
+    hasWalletKyc: false,
   ),
 ];

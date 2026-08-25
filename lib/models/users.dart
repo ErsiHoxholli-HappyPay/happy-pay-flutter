@@ -8,6 +8,7 @@ class Users {
   final String? birthDate;
   final String? address;
   final int? happyPoints;
+  final bool hasWalletKyc;
 
   Users({
     required this.id,
@@ -19,5 +20,6 @@ class Users {
     this.birthDate,
     this.address,
     this.happyPoints,
+    required this.hasWalletKyc,
   });
 }

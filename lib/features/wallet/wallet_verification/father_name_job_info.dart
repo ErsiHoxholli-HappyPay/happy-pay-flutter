@@ -113,6 +113,7 @@ class _JobInformationScreenState extends State<JobInformationScreen> {
               isLoading: _isSubmitting,
               onPressed: _profession == null ? null : _handleSubmit,
             ),
+            const SizedBox(height: 40),
           ],
         ),
       ),

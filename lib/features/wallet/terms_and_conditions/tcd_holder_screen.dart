@@ -211,6 +211,7 @@ class ShowBottomModal extends StatelessWidget {
 
   static Future<void> _show(BuildContext context) {
     return showModalBottomSheet(
+      useSafeArea: true,
       context: context,
       backgroundColor: Colors.white,
       shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(12)),
