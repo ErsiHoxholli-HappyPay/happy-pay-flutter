@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:happy_pay_flutter/data/session.dart';
+import 'package:happy_pay_flutter/data/users.dart';
+// import 'package:happy_pay_flutter/features/settings_screens/settings_screen.dart';
 import 'package:happy_pay_flutter/features/splash_screen.dart';
-
-import 'package:happy_pay_flutter/features/wallet/wallet_verification/get_started_with_wallet.dart';
 
 import 'features/onboarding/get_started_screen.dart';
 import 'features/onboarding/phone_number_screen.dart';
@@ -15,6 +16,7 @@ import 'features/kyc/terms_and_conditions.dart';
 import 'features/kyc/privacy_policy.dart';
 
 void main() {
+  AppSession.currentUser ??= users.first;
   runApp(const MyApp());
 }
 
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
       title: 'Happy Pay',
       theme: ThemeData().copyWith(),
       home: const SplashScreen(),
-      // home: GetStartedWithWallet(),
+      // home: SettingsScreen(user: AppSession.currentUser ?? users.first),
       routes: {
         '/get_started': (context) => const GetStartedScreen(),
         '/phone_number': (context) => const PhoneNumberScreen(),

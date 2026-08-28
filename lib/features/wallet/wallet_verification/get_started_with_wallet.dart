@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:happy_pay_flutter/features/loyalty/home_screen.dart';
 import 'package:happy_pay_flutter/features/wallet/wallet_verification/view_details.dart';
 
 class GetStartedWithWallet extends StatefulWidget {
@@ -19,9 +20,30 @@ class _GetStartedWithWalletState extends State<GetStartedWithWallet> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Get started with Wallet + Loans',
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    'Get started with Wallet + Loans',
+                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(width: 40),
+                IconButton(
+                  onPressed: () => Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (_) => const HomeScreen()),
+                    (route) => route.isFirst,
+                  ),
+                  style: IconButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.white,
+                    shape: const CircleBorder(),
+                  ),
+                  icon: const Icon(Icons.close, size: 18),
+                ),
+              ],
             ),
             SizedBox(
               height: 200,

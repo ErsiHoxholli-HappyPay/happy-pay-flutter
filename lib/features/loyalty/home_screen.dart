@@ -6,6 +6,7 @@ import 'package:happy_pay_flutter/features/loyalty/barcode_screen.dart';
 import 'package:happy_pay_flutter/features/loyalty/points_history.dart';
 import 'package:happy_pay_flutter/features/loyalty/referal.dart';
 import 'package:happy_pay_flutter/features/loyalty/steps/steps_permission.dart';
+import 'package:happy_pay_flutter/features/settings_screens/settings_screen.dart';
 import 'package:happy_pay_flutter/widgets/lucky_spin/lucky_spin.dart';
 import 'package:happy_pay_flutter/features/loyalty/partners/partners_screen.dart';
 import '../../data/offer.dart';
@@ -84,16 +85,30 @@ class _HomeScreenState extends State<HomeScreen> {
                         const SizedBox(width: 12),
 
                         Container(
+                          alignment: Alignment.center,
                           width: 38,
                           height: 38,
                           decoration: BoxDecoration(
                             color: Colors.black,
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Icon(
-                            Icons.person,
-                            color: Colors.white,
-                            size: 20,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                            ),
+                            onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => SettingsScreen(
+                                  user: AppSession.currentUser!,
+                                ),
+                              ),
+                            ),
+                            child: const Icon(
+                              Icons.person,
+                              color: Colors.white,
+                              size: 20,
+                            ),
                           ),
                         ),
                       ],
