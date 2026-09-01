@@ -1,3 +1,6 @@
+import 'payment_card.dart';
+import 'bank_account.dart';
+
 class Users {
   final String id;
   final String phoneNumber;
@@ -9,6 +12,8 @@ class Users {
   final String? address;
   final int? happyPoints;
   final bool hasWalletKyc;
+  final List<PaymentCard> savedCards;
+  final List<BankAccount> savedBankAccounts;
 
   Users({
     required this.id,
@@ -21,5 +26,8 @@ class Users {
     this.address,
     this.happyPoints,
     required this.hasWalletKyc,
-  });
+    List<PaymentCard>? savedCards,
+    List<BankAccount>? savedBankAccounts,
+  })  : savedCards = savedCards ?? [],
+        savedBankAccounts = savedBankAccounts ?? [];
 }
