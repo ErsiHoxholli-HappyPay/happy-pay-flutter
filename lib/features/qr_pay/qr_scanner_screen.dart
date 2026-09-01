@@ -1,8 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'my_qr_screen.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'qr_payment_screen.dart';
+import 'scanned_contact_screen.dart';
 
+import '../../data/contacts.dart';
 import '../../features/loyalty/home_screen.dart';
+import '../../features/wallet/new_payment/send_amount_screen.dart';
 import '../../features/wallet/wallet_screen.dart';
 import '../../features/loan/loan_screen.dart';
 
@@ -55,15 +61,55 @@ class QRScannerScreen extends StatelessWidget {
             MobileScanner(
               fit: BoxFit.cover,
               onDetect: (capture) {
-                final barcode = capture.barcodes.first;
+                final barcode = capture.barcodes.firstOrNull;
+                if (barcode?.rawValue == null) return;
 
-                if (barcode.rawValue == null) return;
+                Map<String, dynamic>? data;
+                try {
+                  data = jsonDecode(barcode!.rawValue!) as Map<String, dynamic>;
+                } catch (_) {}
 
-                debugPrint(barcode.rawValue);
-
-                // Later:
-                // final data = jsonDecode(barcode.rawValue!);
-                // Navigator.push(...);
+                if (data != null && data['type'] == 'payment') {
+                  // Personal QR — check if already a contact
+                  final name = (data['name'] as String?) ?? 'Unknown';
+                  final walletId = (data['wallet'] as String?) ?? '';
+                  final known = contacts.any(
+                    (c) => c.name.toLowerCase() == name.toLowerCase(),
+                  );
+                  if (known) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => SendAmountScreen(
+                          contactName: name,
+                        ),
+                      ),
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => ScannedContactScreen(
+                          name: name,
+                          walletId: walletId,
+                        ),
+                      ),
+                    );
+                  }
+                } else {
+                  // Merchant / unknown QR
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const QrPaymentScreen(
+                        merchantName: 'Neptun',
+                        amount: 1000,
+                        reference: '2025-3049-5432',
+                        category: 'Shopping',
+                      ),
+                    ),
+                  );
+                }
               },
             ),
 
