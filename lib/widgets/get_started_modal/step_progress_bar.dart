@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
 class StepProgressBar extends StatelessWidget {
-  const StepProgressBar({super.key, required this.stepFills});
+  const StepProgressBar({
+    super.key,
+    required this.stepFills,
+    required this.color,
+  });
 
   final List<double> stepFills;
-
+  final Color color;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -13,7 +17,10 @@ class StepProgressBar extends StatelessWidget {
         return Expanded(
           child: Padding(
             padding: EdgeInsets.only(right: isLast ? 0 : 6),
-            child: _SegmentBar(fillCurrent: stepFills[i].clamp(0.0, 1.0)),
+            child: _SegmentBar(
+              fillCurrent: stepFills[i].clamp(0.0, 1.0),
+              fillColor: color,
+            ),
           ),
         );
       }),
@@ -22,10 +29,10 @@ class StepProgressBar extends StatelessWidget {
 }
 
 class _SegmentBar extends StatefulWidget {
-  const _SegmentBar({required this.fillCurrent});
+  const _SegmentBar({required this.fillCurrent, required this.fillColor});
 
   final double fillCurrent;
-
+  final Color fillColor;
   @override
   State<_SegmentBar> createState() => _SegmentBarState();
 }
@@ -59,10 +66,11 @@ class _SegmentBarState extends State<_SegmentBar> {
             alignment: growing ? Alignment.centerLeft : Alignment.centerRight,
             child: FractionallySizedBox(
               widthFactor: value,
+
               child: Container(
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.black87,
+                  color: widget.fillColor,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),

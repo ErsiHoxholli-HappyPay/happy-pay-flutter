@@ -41,6 +41,13 @@ dependencies:
   shared_preferences: ^2.5.5
   fl_chart: ^1.2.0
   ionicons_plus: ^0.2.5
+  mobile_scanner: ^7.1.2
+  qr_flutter: ^4.1.0
+  share_plus: ^11.0.0
+  camera: ^0.11.0
+  # overrides camera_android_camerax — fixes PigeonInternalInstanceManager channel error
+  camera_android: any
+  image_picker: ^1.2.3
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +74,9 @@ flutter:
     - lib/assets/
     - lib/assets/legal/terms_and_conditions.txt
     - lib/assets/legal/privacy_policy.txt
+    - lib/assets/wallet_legal/terms_and_conditions.txt
+    - lib/assets/wallet_legal/consent_to_data.txt
+    - lib/assets/wallet_legal/other_consents.txt
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

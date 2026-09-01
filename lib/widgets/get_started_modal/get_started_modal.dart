@@ -82,6 +82,7 @@ class _OnboardingSheetState extends State<OnboardingSheet> {
                 const partials = [0.3, 0.6, 1.0];
                 return partials[_currentStep.clamp(0, partials.length - 1)];
               }),
+              color: Colors.black,
             ),
             const SizedBox(height: 24),
             Text(

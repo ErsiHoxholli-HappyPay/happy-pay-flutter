@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen>
   Future<void> _bootstrap() async {
     await Future.wait([
       _initApp(), // your real init logic
-      Future.delayed(const Duration(seconds: 3)), // min display time
+      Future.delayed(const Duration(seconds: 3)),
     ]);
     if (!mounted) return;
     Navigator.of(context).pushReplacementNamed('/get_started');
@@ -47,10 +47,28 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: FadeTransition(
-          opacity: _fade,
-          child: Image.asset('lib/assets/image.png', width: 200, height: 200),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color.fromARGB(255, 154, 16, 16),
+              Color.fromARGB(255, 15, 5, 157),
+            ],
+            begin: AlignmentGeometry.topLeft,
+            end: AlignmentGeometry.bottomRight,
+          ),
+        ),
+
+        child: Center(
+          child: FadeTransition(
+            opacity: _fade,
+            child: Image.asset(
+              'lib/assets/image.png',
+              width: 200,
+              height: 200,
+              color: Colors.white,
+            ),
+          ),
         ),
       ),
     );

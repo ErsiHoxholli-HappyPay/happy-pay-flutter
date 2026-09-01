@@ -1,4 +1,6 @@
 import '../models/users.dart';
+import '../models/payment_card.dart';
+import '../models/bank_account.dart';
 
 final users = [
   Users(
@@ -10,6 +12,16 @@ final users = [
     birthDate: '1990-01-01',
     address: 'Main St, Tirana, Albania 1001',
     happyPoints: 6154,
+    hasWalletKyc: true,
+    savedCards: [
+      PaymentCard(brand: 'Visa', last4: '1234', expiry: '05/27', bankName: 'Tirana Bank'),
+    ],
+    savedBankAccounts: [
+      BankAccount(
+        bankName: 'Tirana Bank',
+        iban: 'AL47212110090000000235698741',
+      ),
+    ],
   ),
   Users(
     id: '2',
@@ -20,5 +32,6 @@ final users = [
     birthDate: '1992-02-02',
     address: 'Main St, Tirana, Albania 1001',
     happyPoints: 3640,
+    hasWalletKyc: false,
   ),
 ];

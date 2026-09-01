@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:happy_pay_flutter/features/booklets/booklets.dart';
-import 'package:happy_pay_flutter/features/booklets/booklets_screen.dart';
+import 'package:happy_pay_flutter/features/loyalty/booklets/booklets.dart';
+import 'package:happy_pay_flutter/features/loyalty/booklets/booklets_screen.dart';
 import 'package:happy_pay_flutter/features/loyalty/level_rewards_info.dart';
 import 'package:happy_pay_flutter/features/loyalty/barcode_screen.dart';
+import 'package:happy_pay_flutter/features/loyalty/points_history.dart';
 import 'package:happy_pay_flutter/features/loyalty/referal.dart';
-import 'package:happy_pay_flutter/features/steps/steps_permission.dart';
+import 'package:happy_pay_flutter/features/loyalty/steps/steps_permission.dart';
+import 'package:happy_pay_flutter/features/settings_screens/settings_screen.dart';
 import 'package:happy_pay_flutter/widgets/lucky_spin/lucky_spin.dart';
-import 'package:happy_pay_flutter/features/partners/partners_screen.dart';
+import 'package:happy_pay_flutter/features/loyalty/partners/partners_screen.dart';
 import '../../data/offer.dart';
 import '../../data/coupons.dart';
 import '../../data/session.dart';
-import '../offers/offers_screen.dart';
-import '../offers/offer_details_screen.dart';
+import 'offers/offers_screen.dart';
+import 'offers/offer_details_screen.dart';
 import '../../widgets/offer_widgets/offer_card.dart';
-import '../coupons/coupons_screen.dart';
+import 'coupons/coupons_screen.dart';
+import '../../widgets/app_bottom_navigation.dart';
+import '../../widgets/app_header.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,7 +27,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool happyOffers = true;
+  bool happyOffers = false;
   @override
   Widget build(BuildContext context) {
     final user = AppSession.currentUser;
@@ -73,27 +77,38 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     // HEADER
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                          "Loyalty",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        const Expanded(
+                          child: AppHeader(title: "Loyalty", currentIndex: 0),
                         ),
 
+                        const SizedBox(width: 12),
+
                         Container(
-                          width: 36,
-                          height: 36,
+                          alignment: Alignment.center,
+                          width: 38,
+                          height: 38,
                           decoration: BoxDecoration(
                             color: Colors.black,
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Icon(
-                            Icons.person,
-                            color: Colors.white,
-                            size: 20,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                            ),
+                            onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => SettingsScreen(
+                                  user: AppSession.currentUser!,
+                                ),
+                              ),
+                            ),
+                            child: const Icon(
+                              Icons.person,
+                              color: Colors.white,
+                              size: 20,
+                            ),
                           ),
                         ),
                       ],
@@ -214,7 +229,20 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
 
-                        Text("View all ›", style: TextStyle(fontSize: 12)),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const PointsHistoryScreen(),
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            "View All >",
+                            style: TextStyle(fontSize: 14),
+                          ),
+                        ),
                       ],
                     ),
 
@@ -414,22 +442,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
 
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.card_giftcard),
-            label: "Loyalty",
-          ),
-
-          BottomNavigationBarItem(icon: Icon(Icons.wallet), label: "Wallet"),
-
-          BottomNavigationBarItem(icon: Icon(Icons.payments), label: "Loans"),
-
-          BottomNavigationBarItem(icon: Icon(Icons.qr_code), label: "QR pay"),
-        ],
-      ),
+      bottomNavigationBar: AppBottomNavigation(currentIndex: 0),
     );
   }
 
