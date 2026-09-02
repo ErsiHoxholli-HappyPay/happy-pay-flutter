@@ -70,7 +70,7 @@ class _TermsHolderScreenState extends State<TermsHolderScreen> {
             Column(
               children: [
                 for (int i = 0; i < Documents.values.length; i++)
-                  _ConsentTile(
+                  ConsentTile(
                     document: Documents.values[i],
                     isFirst: i == 0,
                     isLast: i == Documents.values.length - 1,
@@ -138,8 +138,8 @@ class _TermsHolderScreenState extends State<TermsHolderScreen> {
   }
 }
 
-class _ConsentTile extends StatelessWidget {
-  const _ConsentTile({
+class ConsentTile extends StatelessWidget {
+  const ConsentTile({
     required this.document,
     required this.isFirst,
     required this.isLast,
