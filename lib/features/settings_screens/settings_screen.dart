@@ -2,9 +2,19 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:happy_pay_flutter/features/qr_pay/my_qr_screen.dart';
+import 'package:happy_pay_flutter/features/settings_screens/about_screen.dart';
+import 'package:happy_pay_flutter/features/settings_screens/account_details/view_account_details.dart';
+import 'package:happy_pay_flutter/features/settings_screens/app_prefferences_screen.dart';
+import 'package:happy_pay_flutter/features/settings_screens/faq_screen.dart';
+import 'package:happy_pay_flutter/features/settings_screens/feedback_screen.dart';
+import 'package:happy_pay_flutter/features/settings_screens/inbox_screen.dart';
+import 'package:happy_pay_flutter/features/settings_screens/notification_details_modal.dart';
 import 'package:happy_pay_flutter/features/settings_screens/privacy_and_security.dart';
+import 'package:happy_pay_flutter/features/settings_screens/widgets/change_language_modal.dart';
 import 'package:happy_pay_flutter/features/settings_screens/widgets/select_image_modal.dart';
 import 'package:happy_pay_flutter/features/settings_screens/widgets/settings_buttons.dart';
+import 'package:happy_pay_flutter/features/settings_screens/widgets/confirm_modal.dart';
+
 import 'package:happy_pay_flutter/features/wallet/wallet_verification/widgets/submit_button.dart';
 import 'package:happy_pay_flutter/models/users.dart';
 
@@ -122,7 +132,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       label: 'Change Language',
                       foregroundColor: Colors.black,
                       backgroundColor: Colors.white,
-                      onTap: () {},
+                      onTap: () async {
+                        await ChangeLanguageModal.show(context);
+                      },
                     ),
                   ),
                   Expanded(
@@ -131,7 +143,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       label: 'Inbox',
                       foregroundColor: Colors.black,
                       backgroundColor: Colors.white,
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                InboxScreen(notifications: notification),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -142,7 +162,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 label: 'Account Details',
                 foregroundColor: Colors.black,
                 backgroundColor: Colors.white,
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ViewAccountDetails(
+                        primaryLabel: 'Delete Account',
+                        keepPrimaryWhileEditing: true,
+                        onSubmit: (data) => Navigator.pop(context),
+                      ),
+                    ),
+                  );
+                },
               ),
 
               SettingsButtons(
@@ -150,8 +181,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 label: 'App Preferences',
                 foregroundColor: Colors.black,
                 backgroundColor: Colors.white,
-                onTap: () {},
+                onTap: () async =>
+                    await AppPrefferencesModal.showPrefferencesModal(context),
               ),
+
               SettingsButtons(
                 icon: Icon(Icons.lock),
                 label: 'Privacy and Safety',
@@ -186,7 +219,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 label: 'About',
                 foregroundColor: Colors.black,
                 backgroundColor: Colors.white,
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => AboutScreen()),
+                  );
+                },
               ),
               const SizedBox(height: 10),
               Row(
@@ -194,7 +232,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Expanded(
                     child: SettingsButtons(
                       showHelpBadge: true,
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const FaqScreen()),
+                        );
+                      },
                       label: 'FAQ',
                       foregroundColor: Colors.black,
                       backgroundColor: Colors.white,
@@ -206,7 +249,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       label: 'Feedback',
                       foregroundColor: Colors.black,
                       backgroundColor: Colors.white,
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => FeedbackScreen()),
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -214,7 +262,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               const SizedBox(height: 28),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 10),
-                child: AppSubmitButton(label: 'Sign Out', onPressed: () {}),
+                child: AppSubmitButton(
+                  label: 'Sign Out',
+                  onPressed: () => ConfirmModal.showSignOut(context),
+                ),
               ),
               const SizedBox(height: 40),
             ],

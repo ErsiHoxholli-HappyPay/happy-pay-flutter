@@ -14,7 +14,12 @@ final users = [
     happyPoints: 6154,
     hasWalletKyc: true,
     savedCards: [
-      PaymentCard(brand: 'Visa', last4: '1234', expiry: '05/27', bankName: 'Tirana Bank'),
+      PaymentCard(
+        brand: 'Visa',
+        last4: '1234',
+        expiry: '05/27',
+        bankName: 'Tirana Bank',
+      ),
     ],
     savedBankAccounts: [
       BankAccount(
@@ -28,6 +33,17 @@ final users = [
     name: 'Jane Smith',
     email: 'jane@example.com',
     phoneNumber: '+355 612345679',
+    gender: 'Female',
+    birthDate: '1992-02-02',
+    address: 'Main St, Tirana, Albania 1001',
+    happyPoints: 3640,
+    hasWalletKyc: false,
+  ),
+  Users(
+    id: '3',
+    name: 'Jack Smith',
+    email: '',
+    phoneNumber: '+355 612345670',
     gender: 'Female',
     birthDate: '1992-02-02',
     address: 'Main St, Tirana, Albania 1001',
