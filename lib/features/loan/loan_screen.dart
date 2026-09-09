@@ -1,8 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:happy_pay_flutter/data/session.dart';
 import 'package:happy_pay_flutter/features/loan/loan_details.dart';
 import 'package:happy_pay_flutter/features/loan/payment_plan_screen.dart';
+import 'package:happy_pay_flutter/features/settings_screens/settings_screen.dart';
 import '../../widgets/app_bottom_navigation.dart';
 import '../../widgets/app_header.dart';
 
@@ -32,10 +34,19 @@ class LoanScreen extends StatelessWidget {
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(
-                      Icons.person,
-                      color: Colors.white,
-                      size: 22,
+                    child: IconButton(
+                      onPressed: () {
+                        final user = AppSession.currentUser;
+                        if (user == null) return;
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => SettingsScreen(user: user),
+                          ),
+                        );
+                      },
+                      icon: Icon(Icons.person, size: 22, color: Colors.white),
                     ),
                   ),
                 ],
