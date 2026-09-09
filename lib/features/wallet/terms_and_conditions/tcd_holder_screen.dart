@@ -140,6 +140,7 @@ class _TermsHolderScreenState extends State<TermsHolderScreen> {
 
 class ConsentTile extends StatelessWidget {
   const ConsentTile({
+    super.key,
     required this.document,
     required this.isFirst,
     required this.isLast,
