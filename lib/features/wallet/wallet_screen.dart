@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:happy_pay_flutter/features/settings_screens/settings_screen.dart';
 import '../../data/businesses.dart';
 import '../../data/contacts.dart';
 import '../../data/session.dart';
@@ -50,8 +51,7 @@ class _WalletScreenState extends State<WalletScreen> {
                           onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) =>
-                                  const InsightsScreen(),
+                              builder: (_) => const InsightsScreen(),
                             ),
                           ),
                           child: _topButton(Icons.bar_chart),
@@ -123,8 +123,7 @@ class _WalletScreenState extends State<WalletScreen> {
                               await Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) =>
-                                      const AddMoneyScreen(),
+                                  builder: (_) => const AddMoneyScreen(),
                                 ),
                               );
                               if (mounted) setState(() {});
@@ -158,13 +157,10 @@ class _WalletScreenState extends State<WalletScreen> {
                     // ----------------------------------------
                     // PENDING REQUESTS
                     // ----------------------------------------
-
                     if (AppSession.pendingRequests.isNotEmpty) ...[
                       const Text(
                         "Pending requests",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 10),
                       ...AppSession.pendingRequests.map(
@@ -173,30 +169,22 @@ class _WalletScreenState extends State<WalletScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (_) =>
-                                  ReviewIncomingRequestScreen(
-                                request: req,
-                              ),
+                                  ReviewIncomingRequestScreen(request: req),
                             ),
                           ).then((_) => setState(() {})),
                           child: Container(
-                            margin: const EdgeInsets.only(
-                              bottom: 8,
-                            ),
+                            margin: const EdgeInsets.only(bottom: 8),
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               color: Colors.grey.shade100,
-                              borderRadius:
-                                  BorderRadius.circular(8),
-                              border: Border.all(
-                                color: Colors.grey.shade200,
-                              ),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: Colors.grey.shade200),
                             ),
                             child: Row(
                               children: [
                                 CircleAvatar(
                                   radius: 18,
-                                  backgroundColor:
-                                      Colors.grey.shade300,
+                                  backgroundColor: Colors.grey.shade300,
                                   child: Text(
                                     req.contactName
                                         .split(' ')
@@ -205,8 +193,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                         .join(),
                                     style: const TextStyle(
                                       fontSize: 11,
-                                      fontWeight:
-                                          FontWeight.w600,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                 ),
@@ -220,16 +207,14 @@ class _WalletScreenState extends State<WalletScreen> {
                                         req.contactName,
                                         style: const TextStyle(
                                           fontSize: 12,
-                                          fontWeight:
-                                              FontWeight.w500,
+                                          fontWeight: FontWeight.w500,
                                         ),
                                       ),
                                       Text(
                                         "Tap to accept or decline",
                                         style: TextStyle(
                                           fontSize: 10,
-                                          color:
-                                              Colors.grey.shade500,
+                                          color: Colors.grey.shade500,
                                         ),
                                       ),
                                     ],
@@ -251,15 +236,13 @@ class _WalletScreenState extends State<WalletScreen> {
                     ],
 
                     // ----------------------------------------
-
                     _sectionHeader(
                       "People",
                       actionLabel: "All contacts",
                       onAction: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) =>
-                              const ContactsScreen(),
+                          builder: (_) => const ContactsScreen(),
                         ),
                       ),
                     ),
@@ -280,49 +263,38 @@ class _WalletScreenState extends State<WalletScreen> {
                               .take(5)
                               .toList()[index];
                           return GestureDetector(
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) =>
-                                    ContactDetailScreen(
-                                  contact: person,
-                                ),
-                              ),
-                            ).then((_) {
-                              if (mounted) setState(() {});
-                            }),
+                            onTap: () =>
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        ContactDetailScreen(contact: person),
+                                  ),
+                                ).then((_) {
+                                  if (mounted) setState(() {});
+                                }),
                             child: Container(
                               width: 60,
-                              margin: const EdgeInsets
-                                  .only(right: 12),
+                              margin: const EdgeInsets.only(right: 12),
                               child: Column(
                                 children: [
                                   CircleAvatar(
                                     radius: 20,
-                                    backgroundColor:
-                                        Colors.grey.shade300,
+                                    backgroundColor: Colors.grey.shade300,
                                     child: Text(
                                       person.initials,
-                                      style:
-                                          const TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 12,
-                                        fontWeight:
-                                            FontWeight.w600,
-                                        color:
-                                            Colors.black87,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black87,
                                       ),
                                     ),
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
-                                    person.name
-                                        .split(' ')
-                                        .first,
-                                    style: const TextStyle(
-                                      fontSize: 11,
-                                    ),
-                                    overflow:
-                                        TextOverflow.ellipsis,
+                                    person.name.split(' ').first,
+                                    style: const TextStyle(fontSize: 11),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ],
                               ),
@@ -340,8 +312,7 @@ class _WalletScreenState extends State<WalletScreen> {
                       onAction: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) =>
-                              const BusinessesScreen(),
+                          builder: (_) => const BusinessesScreen(),
                         ),
                       ),
                     ),
@@ -352,57 +323,42 @@ class _WalletScreenState extends State<WalletScreen> {
                       height: 90,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: businesses
-                            .take(4)
-                            .length,
+                        itemCount: businesses.take(4).length,
                         itemBuilder: (_, index) {
-                          final biz = businesses
-                              .take(4)
-                              .toList()[index];
+                          final biz = businesses.take(4).toList()[index];
                           return GestureDetector(
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) =>
-                                    BusinessDetailScreen(
-                                  business: biz,
-                                ),
-                              ),
-                            ).then((_) {
-                              if (mounted) setState(() {});
-                            }),
+                            onTap: () =>
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        BusinessDetailScreen(business: biz),
+                                  ),
+                                ).then((_) {
+                                  if (mounted) setState(() {});
+                                }),
                             child: Container(
                               width: 65,
-                              margin: const EdgeInsets
-                                  .only(right: 12),
+                              margin: const EdgeInsets.only(right: 12),
                               child: Column(
                                 children: [
                                   CircleAvatar(
                                     radius: 20,
-                                    backgroundColor:
-                                        Colors.grey.shade300,
+                                    backgroundColor: Colors.grey.shade300,
                                     child: Text(
                                       biz.initials,
-                                      style:
-                                          const TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 11,
-                                        fontWeight:
-                                            FontWeight.w600,
-                                        color:
-                                            Colors.black87,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black87,
                                       ),
                                     ),
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
-                                    biz.name
-                                        .split(' ')
-                                        .first,
-                                    style: const TextStyle(
-                                      fontSize: 11,
-                                    ),
-                                    overflow:
-                                        TextOverflow.ellipsis,
+                                    biz.name.split(' ').first,
+                                    style: const TextStyle(fontSize: 11),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ],
                               ),
@@ -425,16 +381,12 @@ class _WalletScreenState extends State<WalletScreen> {
                           onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) =>
-                                  const AllTransactionsScreen(),
+                              builder: (_) => const AllTransactionsScreen(),
                             ),
                           ),
                           child: const Text(
                             "View all  ›",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black,
-                            ),
+                            style: TextStyle(fontSize: 12, color: Colors.black),
                           ),
                         ),
                       ],
@@ -442,13 +394,12 @@ class _WalletScreenState extends State<WalletScreen> {
 
                     const SizedBox(height: 12),
 
-                    ...transactions.take(3).map(
-                      (tx) => _transaction(
-                        tx.name,
-                        tx.displayAmount,
-                        tx.date,
-                      ),
-                    ),
+                    ...transactions
+                        .take(3)
+                        .map(
+                          (tx) =>
+                              _transaction(tx.name, tx.displayAmount, tx.date),
+                        ),
 
                     const SizedBox(height: 25),
 
@@ -463,8 +414,7 @@ class _WalletScreenState extends State<WalletScreen> {
                           onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) =>
-                                  const InsightsScreen(),
+                              builder: (_) => const InsightsScreen(),
                             ),
                           ),
                           child: const Text(
@@ -480,96 +430,96 @@ class _WalletScreenState extends State<WalletScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: Builder(builder: (context) {
-                            final months = mockInsightsData
-                                .length >= 3
-                                ? mockInsightsData.sublist(
-                                    mockInsightsData.length - 3)
-                                : mockInsightsData;
-                            final maxVal = months.fold<double>(
-                              1,
-                              (m, d) => d.total > m ? d.total : m,
-                            );
-                            return Container(
-                              height: 150,
-                              padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade100,
-                                borderRadius:
-                                    BorderRadius.circular(8),
-                              ),
-                              child: Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Expenses in "
-                                    "${months.last.monthLabel}",
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 12,
+                          child: Builder(
+                            builder: (context) {
+                              final months = mockInsightsData.length >= 3
+                                  ? mockInsightsData.sublist(
+                                      mockInsightsData.length - 3,
+                                    )
+                                  : mockInsightsData;
+                              final maxVal = months.fold<double>(
+                                1,
+                                (m, d) => d.total > m ? d.total : m,
+                              );
+                              return Container(
+                                height: 150,
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade100,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Expenses in "
+                                      "${months.last.monthLabel}",
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 12,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 15),
-                                  Expanded(
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: months
-                                          .expand(
-                                            (m) => [
-                                              _bar(
-                                                m.monthLabel,
-                                                (m.total / maxVal) * 70,
-                                              ),
-                                              const SizedBox(width: 18),
-                                            ],
-                                          )
-                                          .toList()
-                                          ..removeLast(),
+                                    const SizedBox(height: 15),
+                                    Expanded(
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children:
+                                            months
+                                                .expand(
+                                                  (m) => [
+                                                    _bar(
+                                                      m.monthLabel,
+                                                      (m.total / maxVal) * 70,
+                                                    ),
+                                                    const SizedBox(width: 18),
+                                                  ],
+                                                )
+                                                .toList()
+                                              ..removeLast(),
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
                         ),
                         const SizedBox(width: 10),
                         Expanded(
-                          child: Builder(builder: (context) {
-                            final cats = mockInsightsData
-                                .last.categories
-                                .take(3)
-                                .toList();
-                            return Container(
-                              padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade100,
-                                borderRadius:
-                                    BorderRadius.circular(8),
-                              ),
-                              child: Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    "Top categories",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 12,
+                          child: Builder(
+                            builder: (context) {
+                              final cats = mockInsightsData.last.categories
+                                  .take(3)
+                                  .toList();
+                              return Container(
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade100,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "Top categories",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 12,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 12),
-                                  ...cats.map(
-                                    (c) => _category(
-                                      '${c.emoji} ${c.name}',
-                                      'L${c.amount.toStringAsFixed(0)}',
+                                    const SizedBox(height: 12),
+                                    ...cats.map(
+                                      (c) => _category(
+                                        '${c.emoji} ${c.name}',
+                                        'L${c.amount.toStringAsFixed(0)}',
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ],
                     ),
@@ -606,7 +556,18 @@ class _WalletScreenState extends State<WalletScreen> {
         color: Colors.black,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: const Icon(Icons.person, color: Colors.white, size: 18),
+      child: IconButton(
+        onPressed: () {
+          final user = AppSession.currentUser;
+          if (user == null) return;
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => SettingsScreen(user: user)),
+          );
+        },
+        color: Colors.white,
+        icon: const Icon(Icons.person, size: 18),
+      ),
     );
   }
 
@@ -629,19 +590,11 @@ class _WalletScreenState extends State<WalletScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              size: 14,
-            ),
+            Icon(icon, size: 14),
 
             const SizedBox(width: 5),
 
-            Text(
-              text,
-              style: const TextStyle(
-                fontSize: 12,
-              ),
-            ),
+            Text(text, style: const TextStyle(fontSize: 12)),
           ],
         ),
       ),
@@ -656,15 +609,11 @@ class _WalletScreenState extends State<WalletScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(title,
-            style: const TextStyle(
-                fontWeight: FontWeight.bold)),
+        Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         GestureDetector(
           onTap: onAction,
           child: Text(
-            actionLabel != null
-                ? '$actionLabel  ›'
-                : 'Manage  ›',
+            actionLabel != null ? '$actionLabel  ›' : 'Manage  ›',
             style: const TextStyle(fontSize: 12),
           ),
         ),
@@ -675,10 +624,7 @@ class _WalletScreenState extends State<WalletScreen> {
   Widget _transaction(String name, String amount, String date) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 10,
-        vertical: 10,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.grey.shade100,
         borderRadius: BorderRadius.circular(5),

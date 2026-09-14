@@ -25,12 +25,12 @@ class LoanScreen extends StatelessWidget {
               Row(
                 children: [
                   const Expanded(
-                    child: AppHeader(title: "Loan", currentIndex: 2),
+                    child: AppHeader(title: "Loans", currentIndex: 2),
                   ),
                   const SizedBox(width: 12),
                   Container(
-                    width: 44,
-                    height: 44,
+                    width: 38,
+                    height: 38,
                     decoration: BoxDecoration(
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(12),
