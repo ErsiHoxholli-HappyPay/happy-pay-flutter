@@ -23,7 +23,6 @@ class LegalDocumentScreen extends StatefulWidget {
 }
 
 class _LegalDocumentScreenState extends State<LegalDocumentScreen> {
-  bool _accepted = false;
   late final Future<String> _contentFuture = rootBundle.loadString(
     widget.assetPath,
   );
@@ -59,52 +58,8 @@ class _LegalDocumentScreenState extends State<LegalDocumentScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Checkbox(
-                  value: _accepted,
-                  onChanged: (val) => setState(() => _accepted = val ?? false),
-                ),
-                Expanded(
-                  child: Text(
-                    widget.checkboxLabel,
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                ),
-              ],
-            ),
+
             const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: _accepted
-                  ? () {
-                      if (widget.onAccepted != null) {
-                        widget.onAccepted!();
-                      } else if (widget.nextScreen != null) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => widget.nextScreen!),
-                        );
-                      }
-                    }
-                  : null,
-              style: ButtonStyle(
-                minimumSize: const WidgetStatePropertyAll(Size.fromHeight(50)),
-                shape: const WidgetStatePropertyAll(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                  ),
-                ),
-                backgroundColor: WidgetStateProperty.resolveWith(
-                  (states) => states.contains(WidgetState.disabled)
-                      ? Colors.grey
-                      : Colors.black,
-                ),
-                foregroundColor: const WidgetStatePropertyAll(Colors.white),
-              ),
-              child: const Text('Accept'),
-            ),
-            const SizedBox(height: 40),
           ],
         ),
       ),

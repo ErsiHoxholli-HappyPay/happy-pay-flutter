@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:happy_pay_flutter/data/session.dart';
 import 'package:happy_pay_flutter/features/loan/loan_details.dart';
+import 'package:happy_pay_flutter/features/loan/pay_now.dart';
 import 'package:happy_pay_flutter/features/loan/payment_plan_screen.dart';
 import 'package:happy_pay_flutter/features/settings_screens/settings_screen.dart';
 import '../../widgets/app_bottom_navigation.dart';
@@ -282,7 +283,12 @@ class LoanScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => PayNow()),
+                        );
+                      },
                       child: Text(
                         'Pay now',
                         style: TextStyle(color: Colors.black),
