@@ -26,11 +26,13 @@ class AppBottomNavigation extends StatelessWidget {
         break;
 
       case 2:
-        screen = const LoanScreen();
+        screen = hasKyc ? const LoanScreen() : const GetStartedWithWallet();
         break;
 
       case 3:
-        screen = QRScannerScreen(previousIndex: currentIndex);
+        screen = hasKyc
+            ? QRScannerScreen(previousIndex: currentIndex)
+            : const GetStartedWithWallet();
         break;
 
       default:
