@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:happy_pay_flutter/data/session.dart';
 import 'package:happy_pay_flutter/data/users.dart';
-import 'package:happy_pay_flutter/features/loan/loan_screen.dart';
-
+import 'package:happy_pay_flutter/features/splash_screen.dart';
 import 'features/onboarding/get_started_screen.dart';
 import 'features/onboarding/phone_number_screen.dart';
 import 'features/onboarding/otp_code.dart';
@@ -31,7 +30,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData().copyWith(scaffoldBackgroundColor: Colors.white),
 
       // home: const SplashScreen(),
-      home: LoanScreen(),
+      home: SplashScreen(),
       routes: {
         '/get_started': (context) => const GetStartedScreen(),
         '/phone_number': (context) => const PhoneNumberScreen(),
