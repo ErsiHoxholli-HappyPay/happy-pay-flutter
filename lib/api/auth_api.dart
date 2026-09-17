@@ -28,9 +28,18 @@ Future<ApiResponse> requestRegistrationCode(String phone) {
 enum SendCodeResult { codeSent, alreadyRegistered, failed }
 
 class SendCodeOutcome {
-  SendCodeOutcome(this.result, [this.mode]);
+  SendCodeOutcome(this.result, [this.mode, this.code]);
   final SendCodeResult result;
   final AuthMode? mode;
+  final String? code;
+}
+
+String? _codeFrom(ApiResponse response) {
+  final value = response.data?['code'] ??
+      response.data?['otp_code'] ??
+      response.body?['code'] ??
+      response.body?['otp_code'];
+  return value is String && value.isNotEmpty ? value : null;
 }
 
 Future<SendCodeOutcome> sendFirstCode(String phone) async {
@@ -38,7 +47,11 @@ Future<SendCodeOutcome> sendFirstCode(String phone) async {
 
   final login = await requestLoginCode(phone);
   if (login.isHttpOk && login.bodyStatusCode == 200) {
-    return SendCodeOutcome(SendCodeResult.codeSent, AuthMode.login);
+    return SendCodeOutcome(
+      SendCodeResult.codeSent,
+      AuthMode.login,
+      _codeFrom(login),
+    );
   }
   if (!login.hasBodyAnswer) {
     return SendCodeOutcome(SendCodeResult.failed);
@@ -46,7 +59,11 @@ Future<SendCodeOutcome> sendFirstCode(String phone) async {
 
   final registration = await requestRegistrationCode(phone);
   if (registration.isHttpOk && registration.bodyStatusCode == 200) {
-    return SendCodeOutcome(SendCodeResult.codeSent, AuthMode.registration);
+    return SendCodeOutcome(
+      SendCodeResult.codeSent,
+      AuthMode.registration,
+      _codeFrom(registration),
+    );
   }
   if (registration.hasBodyAnswer &&
       registration.bodyStatusCode == 400 &&
@@ -54,4 +71,38 @@ Future<SendCodeOutcome> sendFirstCode(String phone) async {
     return SendCodeOutcome(SendCodeResult.alreadyRegistered);
   }
   return SendCodeOutcome(SendCodeResult.failed);
+}
+
+enum ConfirmResult { confirmed, rejected, failed }
+
+Future<ConfirmResult> _confirm(String path, String phone, String code) async {
+  final response = await _api.send(
+    'POST',
+    path,
+    auth: Auth.staticToken,
+    body: {'mobile_number': phone, 'otp_code': code},
+  );
+  final access = response.data?['access_token'];
+  if (response.isHttpOk &&
+      response.success &&
+      access is String &&
+      access.isNotEmpty) {
+    await TokenStore.instance.saveAccess(access);
+    return ConfirmResult.confirmed;
+  }
+  return response.hasBodyAnswer
+      ? ConfirmResult.rejected
+      : ConfirmResult.failed;
+}
+
+Future<ConfirmResult> confirmLoginCode(String phone, String code) {
+  return _confirm('/api/v1/mobile/accounts/login/confirm/', phone, code);
+}
+
+Future<ConfirmResult> confirmRegistrationCode(String phone, String code) {
+  return _confirm(
+    '/api/v1/mobile/accounts/registration/confirm/',
+    phone,
+    code,
+  );
 }
