@@ -48,6 +48,8 @@ dependencies:
   # overrides camera_android_camerax — fixes PigeonInternalInstanceManager channel error
   camera_android: any
   image_picker: ^1.2.3
+  dio: ^5.11.1
+  flutter_secure_storage: ^11.2.0
 
 dev_dependencies:
   flutter_test:

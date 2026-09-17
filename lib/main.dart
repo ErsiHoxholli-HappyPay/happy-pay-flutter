@@ -13,8 +13,17 @@ import 'features/kyc/address_details.dart';
 import 'features/kyc/happy_documents.dart';
 import 'features/kyc/terms_and_conditions.dart';
 import 'features/kyc/privacy_policy.dart';
+import 'api/api_client.dart';
+import 'api/env.dart';
 
-void main() async {
+void main() {
+  assert(
+    kBaseUrl.isNotEmpty && kStaticToken.isNotEmpty,
+    'Run with --dart-define-from-file=env/test.json',
+  );
+  ApiClient.instance.onSessionExpired = () {
+    // Send the customer back to your phone screen here.
+  };
   WidgetsFlutterBinding.ensureInitialized();
   AppSession.currentUser ??= users.first;
   runApp(const MyApp());
