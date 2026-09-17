@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import '../../api/auth_api.dart';
 import '../../widgets/phone/otp_field.dart';
 import '../../widgets/back_button.dart';
 import '../../data/users.dart';
 import '../../data/session.dart';
 
 enum _VerifyStatus { idle, verifying, error }
+
+/// Route arguments for `/otp_code`.
+class Arguments {
+  const Arguments({required this.phone, required this.mode});
+  final String phone;
+  final AuthMode mode;
+}
 
 class OtpCodeScreen extends StatefulWidget {
   const OtpCodeScreen({super.key});
@@ -21,12 +29,18 @@ class _OtpCodeScreenState extends State<OtpCodeScreen> {
   final _otpKey = GlobalKey<State>();
   Key _otpResetKey = UniqueKey();
   String _phoneNumber = '';
+  AuthMode _mode = AuthMode.login;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _phoneNumber =
-        (ModalRoute.of(context)?.settings.arguments as String?) ?? '';
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (args is Arguments) {
+      _phoneNumber = args.phone;
+      _mode = args.mode;
+    } else if (args is String) {
+      _phoneNumber = args;
+    }
   }
 
   Future<void> _verifyOtp(String code) async {
@@ -71,9 +85,9 @@ class _OtpCodeScreenState extends State<OtpCodeScreen> {
     );
     if (match != null) {
       AppSession.currentUser = match;
-      return false; // existing user
     }
-    return true; // new user
+    // Backend decided login vs registration when the code was sent.
+    return _mode == AuthMode.registration;
   }
 
   @override

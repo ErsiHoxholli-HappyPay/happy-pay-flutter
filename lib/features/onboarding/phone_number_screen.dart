@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:happy_pay_flutter/api/api_client.dart';
+import 'package:happy_pay_flutter/api/auth_api.dart';
+import 'package:happy_pay_flutter/api/phone.dart';
 import 'package:happy_pay_flutter/widgets/back_button.dart';
 import '../../data/country_dial_codes.dart';
+import 'otp_code.dart';
 
 class PhoneNumberScreen extends StatefulWidget {
   const PhoneNumberScreen({super.key});
@@ -12,11 +16,51 @@ class PhoneNumberScreen extends StatefulWidget {
 class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
   final _phoneController = TextEditingController();
   CountryDialCode _selectedCountry = countryDialCodes.first;
+  bool sending = false;
 
   @override
   void dispose() {
     _phoneController.dispose();
     super.dispose();
+  }
+
+  Future<void> onSendPressed() async {
+    if (sending) return;
+    final phone = toApiPhone(_phoneController.text, _selectedCountry.dialCode);
+    if (phone == null) {
+      showError('Please enter a valid phone number.');
+      return;
+    }
+    setState(() => sending = true);
+    try {
+      final outcome = await sendFirstCode(phone);
+      if (!mounted) return;
+      switch (outcome.result) {
+        case SendCodeResult.codeSent:
+          openCodeScreen(phone: phone, mode: outcome.mode!);
+        case SendCodeResult.alreadyRegistered:
+          showError('This number is already registered.');
+        case SendCodeResult.failed:
+          showError('We could not send a code. Please try again.');
+      }
+    } on NetworkException {
+      if (mounted) showError('No connection. Please try again.');
+    } finally {
+      if (mounted) setState(() => sending = false);
+    }
+  }
+
+  void showError(String message) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  void openCodeScreen({required String phone, required AuthMode mode}) {
+    Navigator.of(context).pushNamed(
+      '/otp_code',
+      arguments: Arguments(phone: phone, mode: mode),
+    );
   }
 
   @override
@@ -86,13 +130,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
               ),
               const Spacer(),
               ElevatedButton(
-                onPressed: () {
-                  final fullNumber =
-                      '${_selectedCountry.dialCode}${_phoneController.text}';
-                  Navigator.of(
-                    context,
-                  ).pushNamed('/otp_code', arguments: fullNumber);
-                },
+                onPressed: sending ? null : onSendPressed,
                 style: ButtonStyle(
                   minimumSize: const WidgetStatePropertyAll(
                     Size.fromHeight(60),
@@ -109,10 +147,22 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                   ),
                   foregroundColor: const WidgetStatePropertyAll(Colors.white),
                 ),
-                child: const Text(
-                  'Send Code',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
+                child: sending
+                    ? const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.5,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text(
+                        'Send Code',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
               ),
             ],
           ),

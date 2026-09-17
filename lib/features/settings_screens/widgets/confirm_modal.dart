@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:happy_pay_flutter/features/onboarding/phone_number_screen.dart';
 
 class ConfirmModal extends StatelessWidget {
   const ConfirmModal({
@@ -24,10 +23,9 @@ class ConfirmModal extends StatelessWidget {
         title: 'Are you sure?',
         description: 'You will need to login again.',
         buttonLabel: 'Yes, Sign Out',
-        onConfirm: () => Navigator.push(
+        onConfirm: () => Navigator.of(
           context,
-          MaterialPageRoute(builder: (_) => PhoneNumberScreen()),
-        ),
+        ).pushNamedAndRemoveUntil('/phone_number', (_) => false),
       ),
     );
   }
