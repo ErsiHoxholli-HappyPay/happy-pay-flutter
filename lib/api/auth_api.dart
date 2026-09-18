@@ -144,6 +144,17 @@ Future<MemberLookup> findMember(String phone) async {
       : const MemberLookup();
 }
 
+Future<String?> findClientUid(String phone) async {
+  final response = await _api.send(
+    'POST',
+    '/api/v1/clients/search/',
+    auth: Auth.staticToken,
+    body: {'mobile_number': phone},
+  );
+  final uid = response.body?['uid'];
+  return response.isHttpOk && uid is String && uid.isNotEmpty ? uid : null;
+}
+
 /// Values to pre-fill the sign-up form. Any of them can be null.
 class MemberPrefill {
   MemberPrefill.fromMember(Map<String, dynamic> m)
