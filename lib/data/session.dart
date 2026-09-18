@@ -1,4 +1,5 @@
 import '../models/pending_request.dart';
+import '../models/sign_up_form.dart';
 import '../models/users.dart';
 
 // Holds the authenticated user for the lifetime of the app session.
@@ -19,4 +20,7 @@ class AppSession {
   static final List<PendingRequest> pendingRequests = [
     PendingRequest(id: 'req-1', contactName: 'John Doe', amount: '1,000'),
   ];
+
+  // Reset when a new sign-up starts.
+  static SignUpForm signUpForm = SignUpForm();
 }

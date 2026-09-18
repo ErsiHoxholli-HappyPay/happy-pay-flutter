@@ -1,6 +1,9 @@
 // complete_profile.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:happy_pay_flutter/api/auth_api.dart' show isAdult;
+import 'package:happy_pay_flutter/data/session.dart';
+import 'package:happy_pay_flutter/models/sign_up_form.dart';
 import 'package:happy_pay_flutter/widgets/back_button.dart';
 
 class CompleteProfileScreen extends StatefulWidget {
@@ -54,24 +57,43 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
     if (day.length < 2 || month.length < 2 || year.length < 4) {
       return null; // still typing
     }
-    return _isValidDate(day, month, year)
-        ? null
-        : 'Enter a valid date (dd/mm/yyyy)';
+    if (!_isValidDate(day, month, year)) {
+      return 'Enter a valid date (dd/mm/yyyy)';
+    }
+    return isAdult(_dateOfBirth!) ? null : 'You must be at least 18 years old';
   }
 
-  bool get _isComplete =>
-      _firstNameController.text.trim().length >= _minNameLength &&
-      _lastNameController.text.trim().length >= _minNameLength &&
-      _gender != null &&
-      _isValidDate(
-        _dayController.text.trim(),
-        _monthController.text.trim(),
-        _yearController.text.trim(),
-      );
+  DateTime? get _dateOfBirth {
+    final day = _dayController.text.trim();
+    final month = _monthController.text.trim();
+    final year = _yearController.text.trim();
+    if (!_isValidDate(day, month, year)) return null;
+    return DateTime(int.parse(year), int.parse(month), int.parse(day));
+  }
+
+  bool get _isComplete {
+    final dob = _dateOfBirth;
+    return _firstNameController.text.trim().length >= _minNameLength &&
+        _lastNameController.text.trim().length >= _minNameLength &&
+        _gender != null &&
+        dob != null &&
+        isAdult(dob);
+  }
+
+  void _continue() {
+    final form = AppSession.signUpForm;
+    form.firstName = _firstNameController.text.trim();
+    form.lastName = _lastNameController.text.trim();
+    form.gender = _gender;
+    form.dateOfBirth = _dateOfBirth;
+    Navigator.of(context).pushNamed('/kyc/contact_information');
+  }
 
   @override
   void initState() {
     super.initState();
+    // First panel: a fresh sign-up starts with an empty form.
+    AppSession.signUpForm = SignUpForm();
     for (final c in [
       _firstNameController,
       _lastNameController,
@@ -308,11 +330,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
               ],
               const Spacer(),
               ElevatedButton(
-                onPressed: _isComplete
-                    ? () => Navigator.of(
-                        context,
-                      ).pushNamed('/kyc/contact_information')
-                    : null,
+                onPressed: _isComplete ? _continue : null,
                 style: ButtonStyle(
                   minimumSize: const WidgetStatePropertyAll(
                     Size.fromHeight(60),

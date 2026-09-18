@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:happy_pay_flutter/data/session.dart';
 import 'package:happy_pay_flutter/widgets/back_button.dart';
 
 class HappyDocumentsScreen extends StatefulWidget {
@@ -12,7 +13,14 @@ class _HappyDocumentsScreenState extends State<HappyDocumentsScreen> {
   bool _acceptsTerms = false;
   bool _acceptsPrivacy = false;
   bool _acknowledges = false;
-  bool get _isComplete => _acceptsTerms && _acceptsPrivacy && _acknowledges;
+  // Ticking the acknowledgement also ticks the two documents.
+  bool get _isComplete => _acknowledges;
+
+  void _continue() {
+    AppSession.signUpForm.acceptedTerms = true;
+    // TODO(#48): send createClient here instead of going straight home.
+    Navigator.of(context).pushNamedAndRemoveUntil('/home_screen', (_) => false);
+  }
 
   void _onTermsChanged(bool value) {
     _acceptsTerms = value;
@@ -146,11 +154,7 @@ class _HappyDocumentsScreenState extends State<HappyDocumentsScreen> {
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: _isComplete
-                    ? () => Navigator.of(
-                        context,
-                      ).pushNamedAndRemoveUntil('/home_screen', (_) => false)
-                    : null,
+                onPressed: _isComplete ? _continue : null,
                 style: ButtonStyle(
                   minimumSize: const WidgetStatePropertyAll(
                     Size.fromHeight(60),

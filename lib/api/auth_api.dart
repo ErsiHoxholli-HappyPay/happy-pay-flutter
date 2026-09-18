@@ -191,49 +191,50 @@ class MemberPrefill {
     }
     return null;
   }
+}
 
-  String apiDateOfBirth(DateTime date) =>
-      '${date.year}-${date.month}-${date.day}';
+// No leading zeros: the backend is only confirmed to accept e.g. 1990-5-3.
+String apiDateOfBirth(DateTime date) =>
+    '${date.year}-${date.month}-${date.day}';
 
-  bool isAdult(DateTime birth, {DateTime? today}) {
-    final now = today ?? DateTime.now();
-    var age = now.year - birth.year;
-    if (now.month < birth.month ||
-        (now.month == birth.month && now.day < birth.day)) {
-      age--;
-    }
-    return age >= 18;
+bool isAdult(DateTime birth, {DateTime? today}) {
+  final now = today ?? DateTime.now();
+  var age = now.year - birth.year;
+  if (now.month < birth.month ||
+      (now.month == birth.month && now.day < birth.day)) {
+    age--;
   }
+  return age >= 18;
+}
 
-  Future<bool> createClient({
-    required String phone,
-    required String firstName,
-    required String lastName,
-    required String gender,
-    required DateTime dateOfBirth,
-    required String street,
-    required String city,
-    required String postCode,
-    String? email,
-    String qcCode = '',
-  }) async {
-    final response = await _api.send(
-      'POST',
-      '/api/v1/mobile/clients/',
-      auth: Auth.customer,
-      body: {
-        'mobile_number': phone,
-        'first_name': firstName,
-        'last_name': lastName,
-        'gender': gender,
-        'date_of_birth': apiDateOfBirth(dateOfBirth),
-        'address': street,
-        'town': city,
-        'post_code': postCode,
-        'email': email,
-        'qc_code': qcCode,
-      },
-    );
-    return response.isHttpOk && response.success;
-  }
+Future<bool> createClient({
+  required String phone,
+  required String firstName,
+  required String lastName,
+  required String gender,
+  required DateTime dateOfBirth,
+  required String street,
+  required String city,
+  required String postCode,
+  String? email,
+  String qcCode = '',
+}) async {
+  final response = await _api.send(
+    'POST',
+    '/api/v1/mobile/clients/',
+    auth: Auth.customer,
+    body: {
+      'mobile_number': phone,
+      'first_name': firstName,
+      'last_name': lastName,
+      'gender': gender,
+      'date_of_birth': apiDateOfBirth(dateOfBirth),
+      'address': street,
+      'town': city,
+      'post_code': postCode,
+      'email': email,
+      'qc_code': qcCode,
+    },
+  );
+  return response.isHttpOk && response.success;
 }
