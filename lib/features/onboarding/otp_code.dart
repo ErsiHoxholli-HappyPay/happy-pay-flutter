@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import '../../widgets/phone/otp_field.dart';
 import '../../widgets/back_button.dart';
-import '../../data/users.dart';
-import '../../data/session.dart';
 import '../../api/api_client.dart' show NetworkException;
 import '../../api/auth_api.dart';
 
@@ -131,7 +129,7 @@ class _OtpCodeScreenState extends State<OtpCodeScreen> {
 
     await _verifyRegistrationCode(code);
   }
-  
+
   Future<void> _verifyRegistrationCode(String code) async {
     ConfirmResult result;
 
@@ -189,11 +187,14 @@ class _OtpCodeScreenState extends State<OtpCodeScreen> {
         break;
     }
   }
-  
+
   Future<void> _verifyLoginCode(String code) async {
     ConfirmResult result;
     try {
-      result = await confirmLoginCode(_phoneNumber, code).timeout(_verifyTimeout);
+      result = await confirmLoginCode(
+        _phoneNumber,
+        code,
+      ).timeout(_verifyTimeout);
     } catch (_) {
       // Covers timeout, NetworkException, and any other unexpected failure.
       if (!mounted) return;
@@ -338,15 +339,17 @@ class _OtpCodeScreenState extends State<OtpCodeScreen> {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
-                          backgroundColor:
-                              resendDisabled ? Colors.grey : Colors.black,
+                          backgroundColor: resendDisabled
+                              ? Colors.grey
+                              : Colors.black,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 16),
                         ),
-                        onPressed:
-                            resendDisabled ? null : () => _handleResend(),
+                        onPressed: resendDisabled
+                            ? null
+                            : () => _handleResend(),
                         child: Text(
                           isCoolingDown
                               ? 'Resend code in 0:${secondsLeft.toString().padLeft(2, '0')}'
