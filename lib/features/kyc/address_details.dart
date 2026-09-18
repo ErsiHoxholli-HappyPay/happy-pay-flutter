@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../data/session.dart';
 import '../../widgets/back_button.dart';
 
 class AddressDetailsScreen extends StatefulWidget {
@@ -14,9 +15,10 @@ class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
   final _apartmentNumberController = TextEditingController();
   final _postalCodeController = TextEditingController();
 
+  // Apartment has no API field, so it is not required.
   bool get _isComplete =>
       _cityController.text.trim().isNotEmpty &&
-      _apartmentNumberController.text.trim().isNotEmpty &&
+      _streetController.text.trim().isNotEmpty &&
       _postalCodeController.text.trim().isNotEmpty;
 
   @override
@@ -26,6 +28,14 @@ class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
     _apartmentNumberController.dispose();
     _postalCodeController.dispose();
     super.dispose();
+  }
+
+  void _continue() {
+    final form = AppSession.signUpForm;
+    form.city = _cityController.text.trim();
+    form.street = _streetController.text.trim();
+    form.postCode = _postalCodeController.text.trim();
+    Navigator.of(context).pushNamed('/kyc/happy_documents');
   }
 
   @override
@@ -81,11 +91,7 @@ class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
               ),
               const Spacer(),
               ElevatedButton(
-                onPressed: _isComplete
-                    ? () => Navigator.of(
-                        context,
-                      ).pushNamed('/kyc/happy_documents')
-                    : null,
+                onPressed: _isComplete ? _continue : null,
                 style: ButtonStyle(
                   minimumSize: const WidgetStatePropertyAll(
                     Size.fromHeight(60),

@@ -1,6 +1,7 @@
 // contact_information.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:happy_pay_flutter/data/session.dart';
 import 'package:happy_pay_flutter/widgets/back_button.dart';
 
 class ContactInformationScreen extends StatefulWidget {
@@ -14,6 +15,9 @@ class ContactInformationScreen extends StatefulWidget {
 class _ContactInformationScreenState extends State<ContactInformationScreen> {
   final _numberController = TextEditingController();
   final _prefixController = TextEditingController();
+  final _emailController = TextEditingController();
+
+  static final _emailPattern = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
 
   /// National-number rules per calling code: expected digit length and
   /// the leading-digit pattern for that prefix's mobile ranges.
@@ -36,11 +40,15 @@ class _ContactInformationScreenState extends State<ContactInformationScreen> {
         : 'Invalid number for ${_prefixController.text}';
   }
 
-  bool get _isComplete {
-    final digits = _numberController.text.trim();
-    final pattern = _nationalNumberPatterns[_prefixController.text];
-    return digits.isNotEmpty && pattern != null && pattern.hasMatch(digits);
+  String? get _emailError {
+    final email = _emailController.text.trim();
+    if (email.isEmpty) return null;
+    return _emailPattern.hasMatch(email) ? null : 'Enter a valid email';
   }
+
+  // Nothing is required on this panel; only reject values that are present
+  // but malformed.
+  bool get _isComplete => _numberError == null && _emailError == null;
 
   bool _acceptsPromo = false;
 
@@ -48,7 +56,8 @@ class _ContactInformationScreenState extends State<ContactInformationScreen> {
   void initState() {
     super.initState();
     _prefixController.text = '+355';
-    for (final c in [_numberController, _prefixController]) {
+    _emailController.text = AppSession.signUpForm.email ?? '';
+    for (final c in [_numberController, _prefixController, _emailController]) {
       c.addListener(() => setState(() {}));
     }
   }
@@ -57,7 +66,14 @@ class _ContactInformationScreenState extends State<ContactInformationScreen> {
   void dispose() {
     _numberController.dispose();
     _prefixController.dispose();
+    _emailController.dispose();
     super.dispose();
+  }
+
+  void _continue() {
+    final email = _emailController.text.trim();
+    AppSession.signUpForm.email = email.isEmpty ? null : email;
+    Navigator.of(context).pushNamed('/kyc/address_details');
   }
 
   final ButtonStyle _entryStyle =
@@ -186,10 +202,13 @@ class _ContactInformationScreenState extends State<ContactInformationScreen> {
               ),
               const SizedBox(height: 8),
               TextField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   labelText: 'Email Address',
-                  border: OutlineInputBorder(
-                    borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+                  errorText: _emailError,
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12.0)),
                   ),
                 ),
               ),
@@ -214,11 +233,7 @@ class _ContactInformationScreenState extends State<ContactInformationScreen> {
               ),
               const Spacer(),
               ElevatedButton(
-                onPressed: _isComplete
-                    ? () => Navigator.of(
-                        context,
-                      ).pushNamed('/kyc/address_details')
-                    : null,
+                onPressed: _isComplete ? _continue : null,
                 style: ButtonStyle(
                   minimumSize: const WidgetStatePropertyAll(
                     Size.fromHeight(60),

@@ -144,6 +144,17 @@ Future<MemberLookup> findMember(String phone) async {
       : const MemberLookup();
 }
 
+Future<String?> findClientUid(String phone) async {
+  final response = await _api.send(
+    'POST',
+    '/api/v1/clients/search/',
+    auth: Auth.staticToken,
+    body: {'mobile_number': phone},
+  );
+  final uid = response.body?['uid'];
+  return response.isHttpOk && uid is String && uid.isNotEmpty ? uid : null;
+}
+
 /// Values to pre-fill the sign-up form. Any of them can be null.
 class MemberPrefill {
   MemberPrefill.fromMember(Map<String, dynamic> m)
@@ -180,4 +191,50 @@ class MemberPrefill {
     }
     return null;
   }
+}
+
+// No leading zeros: the backend is only confirmed to accept e.g. 1990-5-3.
+String apiDateOfBirth(DateTime date) =>
+    '${date.year}-${date.month}-${date.day}';
+
+bool isAdult(DateTime birth, {DateTime? today}) {
+  final now = today ?? DateTime.now();
+  var age = now.year - birth.year;
+  if (now.month < birth.month ||
+      (now.month == birth.month && now.day < birth.day)) {
+    age--;
+  }
+  return age >= 18;
+}
+
+Future<bool> createClient({
+  required String phone,
+  required String firstName,
+  required String lastName,
+  required String gender,
+  required DateTime dateOfBirth,
+  required String street,
+  required String city,
+  required String postCode,
+  String? email,
+  String qcCode = '',
+}) async {
+  final response = await _api.send(
+    'POST',
+    '/api/v1/mobile/clients/',
+    auth: Auth.customer,
+    body: {
+      'mobile_number': phone,
+      'first_name': firstName,
+      'last_name': lastName,
+      'gender': gender,
+      'date_of_birth': apiDateOfBirth(dateOfBirth),
+      'address': street,
+      'town': city,
+      'post_code': postCode,
+      'email': email,
+      'qc_code': qcCode,
+    },
+  );
+  return response.isHttpOk && response.success;
 }
