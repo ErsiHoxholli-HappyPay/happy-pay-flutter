@@ -37,7 +37,11 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
       if (!mounted) return;
       switch (outcome.result) {
         case SendCodeResult.codeSent:
-          openCodeScreen(phone: phone, mode: outcome.mode!);
+          openCodeScreen(
+            phone: phone,
+            mode: outcome.mode!,
+            code: outcome.code,
+          );
         case SendCodeResult.alreadyRegistered:
           showError('This number is already registered.');
         case SendCodeResult.failed:
@@ -56,10 +60,14 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
       ..showSnackBar(SnackBar(content: Text(message)));
   }
 
-  void openCodeScreen({required String phone, required AuthMode mode}) {
+  void openCodeScreen({
+    required String phone,
+    required AuthMode mode,
+    String? code,
+  }) {
     Navigator.of(context).pushNamed(
       '/otp_code',
-      arguments: Arguments(phone: phone, mode: mode),
+      arguments: OtpCodeScreenArgs(phone: phone, mode: mode, code: code),
     );
   }
 

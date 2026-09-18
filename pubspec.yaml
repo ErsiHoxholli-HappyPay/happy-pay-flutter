@@ -51,6 +51,9 @@ dependencies:
   dio: ^5.11.1
   flutter_secure_storage: ^11.2.0
 
+dependency_overrides:
+  path_provider_android: 2.2.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

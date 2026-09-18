@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import '../../api/auth_api.dart';
 import '../../widgets/phone/otp_field.dart';
 import '../../widgets/back_button.dart';
-import '../../data/users.dart';
-import '../../data/session.dart';
+import '../../api/api_client.dart' show NetworkException;
+import '../../api/auth_api.dart';
 
 enum _VerifyStatus { idle, verifying, error }
 
-/// Route arguments for `/otp_code`.
-class Arguments {
-  const Arguments({required this.phone, required this.mode});
+/// Route arguments for [OtpCodeScreen]. Pass both the phone number
+/// and the [AuthMode] chosen in step 1/2 of the auth flow, so resend
+/// knows which call to repeat.
+class OtpCodeScreenArgs {
+  const OtpCodeScreenArgs({required this.phone, required this.mode, this.code});
+
   final String phone;
   final AuthMode mode;
+  final String? code;
 }
 
 class OtpCodeScreen extends StatefulWidget {
@@ -25,21 +28,93 @@ class OtpCodeScreen extends StatefulWidget {
 class _OtpCodeScreenState extends State<OtpCodeScreen> {
   static const _verifyTimeout = Duration(seconds: 15);
 
+  // Resend countdown (see docs/auth-flow-guide.md, step 3).
+  static const resendDelay = 30;
+  int secondsLeft = resendDelay;
+  Timer? countdown;
+
   _VerifyStatus _status = _VerifyStatus.idle;
   final _otpKey = GlobalKey<State>();
   Key _otpResetKey = UniqueKey();
   String _phoneNumber = '';
+  String? _loginCode;
   AuthMode _mode = AuthMode.login;
+
+  // Error banner text. Defaults to the wrong-code message; resend
+  // failures override it with their own wording (see _handleResend).
+  String _errorTitle = 'Something went wrong.';
+  String _errorSubtitle =
+      'Check your phone number and resend the code to try again.';
+
+  bool _resending = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // A code was sent immediately before this screen opened.
+    startCountdown();
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final args = ModalRoute.of(context)?.settings.arguments;
-    if (args is Arguments) {
+    if (args is OtpCodeScreenArgs) {
       _phoneNumber = args.phone;
       _mode = args.mode;
-    } else if (args is String) {
-      _phoneNumber = args;
+      _loginCode = args.code;
+    }
+  }
+
+  @override
+  void dispose() {
+    countdown?.cancel();
+    super.dispose();
+  }
+
+  void startCountdown() {
+    countdown?.cancel();
+    setState(() => secondsLeft = resendDelay);
+    countdown = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (secondsLeft <= 1) {
+        timer.cancel();
+        setState(() => secondsLeft = 0);
+      } else {
+        setState(() => secondsLeft--);
+      }
+    });
+  }
+
+  Future<void> _handleResend() async {
+    if (secondsLeft > 0 || _resending) return;
+    setState(() => _resending = true);
+    try {
+      final response = _mode == AuthMode.login
+          ? await requestLoginCode(_phoneNumber)
+          : await requestRegistrationCode(_phoneNumber);
+      if (!mounted) return;
+      if (response.isHttpOk && response.bodyStatusCode == 200) {
+        setState(() {
+          _status = _VerifyStatus.idle; // clear any old error banner
+          _resending = false;
+        });
+        startCountdown();
+      } else {
+        setState(() {
+          _status = _VerifyStatus.error;
+          _errorTitle = 'We could not send a new code.';
+          _errorSubtitle = 'Please try again.';
+          _resending = false;
+        });
+      }
+    } on NetworkException {
+      if (!mounted) return;
+      setState(() {
+        _status = _VerifyStatus.error;
+        _errorTitle = 'No connection.';
+        _errorSubtitle = 'Please try again.';
+        _resending = false;
+      });
     }
   }
 
@@ -47,52 +122,122 @@ class _OtpCodeScreenState extends State<OtpCodeScreen> {
     if (_status == _VerifyStatus.verifying) return;
     setState(() => _status = _VerifyStatus.verifying);
 
-    bool? success;
+    if (_mode == AuthMode.login) {
+      await _verifyLoginCode(code);
+      return;
+    }
+
+    await _verifyRegistrationCode(code);
+  }
+
+  Future<void> _verifyRegistrationCode(String code) async {
+    ConfirmResult result;
+
     try {
-      // Replace with real call, e.g. context.read<AuthRepository>().verifyOtp(code)
-      // null = wrong code, true = new user, false = existing user
-      success = await _callVerifyApi(code).timeout(_verifyTimeout);
-    } catch (_) {
-      // Covers timeout + any network/API exception.
+      result = await confirmRegistrationCode(
+        _phoneNumber,
+        code,
+      ).timeout(_verifyTimeout);
+    } on NetworkException {
       if (!mounted) return;
+
       setState(() {
         _status = _VerifyStatus.error;
+        _errorTitle = 'No connection.';
+        _errorSubtitle = 'Please try again.';
+        _otpResetKey = UniqueKey();
+      });
+      return;
+    } catch (_) {
+      if (!mounted) return;
+
+      setState(() {
+        _status = _VerifyStatus.error;
+        _errorTitle = 'Something went wrong.';
+        _errorSubtitle = 'Please try again.';
         _otpResetKey = UniqueKey();
       });
       return;
     }
 
     if (!mounted) return;
-    if (success != null) {
-      final route = success ? '/kyc/complete_profile' : '/home_screen';
-      Navigator.of(context).pushNamedAndRemoveUntil(route, (_) => false);
-    } else {
-      setState(() {
-        _status = _VerifyStatus.error;
-        _otpResetKey = UniqueKey();
-      });
+
+    switch (result) {
+      case ConfirmResult.confirmed:
+        // TODO(#45): member lookup, then signup form.
+        break;
+
+      case ConfirmResult.rejected:
+        setState(() {
+          _status = _VerifyStatus.error;
+          _errorTitle = 'Something went wrong.';
+          _errorSubtitle =
+              'Check your phone number and resend the code to try again.';
+          _otpResetKey = UniqueKey();
+        });
+        break;
+
+      case ConfirmResult.failed:
+        setState(() {
+          _status = _VerifyStatus.error;
+          _errorTitle = 'Something went wrong.';
+          _errorSubtitle = 'Please try again.';
+          _otpResetKey = UniqueKey();
+        });
+        break;
     }
   }
 
-  // Returns true (new user) / false (existing user) / null (wrong code)
-  Future<bool?> _callVerifyApi(String code) async {
-    await Future.delayed(const Duration(seconds: 3));
-    if (code != '111111') return null;
-    final normalized = _phoneNumber.replaceAll(' ', '');
-    final match = users.cast<dynamic>().firstWhere(
-      (u) => (u.phoneNumber as String).replaceAll(' ', '') == normalized,
-      orElse: () => null,
-    );
-    if (match != null) {
-      AppSession.currentUser = match;
+  Future<void> _verifyLoginCode(String code) async {
+    ConfirmResult result;
+    try {
+      result = await confirmLoginCode(
+        _phoneNumber,
+        code,
+      ).timeout(_verifyTimeout);
+    } catch (_) {
+      // Covers timeout, NetworkException, and any other unexpected failure.
+      if (!mounted) return;
+      setState(() {
+        _status = _VerifyStatus.error;
+        _errorTitle = 'Something went wrong.';
+        _errorSubtitle = 'Please try again.';
+        _otpResetKey = UniqueKey();
+      });
+      return;
     }
-    // Backend decided login vs registration when the code was sent.
-    return _mode == AuthMode.registration;
+
+    if (!mounted) return;
+    switch (result) {
+      case ConfirmResult.confirmed:
+        // TODO(#45): continue to the member lookup. Loader stays up until then.
+        break;
+      case ConfirmResult.rejected:
+        setState(() {
+          _status = _VerifyStatus.error;
+          _errorTitle = 'Something went wrong.';
+          _errorSubtitle =
+              'Check your phone number and resend the code to try again.';
+          _otpResetKey = UniqueKey();
+        });
+        break;
+
+      case ConfirmResult.failed:
+        setState(() {
+          _status = _VerifyStatus.error;
+          _errorTitle = 'Something went wrong.';
+          _errorSubtitle = 'Please try again.';
+          _otpResetKey = UniqueKey();
+        });
+        break;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final isVerifying = _status == _VerifyStatus.verifying;
+    final isCoolingDown = secondsLeft > 0;
+    final resendDisabled = isCoolingDown || _resending;
 
     return PopScope(
       canPop: !isVerifying,
@@ -133,6 +278,19 @@ class _OtpCodeScreenState extends State<OtpCodeScreen> {
                           : _otpKey,
                       onCompleted: _verifyOtp,
                     ),
+                    if (_loginCode != null) ...[
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        initialValue: _loginCode,
+                        readOnly: true,
+                        decoration: const InputDecoration(
+                          labelText: 'Login code',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                          ),
+                        ),
+                      ),
+                    ],
                     const Spacer(),
                     if (_status == _VerifyStatus.error) ...[
                       SizedBox(
@@ -146,23 +304,23 @@ class _OtpCodeScreenState extends State<OtpCodeScreen> {
                           alignment: Alignment.center,
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
-                            children: const [
-                              Icon(Icons.warning, color: Colors.black),
-                              SizedBox(width: 8),
+                            children: [
+                              const Icon(Icons.warning, color: Colors.black),
+                              const SizedBox(width: 8),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Something went wrong.',
-                                      style: TextStyle(
+                                      _errorTitle,
+                                      style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 13,
                                       ),
                                     ),
                                     Text(
-                                      'Check your phone number and resend the code to try again.',
-                                      style: TextStyle(
+                                      _errorSubtitle,
+                                      style: const TextStyle(
                                         color: Colors.grey,
                                         fontSize: 13,
                                       ),
@@ -176,10 +334,32 @@ class _OtpCodeScreenState extends State<OtpCodeScreen> {
                       ),
                       const SizedBox(height: 8),
                     ],
-                    ResendTimerButton(
-                      onResend: () {
-                        // Resend API call owned here, same as before.
-                      },
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: resendDisabled
+                              ? Colors.grey
+                              : Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                        ),
+                        onPressed: resendDisabled
+                            ? null
+                            : () => _handleResend(),
+                        child: Text(
+                          isCoolingDown
+                              ? 'Resend code in 0:${secondsLeft.toString().padLeft(2, '0')}'
+                              : (_resending ? 'Sending...' : 'Resend Code'),
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -203,82 +383,6 @@ class _LoadingOverlay extends StatelessWidget {
         child: Container(
           color: Colors.black.withValues(alpha: 0.3),
           child: const Center(child: CircularProgressIndicator(strokeWidth: 4)),
-        ),
-      ),
-    );
-  }
-}
-
-class ResendTimerButton extends StatefulWidget {
-  const ResendTimerButton({
-    super.key,
-    required this.onResend,
-    this.cooldownSeconds = 30,
-  });
-
-  final VoidCallback onResend;
-  final int cooldownSeconds;
-
-  @override
-  State<ResendTimerButton> createState() => _ResendTimerButtonState();
-}
-
-class _ResendTimerButtonState extends State<ResendTimerButton> {
-  Timer? _timer;
-  late int _secondsLeft = widget.cooldownSeconds;
-
-  @override
-  void initState() {
-    super.initState();
-    _startCountdown();
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
-
-  void _startCountdown() {
-    _secondsLeft = widget.cooldownSeconds;
-    _timer?.cancel();
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_secondsLeft <= 1) {
-        timer.cancel();
-        setState(() => _secondsLeft = 0);
-      } else {
-        setState(() => _secondsLeft--);
-      }
-    });
-  }
-
-  void _handleTap() {
-    widget.onResend();
-    _startCountdown();
-  }
-
-  bool get _isCoolingDown => _secondsLeft > 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          foregroundColor: Colors.white,
-          backgroundColor: _isCoolingDown ? Colors.grey : Colors.black,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 16),
-        ),
-        onPressed: _isCoolingDown ? null : _handleTap,
-
-        child: Text(
-          _isCoolingDown
-              ? 'Resend code in 0:${_secondsLeft.toString().padLeft(2, '0')}'
-              : 'Resend Code',
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
       ),
     );
