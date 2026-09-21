@@ -22,6 +22,16 @@ class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
       _postalCodeController.text.trim().isNotEmpty;
 
   @override
+  void initState() {
+    super.initState();
+    final draft = AppSession.signUpDraft;
+    final prefill = AppSession.memberPrefill;
+    _cityController.text = draft.city ?? prefill?.city ?? '';
+    _streetController.text = draft.street ?? prefill?.street ?? '';
+    _postalCodeController.text = draft.postCode ?? prefill?.postCode ?? '';
+  }
+
+  @override
   void dispose() {
     _cityController.dispose();
     _streetController.dispose();
@@ -31,10 +41,10 @@ class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
   }
 
   void _continue() {
-    final form = AppSession.signUpForm;
-    form.city = _cityController.text.trim();
-    form.street = _streetController.text.trim();
-    form.postCode = _postalCodeController.text.trim();
+    final draft = AppSession.signUpDraft;
+    draft.city = _cityController.text.trim();
+    draft.street = _streetController.text.trim();
+    draft.postCode = _postalCodeController.text.trim();
     Navigator.of(context).pushNamed('/kyc/happy_documents');
   }
 

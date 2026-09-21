@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:happy_pay_flutter/api/api_client.dart' show NetworkException;
+import 'package:happy_pay_flutter/api/auth_api.dart';
 import 'package:happy_pay_flutter/data/session.dart';
 import 'package:happy_pay_flutter/widgets/back_button.dart';
 
@@ -13,13 +15,78 @@ class _HappyDocumentsScreenState extends State<HappyDocumentsScreen> {
   bool _acceptsTerms = false;
   bool _acceptsPrivacy = false;
   bool _acknowledges = false;
+  bool _submitting = false;
   // Ticking the acknowledgement also ticks the two documents.
-  bool get _isComplete => _acknowledges;
+  bool get _isComplete => _acknowledges && !_submitting;
 
-  void _continue() {
-    AppSession.signUpForm.acceptedTerms = true;
-    // TODO(#48): send createClient here instead of going straight home.
-    Navigator.of(context).pushNamedAndRemoveUntil('/home_screen', (_) => false);
+  Future<void> _continue() async {
+    if (_submitting) return;
+    final draft = AppSession.signUpDraft;
+    final phone = AppSession.phone;
+    final firstName = draft.firstName;
+    final lastName = draft.lastName;
+    final gender = draft.gender;
+    final dateOfBirth = draft.dateOfBirth;
+    final street = draft.street;
+    final city = draft.city;
+    final postCode = draft.postCode;
+    if (phone == null ||
+        firstName == null ||
+        lastName == null ||
+        gender == null ||
+        dateOfBirth == null ||
+        street == null ||
+        city == null ||
+        postCode == null) {
+      _showError('Some details are missing. Please go back and check them.');
+      return;
+    }
+
+    final member = AppSession.loyaltyMember;
+    final qcCode = AppSession.memberPrefill?.qcCode ?? '';
+
+    setState(() => _submitting = true);
+    try {
+      final created = await createClient(
+        phone: phone,
+        firstName: firstName,
+        lastName: lastName,
+        gender: gender.toLowerCase(),
+        dateOfBirth: dateOfBirth,
+        street: street,
+        city: city,
+        postCode: postCode,
+        email: draft.email,
+        qcCode: qcCode,
+      );
+      if (!mounted) return;
+      if (!created) {
+        _showError('We could not create your account. Please try again.');
+        return;
+      }
+
+      // Step 6 again: the member record may exist now that the client does.
+      final lookup = await findMember(phone);
+      if (!mounted) return;
+      final signedInMember = lookup.member ?? member;
+      if (signedInMember != null) {
+        // TODO(#50): finishSignIn(phone) before going home.
+      }
+
+      Navigator.of(
+        context,
+      ).pushNamedAndRemoveUntil('/home_screen', (_) => false);
+    } on NetworkException {
+      if (mounted) _showError('No connection. Please try again.');
+    } finally {
+      if (mounted) setState(() => _submitting = false);
+    }
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(message)));
   }
 
   void _onTermsChanged(bool value) {
@@ -171,9 +238,12 @@ class _HappyDocumentsScreenState extends State<HappyDocumentsScreen> {
                   ),
                   foregroundColor: const WidgetStatePropertyAll(Colors.white),
                 ),
-                child: const Text(
-                  'I Accept',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                child: Text(
+                  _submitting ? 'Creating account...' : 'I Accept',
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               const SizedBox(height: 20),

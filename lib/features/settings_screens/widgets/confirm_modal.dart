@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:happy_pay_flutter/api/token_store.dart';
+import 'package:happy_pay_flutter/data/session.dart';
 
 class ConfirmModal extends StatelessWidget {
   const ConfirmModal({
@@ -23,9 +25,13 @@ class ConfirmModal extends StatelessWidget {
         title: 'Are you sure?',
         description: 'You will need to login again.',
         buttonLabel: 'Yes, Sign Out',
-        onConfirm: () => Navigator.of(
-          context,
-        ).pushNamedAndRemoveUntil('/phone_number', (_) => false),
+        onConfirm: () {
+          TokenStore.instance.clear();
+          AppSession.signOut();
+          Navigator.of(
+            context,
+          ).pushNamedAndRemoveUntil('/phone_number', (_) => false);
+        },
       ),
     );
   }

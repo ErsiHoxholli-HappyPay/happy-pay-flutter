@@ -56,7 +56,8 @@ class _ContactInformationScreenState extends State<ContactInformationScreen> {
   void initState() {
     super.initState();
     _prefixController.text = '+355';
-    _emailController.text = AppSession.signUpForm.email ?? '';
+    _emailController.text =
+        AppSession.signUpDraft.email ?? AppSession.memberPrefill?.email ?? '';
     for (final c in [_numberController, _prefixController, _emailController]) {
       c.addListener(() => setState(() {}));
     }
@@ -72,7 +73,7 @@ class _ContactInformationScreenState extends State<ContactInformationScreen> {
 
   void _continue() {
     final email = _emailController.text.trim();
-    AppSession.signUpForm.email = email.isEmpty ? null : email;
+    AppSession.signUpDraft.email = email.isEmpty ? null : email;
     Navigator.of(context).pushNamed('/kyc/address_details');
   }
 

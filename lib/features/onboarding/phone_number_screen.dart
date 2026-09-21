@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:happy_pay_flutter/api/api_client.dart';
 import 'package:happy_pay_flutter/api/auth_api.dart';
 import 'package:happy_pay_flutter/api/phone.dart';
-import 'package:happy_pay_flutter/widgets/back_button.dart';
 import '../../data/country_dial_codes.dart';
 import 'otp_code.dart';
 
@@ -37,11 +36,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
       if (!mounted) return;
       switch (outcome.result) {
         case SendCodeResult.codeSent:
-          openCodeScreen(
-            phone: phone,
-            mode: outcome.mode!,
-            code: outcome.code,
-          );
+          openCodeScreen(phone: phone, mode: outcome.mode!, code: outcome.code);
         case SendCodeResult.alreadyRegistered:
           showError('This number is already registered.');
         case SendCodeResult.failed:
@@ -75,10 +70,15 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(leading: const AppBackButton(), elevation: 1),
+
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+          padding: const EdgeInsets.only(
+            top: 40,
+            left: 24,
+            right: 24,
+            bottom: 24,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

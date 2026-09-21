@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:happy_pay_flutter/api/auth_api.dart' show isAdult;
 import 'package:happy_pay_flutter/data/session.dart';
-import 'package:happy_pay_flutter/models/sign_up_form.dart';
 import 'package:happy_pay_flutter/widgets/back_button.dart';
 
 class CompleteProfileScreen extends StatefulWidget {
@@ -15,6 +14,7 @@ class CompleteProfileScreen extends StatefulWidget {
 
 class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
   static const int _minNameLength = 3;
+  static const _genders = ['Male', 'Female'];
 
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
@@ -22,6 +22,15 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
   final _monthController = TextEditingController();
   final _yearController = TextEditingController();
   String? _gender;
+
+  // The member record may carry any casing; map it onto our labels.
+  static String? _matchGender(String? value) {
+    if (value == null) return null;
+    for (final g in _genders) {
+      if (g.toLowerCase() == value.trim().toLowerCase()) return g;
+    }
+    return null;
+  }
 
   String? _nameError(String value) {
     final trimmed = value.trim();
@@ -81,19 +90,30 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
   }
 
   void _continue() {
-    final form = AppSession.signUpForm;
-    form.firstName = _firstNameController.text.trim();
-    form.lastName = _lastNameController.text.trim();
-    form.gender = _gender;
-    form.dateOfBirth = _dateOfBirth;
+    final draft = AppSession.signUpDraft;
+    draft.firstName = _firstNameController.text.trim();
+    draft.lastName = _lastNameController.text.trim();
+    draft.gender = _gender;
+    draft.dateOfBirth = _dateOfBirth;
     Navigator.of(context).pushNamed('/kyc/contact_information');
   }
 
   @override
   void initState() {
     super.initState();
-    // First panel: a fresh sign-up starts with an empty form.
-    AppSession.signUpForm = SignUpForm();
+    // Draft wins over the member record so edits survive going back.
+    final draft = AppSession.signUpDraft;
+    final prefill = AppSession.memberPrefill;
+    _firstNameController.text = draft.firstName ?? prefill?.firstName ?? '';
+    _lastNameController.text = draft.lastName ?? prefill?.lastName ?? '';
+    final dob = draft.dateOfBirth ?? prefill?.dateOfBirth;
+    if (dob != null) {
+      _dayController.text = dob.day.toString().padLeft(2, '0');
+      _monthController.text = dob.month.toString().padLeft(2, '0');
+      _yearController.text = dob.year.toString();
+    }
+    _gender = _matchGender(draft.gender ?? prefill?.gender);
+
     for (final c in [
       _firstNameController,
       _lastNameController,
@@ -214,6 +234,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
               LayoutBuilder(
                 builder: (context, constraints) => DropdownMenu<String>(
                   label: const Text('Gender'),
+                  initialSelection: _gender,
                   width: constraints.maxWidth,
                   textStyle: const TextStyle(
                     fontSize: 15,
@@ -238,21 +259,8 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                   ),
                   onSelected: (value) => setState(() => _gender = value),
                   dropdownMenuEntries: [
-                    DropdownMenuEntry(
-                      value: 'Male',
-                      label: 'Male',
-                      style: _entryStyle,
-                    ),
-                    DropdownMenuEntry(
-                      value: 'Female',
-                      label: 'Female',
-                      style: _entryStyle,
-                    ),
-                    DropdownMenuEntry(
-                      value: 'Other',
-                      label: 'Other',
-                      style: _entryStyle,
-                    ),
+                    for (final g in _genders)
+                      DropdownMenuEntry(value: g, label: g, style: _entryStyle),
                   ],
                 ),
               ),

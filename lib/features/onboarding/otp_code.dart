@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:happy_pay_flutter/data/session.dart';
 import 'dart:async';
 import '../../widgets/phone/otp_field.dart';
 import '../../widgets/back_button.dart';
@@ -130,6 +131,52 @@ class _OtpCodeScreenState extends State<OtpCodeScreen> {
     await _verifyRegistrationCode(code);
   }
 
+  void _showError(String title, String subtitle) {
+    if (!mounted) return;
+    setState(() {
+      _status = _VerifyStatus.error;
+      _errorTitle = title;
+      _errorSubtitle = subtitle;
+      _otpResetKey = UniqueKey();
+    });
+  }
+
+  Future<void> _afterConfirmed() async {
+    MemberLookup lookup;
+    try {
+      lookup = await findMember(_phoneNumber).timeout(_verifyTimeout);
+    } on NetworkException {
+      _showError('No connection.', 'Please try again.');
+      return;
+    } catch (_) {
+      lookup = const MemberLookup(failed: true);
+    }
+    if (!mounted) return;
+
+    AppSession.phone = _phoneNumber;
+    AppSession.loyaltyMember = lookup.member;
+
+    if (_mode == AuthMode.registration) {
+      AppSession.signUpDraft = SignUpDraft();
+      // Sign-up form opens whether or not a member was found.
+      Navigator.of(
+        context,
+      ).pushNamedAndRemoveUntil('/kyc/complete_profile', (_) => false);
+      return;
+    }
+
+    if (!lookup.found) {
+      // Not a code problem, so the wording differs from the rejected case.
+      _showError(
+        'Something went wrong.',
+        'Check your phone number and resend the code to try again.',
+      );
+      return;
+    }
+    // TODO(#50): finishSignIn(_phoneNumber), then /home_screen.
+    Navigator.of(context).pushNamedAndRemoveUntil('/home_screen', (_) => false);
+  }
+
   Future<void> _verifyRegistrationCode(String code) async {
     ConfirmResult result;
 
@@ -164,7 +211,8 @@ class _OtpCodeScreenState extends State<OtpCodeScreen> {
 
     switch (result) {
       case ConfirmResult.confirmed:
-        // TODO(#45): member lookup, then signup form.
+        _afterConfirmed();
+
         break;
 
       case ConfirmResult.rejected:
@@ -195,22 +243,18 @@ class _OtpCodeScreenState extends State<OtpCodeScreen> {
         _phoneNumber,
         code,
       ).timeout(_verifyTimeout);
+    } on NetworkException {
+      _showError('No connection.', 'Please try again.');
+      return;
     } catch (_) {
-      // Covers timeout, NetworkException, and any other unexpected failure.
-      if (!mounted) return;
-      setState(() {
-        _status = _VerifyStatus.error;
-        _errorTitle = 'Something went wrong.';
-        _errorSubtitle = 'Please try again.';
-        _otpResetKey = UniqueKey();
-      });
+      _showError('Something went wrong.', 'Please try again.');
       return;
     }
 
     if (!mounted) return;
     switch (result) {
       case ConfirmResult.confirmed:
-        // TODO(#45): continue to the member lookup. Loader stays up until then.
+        await _afterConfirmed();
         break;
       case ConfirmResult.rejected:
         setState(() {
