@@ -1,4 +1,8 @@
 // lib/api/auth_api.dart
+import 'dart:developer' show debugger;
+
+import 'package:flutter/foundation.dart' show debugPrint, kDebugMode;
+
 import 'api_client.dart';
 import 'token_store.dart';
 
@@ -155,6 +159,15 @@ Future<String?> findClientUid(String phone) async {
   return response.isHttpOk && uid is String && uid.isNotEmpty ? uid : null;
 }
 
+Future<Map<String, dynamic>?> loadClient(String uid) async {
+  final response = await _api.send(
+    'GET',
+    '/api/v1/mobile/clients/$uid',
+    auth: Auth.customer,
+  );
+  return response.isHttpOk && response.success ? response.data : null;
+}
+
 /// Values to pre-fill the sign-up form. Any of them can be null.
 class MemberPrefill {
   MemberPrefill.fromMember(Map<String, dynamic> m)
@@ -219,22 +232,31 @@ Future<bool> createClient({
   String? email,
   String qcCode = '',
 }) async {
+  final body = <String, dynamic>{
+    'mobile_number': phone,
+    'first_name': firstName,
+    'last_name': lastName,
+    'gender': gender,
+    'date_of_birth': apiDateOfBirth(dateOfBirth),
+    'address': street,
+    'town': city,
+    'post_code': postCode,
+    'email': email,
+    'qc_code': qcCode,
+  };
   final response = await _api.send(
     'POST',
     '/api/v1/mobile/clients/',
     auth: Auth.customer,
-    body: {
-      'mobile_number': phone,
-      'first_name': firstName,
-      'last_name': lastName,
-      'gender': gender,
-      'date_of_birth': apiDateOfBirth(dateOfBirth),
-      'address': street,
-      'town': city,
-      'post_code': postCode,
-      'email': email,
-      'qc_code': qcCode,
-    },
+    body: body,
   );
+  if (kDebugMode) {
+    final httpStatus = response.httpStatus;
+    final responseBody = response.body;
+    debugPrint('createClient body: $body');
+    debugPrint('createClient -> HTTP $httpStatus body: $responseBody');
+    // DEBUG: inspect `body`, `httpStatus`, `responseBody` in the Variables panel.
+    debugger();
+  }
   return response.isHttpOk && response.success;
 }

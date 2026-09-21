@@ -17,7 +17,6 @@ class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
 
   // Apartment has no API field, so it is not required.
   bool get _isComplete =>
-      _cityController.text.trim().isNotEmpty &&
       _streetController.text.trim().isNotEmpty &&
       _postalCodeController.text.trim().isNotEmpty;
 

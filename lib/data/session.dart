@@ -34,6 +34,33 @@ class AppSession {
   }
 
   /// Replaces the session user with the loyalty record of the signed-in customer.
+  static void signIn({
+    required String phone,
+    required Map<String, dynamic> member,
+  }) {
+    final p = MemberPrefill.fromMember(member);
+    AppSession.phone = phone;
+    loyaltyMember = member;
+    final address = [
+      p.street,
+      p.city,
+      p.postCode,
+    ].where((s) => s != null && s.trim().isNotEmpty).join(', ');
+    currentUser = Users(
+      id: p.qcCode ?? phone,
+      phoneNumber: phone,
+      // Screens read `name` as the full name.
+      name: [p.firstName, p.lastName].whereType<String>().join(' ').trim(),
+      lastName: p.lastName,
+      email: p.email,
+      gender: p.gender,
+      birthDate: p.dateOfBirth?.toIso8601String().split('T').first,
+      address: address.isEmpty ? null : address,
+      happyPoints: p.points,
+      // Known only after loadClient (#50).
+      hasWalletKyc: false,
+    );
+  }
 
   static void signOut() {
     currentUser = null;
