@@ -27,6 +27,9 @@ class AppSession {
   // Values typed across the sign-up panels, sent together in createClient.
   static SignUpDraft signUpDraft = SignUpDraft();
 
+  // Client id from clients/search (#50); needed by loadClient and createWallet.
+  static String? clientUid;
+
   /// Pre-fill values from the loyalty member, or null when none was found.
   static MemberPrefill? get memberPrefill {
     final member = loyaltyMember;
@@ -66,6 +69,7 @@ class AppSession {
     currentUser = null;
     phone = null;
     loyaltyMember = null;
+    clientUid = null;
     signUpDraft = SignUpDraft();
   }
 }

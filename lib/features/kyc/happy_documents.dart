@@ -99,8 +99,17 @@ class _HappyDocumentsScreenState extends State<HappyDocumentsScreen> {
         );
         return;
       }
+      final clientUid = await findClientUid(phone);
+      if (!mounted) return;
+      if (clientUid == null) {
+        _showError('We could not find your account details. Tap Retry.');
+        return;
+      }
+
       AppSession.signIn(phone: phone, member: member);
-      // TODO(#50): finishSignIn(phone) before going home.
+      AppSession.clientUid = clientUid;
+      print(clientUid);
+
       Navigator.of(
         context,
       ).pushNamedAndRemoveUntil('/home_screen', (_) => false);
