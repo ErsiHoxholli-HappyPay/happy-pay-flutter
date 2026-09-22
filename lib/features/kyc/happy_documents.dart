@@ -105,10 +105,17 @@ class _HappyDocumentsScreenState extends State<HappyDocumentsScreen> {
         _showError('We could not find your account details. Tap Retry.');
         return;
       }
+      AppSession.clientUid = clientUid;
+
+      final client = await loadClient(clientUid);
+      if (!mounted) return;
+      if (client == null) {
+        _showError('We could not load your account. Tap Retry.');
+        return;
+      }
+      debugPrint('clientUid: $clientUid, wallet_uid: ${client['wallet_uid']}');
 
       AppSession.signIn(phone: phone, member: member);
-      AppSession.clientUid = clientUid;
-      print(clientUid);
 
       Navigator.of(
         context,
