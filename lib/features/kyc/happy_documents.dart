@@ -107,13 +107,13 @@ class _HappyDocumentsScreenState extends State<HappyDocumentsScreen> {
       }
       AppSession.clientUid = clientUid;
 
-      final client = await loadClient(clientUid);
+      final finishResult = await finishSignIn(phone);
       if (!mounted) return;
-      if (client == null) {
+      if (finishResult == FinishResult.noClient) {
         _showError('We could not load your account. Tap Retry.');
         return;
       }
-      debugPrint('clientUid: $clientUid, wallet_uid: ${client['wallet_uid']}');
+      // noWallet: original app continues to home without a wallet.
 
       AppSession.signIn(phone: phone, member: member);
 
@@ -122,6 +122,8 @@ class _HappyDocumentsScreenState extends State<HappyDocumentsScreen> {
       ).pushNamedAndRemoveUntil('/home_screen', (_) => false);
     } on NetworkException {
       if (mounted) _showError('No connection. Tap Retry.');
+    } catch (_) {
+      if (mounted) _showError('Something went wrong. Tap Retry.');
     } finally {
       if (mounted) setState(() => _submitting = false);
     }

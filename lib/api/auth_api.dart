@@ -260,3 +260,38 @@ Future<bool> createClient({
   }
   return response.isHttpOk && response.success;
 }
+
+Future<bool> createWallet({
+  required String clientUid,
+  required String phone,
+}) async {
+  final response = await _api.send(
+    'POST',
+    '/api/v1/mobile/wallets/',
+    auth: Auth.customer,
+    body: {
+      'owner_uid': clientUid,
+      'type': 'INDIVIDUAL',
+      'extra': {'mobile_number': phone},
+    },
+  );
+  return response.isHttpOk && response.success;
+}
+
+enum FinishResult { ready, noClient, noWallet }
+
+Future<FinishResult> finishSignIn(String phone) async {
+  final uid = await findClientUid(phone);
+  if (uid == null) return FinishResult.noClient;
+
+  var client = await loadClient(uid);
+  if (client == null) return FinishResult.noClient;
+
+  if (client['wallet_uid'] == null) {
+    final created = await createWallet(clientUid: uid, phone: phone);
+    if (!created) return FinishResult.noWallet;
+    client = await loadClient(uid);
+    if (client == null) return FinishResult.noClient;
+  }
+  return FinishResult.ready;
+}
