@@ -345,3 +345,23 @@ Future<List<City>?> fetchAllCities() async {
   }
   return null;
 }
+
+/// Returns true when the backend confirmed the revoke.
+/// The local session is cleared in every case.
+Future<bool> signOut() async {
+  final refresh = await TokenStore.instance.readRefresh() ?? '';
+  var revoked = false;
+  try {
+    final response = await _api.send(
+      'POST',
+      '/api/v1/mobile/accounts/token/revoke/',
+      auth: Auth.staticToken,
+      body: {'refresh_token': refresh},
+    );
+    revoked = response.isHttpOk && response.success;
+  } on NetworkException {
+    revoked = false;
+  }
+  await TokenStore.instance.clear();
+  return revoked;
+}

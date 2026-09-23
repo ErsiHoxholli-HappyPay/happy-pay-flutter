@@ -1,4 +1,5 @@
 import '../api/auth_api.dart';
+import '../api/auth_api.dart' as auth_api;
 import '../models/pending_request.dart';
 import '../models/users.dart';
 
@@ -77,7 +78,10 @@ class AppSession {
     );
   }
 
-  static void signOut() {
+  /// Revokes the refresh token server-side (best effort) and clears the
+  /// local session.
+  static Future<void> signOut() async {
+    await auth_api.signOut();
     currentUser = null;
     phone = null;
     loyaltyMember = null;
