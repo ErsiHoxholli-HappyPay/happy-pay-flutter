@@ -1,7 +1,5 @@
 // lib/api/auth_api.dart
-import 'dart:developer' show debugger;
-
-import 'package:flutter/foundation.dart' show debugPrint, kDebugMode;
+import 'package:flutter/foundation.dart';
 
 import 'api_client.dart';
 import 'token_store.dart';
@@ -125,24 +123,32 @@ class MemberLookup {
 }
 
 Future<MemberLookup> findMember(String phone) async {
+  final body = {'mobile_number': phone, 'page': 1, 'page_size': 100};
+  debugPrint('findMember request: $body');
   final response = await _api.send(
     'POST',
     '/api/v1/qivos/search_member/',
     auth: Auth.customer,
-    body: {'mobile_number': phone, 'page': 1, 'page_size': 100},
+    body: body,
+  );
+  debugPrint(
+    'findMember response: status=${response.httpStatus}, body=${response.body}',
   );
   if (!response.hasBodyAnswer) {
+    debugPrint('findMember result: failed (no body answer)');
     return const MemberLookup(failed: true);
   }
   final result = response.body?['response'];
   if (!response.isHttpOk ||
       result is! Map<String, dynamic> ||
       result['success'] != true) {
+    debugPrint('findMember result: not found (isHttpOk=${response.isHttpOk})');
     return const MemberLookup();
   }
   final payload = result['payload'];
   final list = payload is Map<String, dynamic> ? payload['data'] : null;
   final first = list is List && list.isNotEmpty ? list.first : null;
+  debugPrint('findMember result: member=$first');
   return first is Map<String, dynamic>
       ? MemberLookup(member: first)
       : const MemberLookup();
@@ -180,6 +186,8 @@ class MemberPrefill {
       street = _text(_first(m['addressList'])?['addressLine1']),
       postCode = _text(_first(m['addressList'])?['postCode']),
       email = _text(_first(m['emailList'])?['emailAddress']),
+      loyaltyQcCode = _text(_first(m['loyaltyMembershipData'])?['QCCode']),
+      mobileQcCode = _text(_first(m['telephoneList'])?['QCCode']),
       points = _int(_first(m['loyaltyMembershipData'])?['pointBalance']);
 
   final String? qcCode;
@@ -191,6 +199,8 @@ class MemberPrefill {
   final String? street;
   final String? postCode;
   final String? email;
+  final String? loyaltyQcCode;
+  final String? mobileQcCode;
   final int? points;
 
   static String? _text(Object? value) => value?.toString();
@@ -227,10 +237,14 @@ Future<bool> createClient({
   required String gender,
   required DateTime dateOfBirth,
   required String street,
-  required String city,
+  required int cityId,
   required String postCode,
   String? email,
   String qcCode = '',
+  String? apartmentNumber,
+  String? relationshipCode,
+  String? loyaltyQcCode,
+  String? mobileQcCode,
 }) async {
   final body = <String, dynamic>{
     'mobile_number': phone,
@@ -239,25 +253,26 @@ Future<bool> createClient({
     'gender': gender,
     'date_of_birth': apiDateOfBirth(dateOfBirth),
     'address': street,
-    'town': city,
+    'town': cityId.toString(),
     'post_code': postCode,
     'email': email,
     'qc_code': qcCode,
+    'apartmentNumber': apartmentNumber,
+    'relationship_code': relationshipCode,
+    'loyalty_qc_code': loyaltyQcCode,
+    'mobile_qc_code': mobileQcCode,
+    'profile_picture': null,
   };
+  debugPrint('createClient request: $body');
   final response = await _api.send(
     'POST',
     '/api/v1/mobile/clients/',
     auth: Auth.customer,
     body: body,
   );
-  if (kDebugMode) {
-    final httpStatus = response.httpStatus;
-    final responseBody = response.body;
-    debugPrint('createClient body: $body');
-    debugPrint('createClient -> HTTP $httpStatus body: $responseBody');
-    // DEBUG: inspect `body`, `httpStatus`, `responseBody` in the Variables panel.
-    debugger();
-  }
+  debugPrint(
+    'createClient response: status=${response.httpStatus}, body=${response.body}',
+  );
   return response.isHttpOk && response.success;
 }
 
@@ -294,4 +309,39 @@ Future<FinishResult> finishSignIn(String phone) async {
     if (client == null) return FinishResult.noClient;
   }
   return FinishResult.ready;
+}
+
+class City {
+  const City({required this.id, required this.name});
+  final int id;
+  final String name;
+}
+
+/// All cities, or null when a page could not be read.
+Future<List<City>?> fetchAllCities() async {
+  final cities = <City>[];
+  for (var page = 1; page <= 50; page++) {
+    final response = await _api.send(
+      'GET',
+      '/api/v1/mobile/cms/content/cities/?page=$page',
+      auth: Auth.staticToken,
+    );
+    final results = response.body?['results'];
+    if (!response.isHttpOk || results is! List) {
+      return null;
+    }
+    for (final item in results) {
+      if (item is Map<String, dynamic>) {
+        final id = item['id'];
+        final name = item['name'];
+        if (id is int && name is String && name.isNotEmpty) {
+          cities.add(City(id: id, name: name));
+        }
+      }
+    }
+    if (response.body?['next'] == null) {
+      return cities..sort((a, b) => a.name.compareTo(b.name));
+    }
+  }
+  return null;
 }

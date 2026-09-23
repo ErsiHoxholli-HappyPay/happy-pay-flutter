@@ -36,6 +36,18 @@ class AppSession {
     return member == null ? null : MemberPrefill.fromMember(member);
   }
 
+  // Cached across the address panel so going back and forth doesn't re-fetch.
+  static Future<List<City>?>? citiesFuture;
+
+  /// Starts loading cities once and reuses the result. Pass `retry: true`
+  /// after a failure to fetch again.
+  static Future<List<City>?> ensureCitiesLoaded({bool retry = false}) {
+    if (retry || citiesFuture == null) {
+      citiesFuture = fetchAllCities();
+    }
+    return citiesFuture!;
+  }
+
   /// Replaces the session user with the loyalty record of the signed-in customer.
   static void signIn({
     required String phone,
@@ -70,7 +82,6 @@ class AppSession {
     phone = null;
     loyaltyMember = null;
     clientUid = null;
-    signUpDraft = SignUpDraft();
   }
 }
 
@@ -80,7 +91,9 @@ class SignUpDraft {
   String? gender;
   DateTime? dateOfBirth;
   String? email;
-  String? city;
+  // The chosen city's id, never its name: two cities can share a name.
+  int? cityId;
   String? street;
+  String? apartmentNumber;
   String? postCode;
 }

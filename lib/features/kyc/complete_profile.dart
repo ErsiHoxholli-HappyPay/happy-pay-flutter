@@ -101,6 +101,8 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
   @override
   void initState() {
     super.initState();
+    // Kicked off here so the list is likely ready by the address panel.
+    AppSession.ensureCitiesLoaded();
     // Draft wins over the member record so edits survive going back.
     final draft = AppSession.signUpDraft;
     final prefill = AppSession.memberPrefill;
@@ -134,22 +136,6 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
     _yearController.dispose();
     super.dispose();
   }
-
-  final ButtonStyle _entryStyle =
-      MenuItemButton.styleFrom(
-        textStyle: const TextStyle(fontSize: 15),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      ).copyWith(
-        backgroundColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) return Colors.black;
-          if (states.contains(WidgetState.hovered)) return Colors.black12;
-          return Colors.transparent;
-        }),
-        foregroundColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) return Colors.white;
-          return Colors.black87;
-        }),
-      );
 
   @override
   Widget build(BuildContext context) {
@@ -231,38 +217,30 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                 ],
               ),
               const SizedBox(height: 16),
-              LayoutBuilder(
-                builder: (context, constraints) => DropdownMenu<String>(
-                  label: const Text('Gender'),
-                  initialSelection: _gender,
-                  width: constraints.maxWidth,
-                  textStyle: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
+              const Text(
+                'Gender',
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+              const SizedBox(height: 8),
+              DropdownButtonFormField<String>(
+                initialValue: _gender,
+                isExpanded: true,
+                decoration: InputDecoration(
+                  hintText: 'Select Gender',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.grey.shade300),
                   ),
-                  inputDecorationTheme: const InputDecorationTheme(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                    ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.grey.shade300),
                   ),
-                  menuStyle: MenuStyle(
-                    backgroundColor: const WidgetStatePropertyAll(Colors.white),
-                    elevation: const WidgetStatePropertyAll(4),
-                    shape: WidgetStatePropertyAll(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    padding: const WidgetStatePropertyAll(
-                      EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-                    ),
-                  ),
-                  onSelected: (value) => setState(() => _gender = value),
-                  dropdownMenuEntries: [
-                    for (final g in _genders)
-                      DropdownMenuEntry(value: g, label: g, style: _entryStyle),
-                  ],
                 ),
+                items: [
+                  for (final g in _genders)
+                    DropdownMenuItem<String>(value: g, child: Text(g)),
+                ],
+                onChanged: (value) => setState(() => _gender = value),
               ),
               const SizedBox(height: 16),
               const Text(

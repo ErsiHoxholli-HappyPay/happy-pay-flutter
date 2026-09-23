@@ -41,14 +41,14 @@ class _HappyDocumentsScreenState extends State<HappyDocumentsScreen> {
     final gender = draft.gender;
     final dateOfBirth = draft.dateOfBirth;
     final street = draft.street;
-    final city = draft.city;
+    final cityId = draft.cityId;
     final postCode = draft.postCode;
     if (firstName == null ||
         lastName == null ||
         gender == null ||
         dateOfBirth == null ||
         street == null ||
-        city == null ||
+        cityId == null ||
         postCode == null) {
       _showError('Some details are missing. Please go back and check them.');
       return;
@@ -64,10 +64,13 @@ class _HappyDocumentsScreenState extends State<HappyDocumentsScreen> {
         gender: gender.toLowerCase(),
         dateOfBirth: dateOfBirth,
         street: street,
-        city: city,
+        cityId: cityId,
         postCode: postCode,
         email: draft.email,
         qcCode: _qcCode!,
+        apartmentNumber: draft.apartmentNumber,
+        loyaltyQcCode: AppSession.memberPrefill?.loyaltyQcCode,
+        mobileQcCode: AppSession.memberPrefill?.mobileQcCode,
       );
       if (!mounted) return;
       if (!created) {
@@ -85,12 +88,15 @@ class _HappyDocumentsScreenState extends State<HappyDocumentsScreen> {
     await _lookupMember(phone);
   }
 
-  /// Step 6 again: the member record should exist now that the client does.
   Future<void> _lookupMember(String phone) async {
     setState(() => _submitting = true);
     try {
       final lookup = await findMember(phone);
       if (!mounted) return;
+      debugPrint(
+        'HappyDocuments lookup for phone=$phone -> '
+        'found=${lookup.found}, failed=${lookup.failed}, member=${lookup.member}',
+      );
       final member = lookup.member;
       if (member == null) {
         _showError(

@@ -173,7 +173,24 @@ class _OtpCodeScreenState extends State<OtpCodeScreen> {
       );
       return;
     }
-    // TODO(#50): finishSignIn(_phoneNumber), then /home_screen.
+
+    FinishResult finishResult;
+    try {
+      finishResult = await finishSignIn(_phoneNumber);
+    } on NetworkException {
+      _showError('No connection.', 'Please try again.');
+      return;
+    } catch (_) {
+      _showError('Something went wrong.', 'Please try again.');
+      return;
+    }
+    if (!mounted) return;
+    if (finishResult == FinishResult.noClient) {
+      _showError('Something went wrong.', 'Please try again.');
+      return;
+    }
+    // noWallet: the reference app continues to home without a wallet.
+    AppSession.signIn(phone: _phoneNumber, member: lookup.member!);
     Navigator.of(context).pushNamedAndRemoveUntil('/home_screen', (_) => false);
   }
 
