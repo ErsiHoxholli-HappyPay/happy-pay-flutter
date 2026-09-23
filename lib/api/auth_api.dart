@@ -48,7 +48,8 @@ String? _codeFrom(ApiResponse response) {
 
 Future<SendCodeOutcome> sendFirstCode(String phone) async {
   debugPrint(
-    'Token Before clear: ${await TokenStore.instance.readAccess()} ${await TokenStore.instance.readRefresh()}',
+    '''Access Token Before clear: ${await TokenStore.instance.readAccess()} \n
+    Refresh Token Before Clear: ${await TokenStore.instance.readRefresh()}''',
   );
   await TokenStore.instance.clear();
   debugPrint(
