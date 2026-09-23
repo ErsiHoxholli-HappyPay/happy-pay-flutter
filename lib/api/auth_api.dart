@@ -47,7 +47,13 @@ String? _codeFrom(ApiResponse response) {
 }
 
 Future<SendCodeOutcome> sendFirstCode(String phone) async {
+  debugPrint(
+    'Token Before clear: ${await TokenStore.instance.readAccess()} ${await TokenStore.instance.readRefresh()}',
+  );
   await TokenStore.instance.clear();
+  debugPrint(
+    'sendFirstCode: access after clear = ${await TokenStore.instance.readAccess()}',
+  );
 
   final login = await requestLoginCode(phone);
   if (login.isHttpOk && login.bodyStatusCode == 200) {
