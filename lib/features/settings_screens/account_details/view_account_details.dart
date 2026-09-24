@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:happy_pay_flutter/data/country_dial_codes.dart';
 import 'package:happy_pay_flutter/data/session.dart';
 import 'package:happy_pay_flutter/features/settings_screens/account_details/edit_phone_number_screen.dart';
 import 'package:happy_pay_flutter/features/settings_screens/widgets/confirm_modal.dart';
@@ -63,13 +64,31 @@ class _ViewAccountDetailsState extends State<ViewAccountDetails> {
       text: dateParts.length == 3 ? dateParts[0] : '',
     );
 
-    final phoneParts = (_user?.phoneNumber ?? '').split(' ');
-    _phoneCodeController = TextEditingController(text: phoneParts.first);
-    _phoneNumberController = TextEditingController(
-      text: phoneParts.length > 1 ? phoneParts.sublist(1).join(' ') : '',
+    final (phoneCode, phoneNumber) = _splitPhoneNumber(
+      _user?.phoneNumber ?? '',
     );
+    _phoneCodeController = TextEditingController(text: phoneCode);
+    _phoneNumberController = TextEditingController(text: phoneNumber);
 
     _emailController = TextEditingController(text: _user?.email ?? '');
+  }
+
+  // Stored numbers have no space between the dial code and the rest, e.g.
+  // "+3556XXXXXXXX"; match against known dial codes to split them apart.
+  (String, String) _splitPhoneNumber(String raw) {
+    final trimmed = raw.trim();
+    if (trimmed.isEmpty) return ('', '');
+    final byLength = [...countryDialCodes]
+      ..sort((a, b) => b.dialCode.length.compareTo(a.dialCode.length));
+    for (final country in byLength) {
+      if (trimmed.startsWith(country.dialCode)) {
+        return (
+          country.dialCode,
+          trimmed.substring(country.dialCode.length).trim(),
+        );
+      }
+    }
+    return ('', trimmed);
   }
 
   @override

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import '../../../widgets/phone/otp_field.dart';
 import '../../../widgets/back_button.dart';
-import '../../../data/session.dart';
-import 'phone_number_changed_screen.dart';
 
 enum _VerifyStatus { idle, verifying, error }
 
@@ -15,8 +13,6 @@ class EnterOtpCodeScreen extends StatefulWidget {
 }
 
 class _EnterOtpCodeScreenState extends State<EnterOtpCodeScreen> {
-  static const _verifyTimeout = Duration(seconds: 10);
-
   _VerifyStatus _status = _VerifyStatus.idle;
   final _otpKey = GlobalKey<State>();
   Key _otpResetKey = UniqueKey();
@@ -33,39 +29,15 @@ class _EnterOtpCodeScreenState extends State<EnterOtpCodeScreen> {
     if (_status == _VerifyStatus.verifying) return;
     setState(() => _status = _VerifyStatus.verifying);
 
-    bool? success;
-    try {
-      // success = await _callVerifyApi(code).timeout(_verifyTimeout);
-    } catch (_) {
-      if (!mounted) return;
-      setState(() {
-        _status = _VerifyStatus.error;
-        _otpResetKey = UniqueKey();
-      });
-      return;
-    }
-
+    // TODO: no backend endpoint exists yet to confirm an OTP for changing
+    // an existing account's phone number (_phoneNumber, code); wire this up
+    // once one is available. For now this always reports an error.
     if (!mounted) return;
     setState(() {
       _status = _VerifyStatus.error;
       _otpResetKey = UniqueKey();
     });
   }
-
-  // Future<bool?> _callVerifyApi(String code) async {
-  //   await Future.delayed(const Duration(seconds: 3));
-  //   if (code != '111111') return null;
-  //   final normalized = _phoneNumber.replaceAll(' ', '');
-  //   final match = users.cast<dynamic>().firstWhere(
-  //     (u) => (u.phoneNumber as String).replaceAll(' ', '') == normalized,
-  //     orElse: () => null,
-  //   );
-  //   if (match != null) {
-  //     AppSession.currentUser = match;
-  //     return false; // existing user
-  //   }
-  //   return true; // new user
-  // }
 
   @override
   Widget build(BuildContext context) {

@@ -196,11 +196,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     MaterialPageRoute(
                       builder: (_) => PrivacyAndSecurity(
                         hasWalletKyc: widget.user.hasWalletKyc,
-                        user: Users(
-                          id: widget.user.id,
-                          phoneNumber: widget.user.phoneNumber,
-                          hasWalletKyc: widget.user.hasWalletKyc,
-                        ),
+                        user: widget.user,
                       ),
                     ),
                   );
