@@ -36,10 +36,10 @@ class _ViewAccountDetailsState extends State<ViewAccountDetails> {
   late final TextEditingController _phoneCodeController;
   late final TextEditingController _phoneNumberController;
   late final TextEditingController _emailController;
-  final _cityController = TextEditingController();
-  final _roadController = TextEditingController();
-  final _apartmentController = TextEditingController();
-  final _postalController = TextEditingController();
+  late final TextEditingController _cityController;
+  late final TextEditingController _roadController;
+  late final TextEditingController _apartmentController;
+  late final TextEditingController _postalController;
 
   @override
   void initState() {
@@ -71,6 +71,13 @@ class _ViewAccountDetailsState extends State<ViewAccountDetails> {
     _phoneNumberController = TextEditingController(text: phoneNumber);
 
     _emailController = TextEditingController(text: _user?.email ?? '');
+    final prefill = AppSession.memberPrefill;
+    _cityController = TextEditingController(text: prefill?.city ?? '');
+    _roadController = TextEditingController(text: prefill?.street ?? '');
+    _postalController = TextEditingController(text: prefill?.postCode ?? '');
+    _apartmentController = TextEditingController(
+      text: AppSession.signUpDraft.apartmentNumber ?? '',
+    );
   }
 
   // Stored numbers have no space between the dial code and the rest, e.g.

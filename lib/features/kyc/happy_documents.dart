@@ -18,16 +18,22 @@ class _HappyDocumentsScreenState extends State<HappyDocumentsScreen> {
   bool _submitting = false;
   // Once the client exists, Retry only repeats the member lookup.
   bool _clientCreated = false;
-  // Fixed on the first create so a retried create sends the same value.
+  // Once the member is found, Retry only repeats finishSignIn.
+  Map<String, dynamic>? _member;
+  // Retry sends the same qcCode
   String? _qcCode;
-  // Ticking the acknowledgement also ticks the two documents.
+  // Ticking the acknowledgement ticks the two documents.
   bool get _isComplete => _acknowledges && !_submitting;
 
   Future<void> _continue() async {
     if (_submitting) return;
     final phone = AppSession.phone;
     if (phone == null) {
-      _showError('Some details are missing. Please go back and check them.');
+      _showError('Phone number is missing. Please go back and check them.');
+      return;
+    }
+    if (_member != null) {
+      await _finishSignIn(phone, _member!);
       return;
     }
     if (_clientCreated) {
@@ -74,15 +80,23 @@ class _HappyDocumentsScreenState extends State<HappyDocumentsScreen> {
       );
       if (!mounted) return;
       if (!created) {
-        _showError('We could not create your account. Please try again.');
+        setState(() => _submitting = false);
+        _showError(
+          'We could not create your account. Please check your details and try again.',
+        );
         return;
       }
       _clientCreated = true;
     } on NetworkException {
-      if (mounted) _showError('No connection. Please try again.');
+      if (!mounted) return;
+      setState(() => _submitting = false);
+      _showError('No connection. Please try again.');
       return;
-    } finally {
-      if (mounted) setState(() => _submitting = false);
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _submitting = false);
+      _showError('Something went wrong. Tap Retry.');
+      return;
     }
 
     await _lookupMember(phone);
@@ -90,6 +104,7 @@ class _HappyDocumentsScreenState extends State<HappyDocumentsScreen> {
 
   Future<void> _lookupMember(String phone) async {
     setState(() => _submitting = true);
+    Map<String, dynamic>? member;
     try {
       final lookup = await findMember(phone);
       if (!mounted) return;
@@ -97,29 +112,43 @@ class _HappyDocumentsScreenState extends State<HappyDocumentsScreen> {
         'HappyDocuments lookup for phone=$phone -> '
         'found=${lookup.found}, failed=${lookup.failed}, member=${lookup.member}',
       );
-      final member = lookup.member;
-      if (member == null) {
-        _showError(
-          'Your account was created but we could not load your loyalty '
-          'details. Tap Retry.',
-        );
-        return;
-      }
-      final clientUid = await findClientUid(phone);
+      member = lookup.member;
+    } on NetworkException {
       if (!mounted) return;
-      if (clientUid == null) {
-        _showError('We could not find your account details. Tap Retry.');
-        return;
-      }
-      AppSession.clientUid = clientUid;
+      setState(() => _submitting = false);
+      _showError('No connection. Please try again.');
+      return;
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _submitting = false);
+      _showError('Something went wrong. Tap Retry.');
+      return;
+    }
 
+    if (member == null) {
+      setState(() => _submitting = false);
+      _showError('We could not load your account. Please try again.');
+      return;
+    }
+    _member = member;
+    await _finishSignIn(phone, member);
+  }
+
+  Future<void> _finishSignIn(String phone, Map<String, dynamic> member) async {
+    setState(() => _submitting = true);
+    try {
       final finishResult = await finishSignIn(phone);
       if (!mounted) return;
       if (finishResult == FinishResult.noClient) {
-        _showError('We could not load your account. Tap Retry.');
+        setState(() => _submitting = false);
+        _showError('We could not load your account. Please try again.');
         return;
       }
-      // noWallet: original app continues to home without a wallet.
+      if (finishResult == FinishResult.noWallet) {
+        setState(() => _submitting = false);
+        _showError('We could not set up your wallet.');
+        return;
+      }
 
       AppSession.signIn(phone: phone, member: member);
 
@@ -127,11 +156,13 @@ class _HappyDocumentsScreenState extends State<HappyDocumentsScreen> {
         context,
       ).pushNamedAndRemoveUntil('/home_screen', (_) => false);
     } on NetworkException {
-      if (mounted) _showError('No connection. Tap Retry.');
+      if (!mounted) return;
+      setState(() => _submitting = false);
+      _showError('No connection. Please try again.');
     } catch (_) {
-      if (mounted) _showError('Something went wrong. Tap Retry.');
-    } finally {
-      if (mounted) setState(() => _submitting = false);
+      if (!mounted) return;
+      setState(() => _submitting = false);
+      _showError('Something went wrong. Tap Retry.');
     }
   }
 

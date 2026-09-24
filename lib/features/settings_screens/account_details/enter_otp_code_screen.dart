@@ -16,6 +16,7 @@ class _EnterOtpCodeScreenState extends State<EnterOtpCodeScreen> {
   _VerifyStatus _status = _VerifyStatus.idle;
   final _otpKey = GlobalKey<State>();
   Key _otpResetKey = UniqueKey();
+  // ignore: unused_field
   String _phoneNumber = '';
 
   @override
