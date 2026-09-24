@@ -46,16 +46,10 @@ class _EnterOtpCodeScreenState extends State<EnterOtpCodeScreen> {
     }
 
     if (!mounted) return;
-    if (success != null) {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => const PhoneNumberChangedScreen()),
-      );
-    } else {
-      setState(() {
-        _status = _VerifyStatus.error;
-        _otpResetKey = UniqueKey();
-      });
-    }
+    setState(() {
+      _status = _VerifyStatus.error;
+      _otpResetKey = UniqueKey();
+    });
   }
 
   // Future<bool?> _callVerifyApi(String code) async {

@@ -18,9 +18,20 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
   bool sending = false;
 
   @override
+  void initState() {
+    super.initState();
+    _phoneController.addListener(_clearError);
+  }
+
+  @override
   void dispose() {
+    _phoneController.removeListener(_clearError);
     _phoneController.dispose();
     super.dispose();
+  }
+
+  void _clearError() {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
   }
 
   Future<void> onSendPressed() async {
@@ -141,7 +152,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                 onPressed: sending ? null : onSendPressed,
                 style: ButtonStyle(
                   minimumSize: const WidgetStatePropertyAll(
-                    Size.fromHeight(60),
+                    Size.fromHeight(50),
                   ),
                   shape: const WidgetStatePropertyAll(
                     RoundedRectangleBorder(

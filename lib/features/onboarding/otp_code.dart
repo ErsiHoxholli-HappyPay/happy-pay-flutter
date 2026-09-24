@@ -28,14 +28,13 @@ class OtpCodeScreen extends StatefulWidget {
 
 class _OtpCodeScreenState extends State<OtpCodeScreen> {
   static const _verifyTimeout = Duration(seconds: 15);
-
   // Resend countdown (see docs/auth-flow-guide.md, step 3).
   static const resendDelay = 30;
   int secondsLeft = resendDelay;
   Timer? countdown;
 
   _VerifyStatus _status = _VerifyStatus.idle;
-  final _otpKey = GlobalKey<State>();
+  // Regenerated only on a new error, to force the OTP boxes to reset.
   Key _otpResetKey = UniqueKey();
   String _phoneNumber = '';
   String? _loginCode;
@@ -71,6 +70,11 @@ class _OtpCodeScreenState extends State<OtpCodeScreen> {
   void dispose() {
     countdown?.cancel();
     super.dispose();
+  }
+
+  void _clearError() {
+    if (_status != _VerifyStatus.error) return;
+    setState(() => _status = _VerifyStatus.idle);
   }
 
   void startCountdown() {
@@ -334,10 +338,9 @@ class _OtpCodeScreenState extends State<OtpCodeScreen> {
                     ),
                     const SizedBox(height: 50),
                     OtpInputField(
-                      key: _status == _VerifyStatus.error
-                          ? _otpResetKey
-                          : _otpKey,
+                      key: _otpResetKey,
                       onCompleted: _verifyOtp,
+                      onChanged: (_) => _clearError(),
                     ),
                     if (_loginCode != null) ...[
                       const SizedBox(height: 16),
