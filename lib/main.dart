@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:happy_pay_flutter/data/session.dart';
-import 'package:happy_pay_flutter/data/users.dart';
 import 'package:happy_pay_flutter/features/splash_screen.dart';
 import 'features/onboarding/get_started_screen.dart';
 import 'features/onboarding/phone_number_screen.dart';
@@ -25,7 +24,7 @@ void main() {
     // Send the customer back to your phone screen here.
   };
   WidgetsFlutterBinding.ensureInitialized();
-  AppSession.currentUser ??= users.first;
+  AppSession.currentUser;
   runApp(const MyApp());
 }
 

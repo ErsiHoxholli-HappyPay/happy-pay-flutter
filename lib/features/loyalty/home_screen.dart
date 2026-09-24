@@ -9,9 +9,11 @@ import 'package:happy_pay_flutter/features/loyalty/steps/steps_permission.dart';
 import 'package:happy_pay_flutter/features/settings_screens/settings_screen.dart';
 import 'package:happy_pay_flutter/widgets/lucky_spin/lucky_spin.dart';
 import 'package:happy_pay_flutter/features/loyalty/partners/partners_screen.dart';
-import '../../data/offer.dart';
 import '../../data/coupons.dart';
 import '../../data/session.dart';
+import '../../data/loyalty_content.dart';
+import '../../models/offer.dart';
+import '../../models/points_history.dart';
 import 'offers/offers_screen.dart';
 import 'offers/offer_details_screen.dart';
 import '../../widgets/offer_widgets/offer_card.dart';
@@ -28,11 +30,59 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool happyOffers = false;
+
+  // null = still loading, [] = loaded empty or failed to load.
+  List<PointsHistoryEntry>? _historyPreview;
+  List<Offer>? _offersPreview;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _loadContent());
+  }
+
+  void _loadContent() {
+    _loadPointsHistory();
+    _loadOffers();
+    _loadPartners();
+  }
+
+  Future<void> _loadPointsHistory() async {
+    try {
+      final data = await fetchPointsHistoryPreview();
+      if (!mounted) return;
+      setState(() => _historyPreview = data);
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _historyPreview = []);
+    }
+  }
+
+  Future<void> _loadOffers() async {
+    try {
+      final data = await fetchOffersPreview();
+      if (!mounted) return;
+      setState(() => _offersPreview = data);
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _offersPreview = []);
+    }
+  }
+
+  Future<void> _loadPartners() async {
+    try {
+      // Not rendered yet; the partners section keeps its static placeholder.
+      await fetchPartnersPreview();
+    } catch (_) {
+      // Nothing to update on failure since there is no partners state yet.
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = AppSession.currentUser;
     final points = user?.happyPoints ?? 0;
-    final filteredOffers = offers
+    final filteredOffers = (_offersPreview ?? [])
         .where(
           (offer) => happyOffers ? offer.points != null : offer.points == null,
         )
@@ -248,11 +298,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     const SizedBox(height: 10),
 
-                    _historyItem("Max Optika", "+3 points"),
-
-                    _historyItem("Spar", "+15 points"),
-
-                    _historyItem("Neptun", "+22 points"),
+                    _historySection(),
 
                     const SizedBox(height: 25),
                     // OFFERS HEADER
@@ -307,39 +353,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     const SizedBox(height: 12),
                     // HORIZONTAL OFFERS
-                    SizedBox(
-                      height: 155,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.only(left: 2, bottom: 3),
-                        itemCount: filteredOffers.length,
-                        itemBuilder: (context, index) {
-                          final offer = filteredOffers[index];
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                              right: 10,
-                              bottom: 3,
-                            ),
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) =>
-                                        OfferDetailsScreen(offer: offer),
-                                  ),
-                                );
-                              },
-                              child: OfferCard(
-                                offer: offer,
-                                imageHeight: 70,
-                                cardWidth: 265,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
+                    _offersSection(filteredOffers),
 
                     const SizedBox(height: 25),
                     // PARTNERS
@@ -487,6 +501,88 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(width: 5),
           Text(text, style: const TextStyle(fontSize: 12)),
         ],
+      ),
+    );
+  }
+
+  Widget _historySection() {
+    final history = _historyPreview;
+    if (history == null) {
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 12),
+          child: SizedBox(
+            width: 18,
+            height: 18,
+            child: CircularProgressIndicator(strokeWidth: 2),
+          ),
+        ),
+      );
+    }
+    if (history.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 12),
+        child: Text(
+          "No recent activity",
+          style: TextStyle(color: Colors.grey, fontSize: 12),
+        ),
+      );
+    }
+    return Column(
+      children: [
+        for (final entry in history)
+          _historyItem(entry.title, entry.formattedPoints),
+      ],
+    );
+  }
+
+  Widget _offersSection(List<Offer> filteredOffers) {
+    if (_offersPreview == null) {
+      return const SizedBox(
+        height: 155,
+        child: Center(
+          child: SizedBox(
+            width: 18,
+            height: 18,
+            child: CircularProgressIndicator(strokeWidth: 2),
+          ),
+        ),
+      );
+    }
+    if (filteredOffers.isEmpty) {
+      return const SizedBox(
+        height: 155,
+        child: Center(
+          child: Text(
+            "No offers available",
+            style: TextStyle(color: Colors.grey, fontSize: 12),
+          ),
+        ),
+      );
+    }
+    return SizedBox(
+      height: 155,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.only(left: 2, bottom: 3),
+        itemCount: filteredOffers.length,
+        itemBuilder: (context, index) {
+          final offer = filteredOffers[index];
+          return Padding(
+            padding: const EdgeInsets.only(right: 10, bottom: 3),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => OfferDetailsScreen(offer: offer),
+                  ),
+                );
+              },
+              child: OfferCard(offer: offer, imageHeight: 70, cardWidth: 265),
+            ),
+          );
+        },
       ),
     );
   }

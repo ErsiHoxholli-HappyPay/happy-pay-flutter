@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import '../../../widgets/phone/otp_field.dart';
 import '../../../widgets/back_button.dart';
-import '../../../data/users.dart';
 import '../../../data/session.dart';
 import 'phone_number_changed_screen.dart';
 
@@ -36,7 +35,7 @@ class _EnterOtpCodeScreenState extends State<EnterOtpCodeScreen> {
 
     bool? success;
     try {
-      success = await _callVerifyApi(code).timeout(_verifyTimeout);
+      // success = await _callVerifyApi(code).timeout(_verifyTimeout);
     } catch (_) {
       if (!mounted) return;
       setState(() {
@@ -59,20 +58,20 @@ class _EnterOtpCodeScreenState extends State<EnterOtpCodeScreen> {
     }
   }
 
-  Future<bool?> _callVerifyApi(String code) async {
-    await Future.delayed(const Duration(seconds: 3));
-    if (code != '111111') return null;
-    final normalized = _phoneNumber.replaceAll(' ', '');
-    final match = users.cast<dynamic>().firstWhere(
-      (u) => (u.phoneNumber as String).replaceAll(' ', '') == normalized,
-      orElse: () => null,
-    );
-    if (match != null) {
-      AppSession.currentUser = match;
-      return false; // existing user
-    }
-    return true; // new user
-  }
+  // Future<bool?> _callVerifyApi(String code) async {
+  //   await Future.delayed(const Duration(seconds: 3));
+  //   if (code != '111111') return null;
+  //   final normalized = _phoneNumber.replaceAll(' ', '');
+  //   final match = users.cast<dynamic>().firstWhere(
+  //     (u) => (u.phoneNumber as String).replaceAll(' ', '') == normalized,
+  //     orElse: () => null,
+  //   );
+  //   if (match != null) {
+  //     AppSession.currentUser = match;
+  //     return false; // existing user
+  //   }
+  //   return true; // new user
+  // }
 
   @override
   Widget build(BuildContext context) {
