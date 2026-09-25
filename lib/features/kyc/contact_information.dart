@@ -55,7 +55,22 @@ class _ContactInformationScreenState extends State<ContactInformationScreen> {
   @override
   void initState() {
     super.initState();
-    _prefixController.text = '+355';
+
+    final rawPhone = AppSession.phone ?? '';
+    final matchedPrefix = _nationalNumberPatterns.keys
+        .where((code) => rawPhone.startsWith(code))
+        .fold<String?>(null, (best, code) {
+          if (best == null || code.length > best.length) return code;
+          return best;
+        });
+
+    _prefixController.text = matchedPrefix ?? '+355';
+    _numberController.text =
+        (matchedPrefix == null
+                ? rawPhone
+                : rawPhone.substring(matchedPrefix.length))
+            .replaceAll(RegExp(r'[^0-9]'), '');
+
     _emailController.text =
         AppSession.signUpDraft.email ?? AppSession.memberPrefill?.email ?? '';
     for (final c in [_numberController, _prefixController, _emailController]) {
@@ -100,160 +115,208 @@ class _ContactInformationScreenState extends State<ContactInformationScreen> {
       appBar: AppBar(leading: const AppBackButton(), elevation: 1),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Contact Information',
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 12),
-              const Text(
-                'Please provide your contact information to complete your profile.',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
-              ),
-              const SizedBox(height: 50),
-              const Text(
-                'Phone Number',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: LayoutBuilder(
-                      builder: (context, constraints) => DropdownMenu<String>(
-                        hintText: '+355',
-                        width: constraints.maxWidth,
-                        textStyle: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
+              Expanded(
+                child: SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Contact Information',
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
                         ),
-                        inputDecorationTheme: const InputDecorationTheme(
-                          border: OutlineInputBorder(
+                      ),
+                      const SizedBox(height: 12),
+                      const Text(
+                        'Please provide your contact information to complete your profile.',
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                      ),
+                      const SizedBox(height: 50),
+                      const Text(
+                        'Phone Number',
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: LayoutBuilder(
+                              builder: (context, constraints) =>
+                                  DropdownMenu<String>(
+                                    enabled: false,
+                                    initialSelection:
+                                        _prefixController.text.isEmpty
+                                        ? '+355'
+                                        : _prefixController.text,
+                                    hintText: '+355',
+                                    width: constraints.maxWidth,
+                                    textStyle: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    inputDecorationTheme:
+                                        const InputDecorationTheme(
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(12.0),
+                                            ),
+                                          ),
+                                        ),
+                                    menuStyle: MenuStyle(
+                                      backgroundColor:
+                                          const WidgetStatePropertyAll(
+                                            Colors.white,
+                                          ),
+                                      elevation: const WidgetStatePropertyAll(
+                                        4,
+                                      ),
+                                      shape: WidgetStatePropertyAll(
+                                        RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                        ),
+                                      ),
+                                      padding: const WidgetStatePropertyAll(
+                                        EdgeInsets.symmetric(
+                                          vertical: 4,
+                                          horizontal: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    onSelected: (value) => setState(
+                                      () =>
+                                          _prefixController.text = value ?? '',
+                                    ),
+                                    dropdownMenuEntries: [
+                                      DropdownMenuEntry(
+                                        value: '+1',
+                                        label: '+1',
+                                        style: _entryStyle,
+                                      ),
+                                      DropdownMenuEntry(
+                                        value: '+44',
+                                        label: '+44',
+                                        style: _entryStyle,
+                                      ),
+                                      DropdownMenuEntry(
+                                        value: '+355',
+                                        label: '+355',
+                                        style: _entryStyle,
+                                      ),
+                                    ],
+                                  ),
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            flex: 5,
+                            child: TextField(
+                              controller: _numberController,
+                              readOnly: true,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+                              decoration: InputDecoration(
+                                hintText: '6x xxx xxxx',
+                                errorText: _numberError,
+                                border: OutlineInputBorder(
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(12.0),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Email Address(Optional)',
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                      ),
+                      const SizedBox(height: 8),
+                      TextField(
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          labelText: 'Email Address',
+                          errorText: _emailError,
+                          border: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(
                               Radius.circular(12.0),
                             ),
                           ),
                         ),
-                        menuStyle: MenuStyle(
-                          backgroundColor: const WidgetStatePropertyAll(
-                            Colors.white,
-                          ),
-                          elevation: const WidgetStatePropertyAll(4),
-                          shape: WidgetStatePropertyAll(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                      ),
+                      Row(
+                        children: [
+                          Checkbox(
+                            value: _acceptsPromo,
+                            onChanged: (v) =>
+                                setState(() => _acceptsPromo = v ?? false),
+                            fillColor: WidgetStateProperty.resolveWith(
+                              (states) => states.contains(WidgetState.selected)
+                                  ? Colors.black
+                                  : Colors.white,
                             ),
+                            side: const BorderSide(color: Colors.grey),
                           ),
-                          padding: const WidgetStatePropertyAll(
-                            EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-                          ),
-                        ),
-                        onSelected: (value) => setState(
-                          () => _prefixController.text = value ?? '',
-                        ),
-                        dropdownMenuEntries: [
-                          DropdownMenuEntry(
-                            value: '+1',
-                            label: '+1',
-                            style: _entryStyle,
-                          ),
-                          DropdownMenuEntry(
-                            value: '+44',
-                            label: '+44',
-                            style: _entryStyle,
-                          ),
-                          DropdownMenuEntry(
-                            value: '+355',
-                            label: '+355',
-                            style: _entryStyle,
+                          const Text(
+                            'Send me promotional news and offers.',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black87,
+                            ),
                           ),
                         ],
                       ),
-                    ),
+                      const SizedBox(height: 24),
+                    ],
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    flex: 5,
-                    child: TextField(
-                      controller: _numberController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      decoration: InputDecoration(
-                        hintText: '6x xxx xxxx',
-                        errorText: _numberError,
-                        border: OutlineInputBorder(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(12.0),
-                          ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8, bottom: 8),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _isComplete ? _continue : null,
+                    style: ButtonStyle(
+                      minimumSize: const WidgetStatePropertyAll(
+                        Size.fromHeight(60),
+                      ),
+                      shape: const WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
                         ),
+                      ),
+                      backgroundColor: WidgetStateProperty.resolveWith(
+                        (states) => states.contains(WidgetState.disabled)
+                            ? Colors.grey
+                            : Colors.black,
+                      ),
+                      foregroundColor: const WidgetStatePropertyAll(
+                        Colors.white,
+                      ),
+                    ),
+                    child: const Text(
+                      'Continue',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'Email Address(Optional)',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: 'Email Address',
-                  errorText: _emailError,
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                  ),
-                ),
-              ),
-              Row(
-                children: [
-                  Checkbox(
-                    value: _acceptsPromo,
-                    onChanged: (v) =>
-                        setState(() => _acceptsPromo = v ?? false),
-                    fillColor: WidgetStateProperty.resolveWith(
-                      (states) => states.contains(WidgetState.selected)
-                          ? Colors.black
-                          : Colors.white,
-                    ),
-                    side: const BorderSide(color: Colors.grey),
-                  ),
-                  const Text(
-                    'Send me promotional news and offers.',
-                    style: TextStyle(fontSize: 16, color: Colors.black87),
-                  ),
-                ],
-              ),
-              const Spacer(),
-              ElevatedButton(
-                onPressed: _isComplete ? _continue : null,
-                style: ButtonStyle(
-                  minimumSize: const WidgetStatePropertyAll(
-                    Size.fromHeight(60),
-                  ),
-                  shape: const WidgetStatePropertyAll(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                    ),
-                  ),
-                  backgroundColor: WidgetStateProperty.resolveWith(
-                    (states) => states.contains(WidgetState.disabled)
-                        ? Colors.grey
-                        : Colors.black,
-                  ),
-                  foregroundColor: const WidgetStatePropertyAll(Colors.white),
-                ),
-                child: const Text(
-                  'Continue',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
             ],

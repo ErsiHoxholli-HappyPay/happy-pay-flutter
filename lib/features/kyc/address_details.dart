@@ -145,74 +145,98 @@ class _AddressDetailsScreenState extends State<AddressDetailsScreen> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Address details',
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                'City',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey[600],
+              Expanded(
+                child: SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Address details',
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      Text(
+                        'City',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      _buildCityField(),
+                      const SizedBox(height: 16),
+                      _LabeledField(
+                        label: 'Road',
+                        controller: _streetController,
+                        hintText: 'Enter Road (Optional)',
+                        onChanged: (_) => setState(() {}),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _LabeledField(
+                              label: 'Apartment number',
+                              controller: _apartmentNumberController,
+                              hintText: 'Enter Apartment Number (Optional)',
+                              onChanged: (_) => setState(() {}),
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: _LabeledField(
+                              label: 'Postal number',
+                              controller: _postalCodeController,
+                              hintText: 'Enter Postal Code (Optional)',
+                              onChanged: (_) => setState(() {}),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 24),
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(height: 8),
-              _buildCityField(),
-              const SizedBox(height: 16),
-              _LabeledField(
-                label: 'Road',
-                controller: _streetController,
-                hintText: 'Enter Road (Optional)',
-                onChanged: (_) => setState(() {}),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: _LabeledField(
-                      label: 'Apartment number',
-                      controller: _apartmentNumberController,
-                      hintText: 'Enter Apartment Number (Optional)',
-                      onChanged: (_) => setState(() {}),
+              Padding(
+                padding: const EdgeInsets.only(top: 8, bottom: 8),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _isComplete ? _continue : null,
+                    style: ButtonStyle(
+                      minimumSize: const WidgetStatePropertyAll(
+                        Size.fromHeight(60),
+                      ),
+                      shape: const WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                        ),
+                      ),
+                      backgroundColor: WidgetStateProperty.resolveWith(
+                        (states) => states.contains(WidgetState.disabled)
+                            ? Colors.grey
+                            : Colors.black,
+                      ),
+                      foregroundColor: const WidgetStatePropertyAll(
+                        Colors.white,
+                      ),
+                    ),
+                    child: const Text(
+                      'Continue',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: _LabeledField(
-                      label: 'Postal number',
-                      controller: _postalCodeController,
-                      hintText: 'Enter Postal Code (Optional)',
-                      onChanged: (_) => setState(() {}),
-                    ),
-                  ),
-                ],
-              ),
-              const Spacer(),
-              ElevatedButton(
-                onPressed: _isComplete ? _continue : null,
-                style: ButtonStyle(
-                  minimumSize: const WidgetStatePropertyAll(
-                    Size.fromHeight(60),
-                  ),
-                  shape: const WidgetStatePropertyAll(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                    ),
-                  ),
-                  backgroundColor: WidgetStateProperty.resolveWith(
-                    (states) => states.contains(WidgetState.disabled)
-                        ? Colors.grey
-                        : Colors.black,
-                  ),
-                  foregroundColor: const WidgetStatePropertyAll(Colors.white),
-                ),
-                child: const Text(
-                  'Continue',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
             ],

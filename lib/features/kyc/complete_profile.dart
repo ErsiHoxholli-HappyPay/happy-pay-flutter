@@ -143,203 +143,244 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(leading: const AppBackButton(), elevation: 1),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Complete Your Profile',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 24,
                 ),
-              ),
-              const SizedBox(height: 12),
-              const Text(
-                'Please provide your details as they are written on official documents, such as a passport or national ID.',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
-              ),
-              const SizedBox(height: 50),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Complete Your Profile',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    const Text(
+                      'Please provide your details as they are written on official documents, such as a passport or national ID.',
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                    const SizedBox(height: 50),
+                    Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'First Name',
-                          style: TextStyle(fontSize: 16, color: Colors.grey),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'First Name',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              TextField(
+                                controller: _firstNameController,
+                                decoration: InputDecoration(
+                                  hintText: 'First Name',
+                                  errorText: _nameError(
+                                    _firstNameController.text,
+                                  ),
+                                  border: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(12.0),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        const SizedBox(height: 8),
-                        TextField(
-                          controller: _firstNameController,
-                          decoration: InputDecoration(
-                            hintText: 'First Name',
-                            errorText: _nameError(_firstNameController.text),
-                            border: const OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(12.0),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Last Name',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              TextField(
+                                controller: _lastNameController,
+                                decoration: InputDecoration(
+                                  hintText: 'Last Name',
+                                  errorText: _nameError(
+                                    _lastNameController.text,
+                                  ),
+                                  border: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(12.0),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Gender',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    DropdownButtonFormField<String>(
+                      initialValue: _gender,
+                      isExpanded: true,
+                      decoration: InputDecoration(
+                        hintText: 'Select Gender',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Colors.grey.shade300),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Colors.grey.shade300),
+                        ),
+                      ),
+                      items: [
+                        for (final g in _genders)
+                          DropdownMenuItem<String>(value: g, child: Text(g)),
+                      ],
+                      onChanged: (value) => setState(() => _gender = value),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Date of Birth',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _dayController,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(2),
+                            ],
+                            decoration: const InputDecoration(
+                              hintText: 'DD',
+                              counterText: '',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(12.0),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: TextField(
+                            controller: _monthController,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(2),
+                            ],
+                            decoration: const InputDecoration(
+                              hintText: 'MM',
+                              counterText: '',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(12.0),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          flex: 2,
+                          child: TextField(
+                            controller: _yearController,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(4),
+                            ],
+                            decoration: const InputDecoration(
+                              hintText: 'YYYY',
+                              counterText: '',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(12.0),
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Last Name',
-                          style: TextStyle(fontSize: 16, color: Colors.grey),
-                        ),
-                        const SizedBox(height: 8),
-                        TextField(
-                          controller: _lastNameController,
-                          decoration: InputDecoration(
-                            hintText: 'Last Name',
-                            errorText: _nameError(_lastNameController.text),
-                            border: const OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(12.0),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'Gender',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
-              ),
-              const SizedBox(height: 8),
-              DropdownButtonFormField<String>(
-                initialValue: _gender,
-                isExpanded: true,
-                decoration: InputDecoration(
-                  hintText: 'Select Gender',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.grey.shade300),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.grey.shade300),
-                  ),
+                    if (_dateError != null) ...[
+                      const SizedBox(height: 6),
+                      Text(
+                        _dateError!,
+                        style: const TextStyle(color: Colors.red, fontSize: 12),
+                      ),
+                    ],
+                    const SizedBox(height: 24),
+                  ],
                 ),
-                items: [
-                  for (final g in _genders)
-                    DropdownMenuItem<String>(value: g, child: Text(g)),
-                ],
-                onChanged: (value) => setState(() => _gender = value),
               ),
-              const SizedBox(height: 16),
-              const Text(
-                'Date of Birth',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _dayController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(2),
-                      ],
-                      decoration: const InputDecoration(
-                        hintText: 'DD',
-                        counterText: '',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                        ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8, bottom: 8),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _isComplete ? _continue : null,
+                  style: ButtonStyle(
+                    minimumSize: const WidgetStatePropertyAll(
+                      Size.fromHeight(60),
+                    ),
+                    shape: const WidgetStatePropertyAll(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(12.0)),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: TextField(
-                      controller: _monthController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(2),
-                      ],
-                      decoration: const InputDecoration(
-                        hintText: 'MM',
-                        counterText: '',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                        ),
-                      ),
+                    backgroundColor: WidgetStateProperty.resolveWith(
+                      (states) => states.contains(WidgetState.disabled)
+                          ? Colors.grey
+                          : Colors.black,
                     ),
+                    foregroundColor: const WidgetStatePropertyAll(Colors.white),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    flex: 2,
-                    child: TextField(
-                      controller: _yearController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(4),
-                      ],
-                      decoration: const InputDecoration(
-                        hintText: 'YYYY',
-                        counterText: '',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                        ),
-                      ),
-                    ),
+                  child: const Text(
+                    'Continue',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                ],
-              ),
-              if (_dateError != null) ...[
-                const SizedBox(height: 6),
-                Text(
-                  _dateError!,
-                  style: const TextStyle(color: Colors.red, fontSize: 12),
-                ),
-              ],
-              const Spacer(),
-              ElevatedButton(
-                onPressed: _isComplete ? _continue : null,
-                style: ButtonStyle(
-                  minimumSize: const WidgetStatePropertyAll(
-                    Size.fromHeight(60),
-                  ),
-                  shape: const WidgetStatePropertyAll(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                    ),
-                  ),
-                  backgroundColor: WidgetStateProperty.resolveWith(
-                    (states) => states.contains(WidgetState.disabled)
-                        ? Colors.grey
-                        : Colors.black,
-                  ),
-                  foregroundColor: const WidgetStatePropertyAll(Colors.white),
-                ),
-                child: const Text(
-                  'Continue',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
